@@ -4,10 +4,10 @@
 # Eg:   deploy.sh prev 0.02
 
 # Variables
-repo="$HOME/dev/SURFCal"
+repo="$HOME/dev/surfcal"
 source="$repo/web"
 branch="master"
-public="/var/www/html/SURFCal"
+public="/var/www/html/surfcal"
 version="0.01"
 
 # Adjustments from parameters.
@@ -25,7 +25,7 @@ sleep 5
 # Update
 sudo rm -rf $public
 sudo cp -r $source $public
-chmod 755 -R $public
+sudo chmod 755 -R $public
 
 # Done
 printf " Done.\n";
