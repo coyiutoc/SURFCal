@@ -1,6 +1,6 @@
 
 CREATE TABLE Calendars (
-    calendarId  INTEGER,
+    calendarId  INTEGER AUTO_INCREMENT,
     name        VARCHAR(32) NOT NULL,
     description VARCHAR(256) NOT NULL,
     PRIMARY KEY (calendarId)
@@ -12,7 +12,7 @@ CREATE TABLE ItemType (
 );
 
 CREATE TABLE Accounts (
-    id          INTEGER,
+    id          INTEGER AUTO_INCREMENT,
     username    VARCHAR(32) NOT NULL,
     email       VARCHAR(64) NOT NULL,
     password    VARCHAR(64),
@@ -38,7 +38,7 @@ CREATE TABLE EmailCodes (
 );
 
 CREATE TABLE Contacts (
-    contactId   INTEGER,
+    contactId   INTEGER AUTO_INCREMENT,
     accId       INTEGER,
     name        VARCHAR(32) NOT NULL,
     birthday    DATE,
@@ -73,7 +73,7 @@ CREATE TABLE ContactPhones (
 );
 
 CREATE TABLE Items (
-    itemId      INTEGER,
+    itemId      INTEGER AUTO_INCREMENT,
     calendarId  INTEGER,
     name        VARCHAR(32),
     createDate  DATE,
