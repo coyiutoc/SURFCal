@@ -9,7 +9,7 @@ $user = 'root';
 $pass = '';
 $schema = 'surfcal';
 
-$conn = new mysqli($dbhost, $dbuser, $dbpass, $schema);
+$conn = new mysqli($host, $user, $pass, $schema);
 
 if (!$conn) {
     // die('Connection Error: ' . mysqli_connect_error());
