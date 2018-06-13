@@ -103,17 +103,15 @@ function getAllItems($calendarId) {
 
     global $conn;
 
-    if ($conn) {
+    echo "<br> ******* Getting all items with calendarId = " . $calendarId . " ******* <br>";
 
-        echo "<br> ******* Getting all items with calendarId = " . $calendarId . " ******* <br>";
+    $query = "SELECT * FROM Items WHERE calendarId = $calendarId";
+    $response = @mysqli_query($conn, $query);
 
-        $query = "SELECT * FROM Items WHERE calendarId = $calendarId";
-        $response = @mysqli_query($conn, $query);
-
-        while($row = mysqli_fetch_assoc($response)){
-        	echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>";
-        }
+    while($row = mysqli_fetch_assoc($response)){
+    	echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>";
     }
+ 
 }
 
 // Queries for different types:
@@ -129,61 +127,58 @@ function getAllItemsType($type, $calendarId){
 
 	global $conn;
 
-    if ($conn){
+    echo "<br> ******* Getting all " . $type . " items with calendarId = " . $calendarId . " ******* <br>";
 
-        echo "<br> ******* Getting all " . $type . " items with calendarId = " . $calendarId . " ******* <br>";
+    switch ($type) {
 
-        switch ($type) {
+    case 'event':
 
-        case 'event':
+        $query = "SELECT * FROM Items I, EventItems E WHERE I.type = 'event' && I.itemId = E.itemId ORDER BY E.startDate ASC;";
+        $response = @mysqli_query($conn, $query);
 
-            $query = "SELECT * FROM Items I, EventItems E WHERE I.type = 'event' && I.itemId = E.itemId ORDER BY E.startDate ASC;";
-            $response = @mysqli_query($conn, $query);
-
-            while($row = mysqli_fetch_assoc($response)){
-                echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>" . " startDate: " . $row["startDate"] . " endDate: " . $row["endDate"] . "<br>";
-            }
-
-            break;
-
-        case "task":
-            
-            $query = "SELECT * FROM Items I, TaskItems E WHERE I.type = 'task' && I.itemId = E.itemId ORDER BY E.dueDate ASC;";
-            $response = @mysqli_query($conn, $query);
-
-            while($row = mysqli_fetch_assoc($response)){
-                echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>" . " dueDate: " . $row["dueDate"] . " completionDate: " . $row["completionDate"] . "<br>";
-            }
-
-            break;
-
-        case "reminder":
-            
-            $query = "SELECT * FROM Items WHERE type = 'reminder' ORDER BY createDate ASC;";
-            $response = @mysqli_query($conn, $query);
-
-            while($row = mysqli_fetch_assoc($response)){
-                echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>";
-            }
-
-            break;
-
-        case "note":
-
-            $query = "SELECT * FROM Items WHERE type = 'note' ORDER BY createDate DESC;";
-            $response = @mysqli_query($conn, $query);
-
-            while($row = mysqli_fetch_assoc($response)){
-                echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>";
-            }
-
-            break;
-
-        default:
-            echo "getAllItemsType has invalid $type parameter.";
+        while($row = mysqli_fetch_assoc($response)){
+            echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>" . " startDate: " . $row["startDate"] . " endDate: " . $row["endDate"] . "<br>";
         }
 
-    } //if ($conn)
+        break;
+
+    case "task":
+        
+        $query = "SELECT * FROM Items I, TaskItems E WHERE I.type = 'task' && I.itemId = E.itemId ORDER BY E.dueDate ASC;";
+        $response = @mysqli_query($conn, $query);
+
+        while($row = mysqli_fetch_assoc($response)){
+            echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>" . " dueDate: " . $row["dueDate"] . " completionDate: " . $row["completionDate"] . "<br>";
+        }
+
+        break;
+
+    case "reminder":
+        
+        $query = "SELECT * FROM Items WHERE type = 'reminder' ORDER BY createDate ASC;";
+        $response = @mysqli_query($conn, $query);
+
+        while($row = mysqli_fetch_assoc($response)){
+            echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>";
+        }
+
+        break;
+
+    case "note":
+
+        $query = "SELECT * FROM Items WHERE type = 'note' ORDER BY createDate DESC;";
+        $response = @mysqli_query($conn, $query);
+
+        while($row = mysqli_fetch_assoc($response)){
+            echo "<br> itemId: " . $row["itemId"] . " name: " . $row["name"] . " createDate: " . $row["createDate"] . " note: " . ($row["note"] ? $row["note"] : "NULL") . " reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . " type: " . $row["type"] . "<br>";
+        }
+
+        break;
+
+    default:
+        echo "getAllItemsType has invalid $type parameter.";
+    }
+
 }
 
 // .............................................................................
