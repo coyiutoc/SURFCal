@@ -2,7 +2,7 @@
 
 session_start();
 
-error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_ALL);
 
 if (extension_loaded('zlib')) {
     ini_set('zlib.output_compression_level', 1);
@@ -12,9 +12,6 @@ if (extension_loaded('zlib')) {
 require_once('config/functions.php');
 require_once('config/database.php');
 require_once('config/properties.php');
-
-$db = new Database();
-$db->connect();
 
 $getSection = isset($_GET[$profile]) ? $_GET[$profile] : '';
 
@@ -71,7 +68,7 @@ switch ($getSection) {
         break;
 }
 
-$db->disconnect();
+$conn->close();
 ob_end_flush();
 
 ?>
