@@ -10,6 +10,9 @@ include('styles/header.php');
 
 // Main content.
 
+getContacts();
+getContactDetails(5);
+
 include('styles/footer.php');
 
 ?>
