@@ -414,7 +414,7 @@ function getAllAccounts() {
 
 	$query = "SELECT id, username, email, name FROM Accounts ORDER BY id ASC;";
 
-	$result = @mysqli_query($conn, $query);
+	$result = mysqli_query($conn, $query);
 
 	if ($result) {
 		while($row = mysqli_fetch_assoc($result)) {
@@ -430,7 +430,7 @@ function getAllAccounts() {
 
 
 /**
- *	Adds a Account to the given calendar with the given permission level
+ *	Adds an Account to the given calendar with the given permission level
  *	@param integer $accId 			the account id
  *	@param integer $calendarId 		the calendar id
  *	@param string $permissionType 	the permission level ("viewer", "user", "admin")
@@ -451,7 +451,7 @@ function addAccountToCalendar($accId, $calendarId, $permissionType) {
 }
 
 /**
- *	Adds a Account to the given calendar with the given permission level
+ *	Removes an Account from the given calendar with the given permission level
  *	@param integer $accId 			the account id
  *	@param integer $calendarId 		the calendar id
  *	@param string $permissionType 	the permission level ("viewer", "user", "admin")
@@ -487,7 +487,7 @@ function getExperiencedAccounts() {
 						   				FROM Items I
 										WHERE I.createdBy=A.id AND T.type=I.type));";
 
-	$result = @mysqli_query($conn, $query);
+	$result = mysqli_query($conn, $query);
 
 	if ($result) {
 		while($row = mysqli_fetch_assoc($result)) {
@@ -501,6 +501,76 @@ function getExperiencedAccounts() {
 	}
 
 	// TODO: return result
+}
+
+/**
+ *	Retrieves average number of items created by accounts (for Admin Panel)
+ * 	@return Float 	Average number of items
+ */
+function getAverageItemsPerAccount() {
+	global $conn;
+
+	$query = "SELECT AVG(C.count)
+			  FROM (SELECT COUNT(*) as count
+					FROM Items
+					GROUP BY createdBy) C";
+
+	$result = mysqli_query($conn, $query);
+
+	if ($result) {
+		$row = mysqli_fetch_assoc($result);
+		echo $row["AVG(C.count)"];
+		return $row["AVG(C.count)"];
+	}
+
+	return 0;
+}
+
+/**
+ *	Retrieves average number of contacts created by accounts (for Admin Panel)
+ * 	@return Float 	Average number of contacts
+ */
+function getAverageContactsPerAccount() {
+	global $conn;
+
+	$query = "SELECT AVG(C.count)
+			  FROM (SELECT COUNT(*) as count
+					FROM Contacts
+					GROUP BY accId) C";
+
+	$result = mysqli_query($conn, $query);
+
+	if ($result) {
+		$row = mysqli_fetch_assoc($result);
+		echo $row["AVG(C.count)"];
+		return $row["AVG(C.count)"];
+	}
+
+	return 0;
+}
+
+/**
+ *	Retrieves average number of contacts created by accounts (for Admin Panel)
+ * 	@return Float 	Average number of contacts
+ */
+function getMinMaxContactsPerAccount() {
+	global $conn;
+
+	$query = "SELECT MIN(C.count), MAX(C.count)
+			  FROM (SELECT COUNT(*) as count
+					FROM Contacts
+					GROUP BY accId) C";
+
+	$result = mysqli_query($conn, $query);
+
+	if ($result) {
+		$row = mysqli_fetch_assoc($result);
+		echo $row["MIN(C.count)"];
+		echo $row["MAX(C.count)"];
+		// TODO: return result
+	}
+
+	return 0;
 }
 
 ?>
