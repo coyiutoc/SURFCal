@@ -131,6 +131,7 @@ function deleteContact($contactId) {
 /**
  *	Creates an Item and its associated Event/Task if the item type is "event" or "task"
  *	@param integer $calendarId 	the calendar id
+ *	@param integer $accId 		the account id of user who creates the item
  *	@param string $name     	the item's title
  * 	@param string $note   		the item's description
  *	@param string $reminder 	the item's reminder datetime string
@@ -139,7 +140,7 @@ function deleteContact($contactId) {
  *								event, due_date and completion_date for task)
  * 	@return boolean				true if item is inserted successfully
  */
-function createItem($calendarId, $name, $note, $reminder, $type, $options) {
+function createItem($calendarId, $accId, $name, $note, $reminder, $type, $options) {
 	global $conn;
 
 	$item_inserted = false; // return value
@@ -148,8 +149,8 @@ function createItem($calendarId, $name, $note, $reminder, $type, $options) {
 	$name = trim($name);
 	$note = trim($note);
 
-	$item_stmt = mysqli_prepare($conn, "INSERT INTO Items VALUES(NULL, ?, ?, NOW(), ?, ?, ?);");
-	mysqli_stmt_bind_param($item_stmt, "issss", $calendarId, $name, $note, $reminder, $type);
+	$item_stmt = mysqli_prepare($conn, "INSERT INTO Items VALUES(NULL, ?, ?, NOW(), ?, ?, ?, ?);");
+	mysqli_stmt_bind_param($item_stmt, "issssi", $calendarId, $name, $note, $reminder, $type, $accId);
 	mysqli_stmt_execute($item_stmt);
 
 	$item_affected_rows = mysqli_stmt_affected_rows($item_stmt);
@@ -475,7 +476,31 @@ function removeAccountFromCalendar($accId, $calendarId) {
  * 	@return array	list of accounts
  */
 function getExperiencedAccounts() {
+	global $conn;
 
+	$query = "	SELECT id, username, email, name 
+				FROM Accounts A
+				WHERE NOT EXISTS
+						(SELECT T.type
+						 FROM ItemType T
+						 WHERE NOT EXISTS (SELECT I.type
+						   				FROM Items I
+										WHERE I.createdBy=A.id AND T.type=I.type));";
+
+	$result = @mysqli_query($conn, $query);
+
+	if ($result) {
+		while($row = mysqli_fetch_assoc($result)) {
+			echo 'id: ' . $row["id"] . '<br>' . 
+			'username: ' . $row["username"] . '<br>' . 
+			'email: ' . $row["email"] . '<br>' . 
+			'name: ' . $row["name"] . '<br>';
+
+			// TODO: Add to result
+		}
+	}
+
+	// TODO: return result
 }
 
 ?>
