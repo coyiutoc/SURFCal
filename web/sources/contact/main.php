@@ -13,6 +13,7 @@ include('styles/header.php');
 // Sample function calls for dev testing:
 getContacts(2);
 getContactDetails(5);
+// deleteContact(6);
 
 include('styles/footer.php');
 

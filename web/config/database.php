@@ -53,14 +53,6 @@ function getContacts($accId) {
 function getContactDetails($contactId) {
 	global $conn;
 
-	// $address_query = "SELECT * FROM ContactAddresses WHERE contactId=?;";
-	// $email_query = "SELECT * FROM ContactEmails WHERE contactId=$contactId;";
-	// $phone_query = "SELECT * FROM ContactPhones WHERE contactId=$contactId;";
-
-	// $address_response = mysqli_query($conn, $address_query);
-	// $email_response = mysqli_query($conn, $email_query);
-	// $phone_response = mysqli_query($conn, $phone_query);
-
 	// Get Address
 	$address_stmt = mysqli_prepare($conn, "SELECT * FROM ContactAddresses WHERE contactId=?;");
 	mysqli_stmt_bind_param($address_stmt, "i", $contactId);
@@ -105,6 +97,21 @@ function getContactDetails($contactId) {
 	// TODO: return list of contact information
 }
 
+/**
+ *	Deletes a Contact
+ *	@param integer $contactId 	the contact's id
+ * 	@return boolean				true if contact is deleted successfully
+ */
+function deleteContact($contactId) {
+	global $conn;
+
+	$stmt = mysqli_prepare($conn, "DELETE FROM Contacts WHERE contactId=?;");
+	mysqli_stmt_bind_param($stmt, "i", $contactId);
+	mysqli_stmt_execute($stmt);
+
+	$affected_rows = mysqli_stmt_affected_rows($stmt);
+	return $affected_rows == 1;
+}
 
 /**
  *	Creates an Item and its associated Event/Task if the item type is "event" or "task"
