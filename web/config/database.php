@@ -8,8 +8,8 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 }
 
 $host = 'localhost';
-$user = 'coyiutoc';
-$pass = '1234';
+$user = 'root';
+$pass = '__';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
