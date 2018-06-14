@@ -40,8 +40,14 @@ function getContacts($accId) {
 		while($row = mysqli_fetch_assoc($result)) {
 			echo 'contactId: ' . $row["contactId"] . '<br>' .
 			'name: ' . $row["name"] . '<br>';
+
+			// TODO: add to result
 		}
 	}
+
+	mysqli_stmt_close($stmt); // close statement
+
+	// TODO: return list of contacts
 }
 
 
@@ -58,18 +64,21 @@ function getContactDetails($contactId) {
 	mysqli_stmt_bind_param($address_stmt, "i", $contactId);
 	mysqli_stmt_execute($address_stmt);
 	$address_result = mysqli_stmt_get_result($address_stmt);
+	mysqli_stmt_close($address_stmt); // close statement
 
 	// Get Email
 	$email_stmt = mysqli_prepare($conn, "SELECT * FROM ContactEmails WHERE contactId=?;");
 	mysqli_stmt_bind_param($email_stmt, "i", $contactId);
 	mysqli_stmt_execute($email_stmt);
 	$email_result = mysqli_stmt_get_result($email_stmt);
+	mysqli_stmt_close($email_stmt); // close statement
 
 	// Get Phone numbers
 	$phone_stmt = mysqli_prepare($conn, "SELECT * FROM ContactPhones WHERE contactId=?;");
 	mysqli_stmt_bind_param($phone_stmt, "i", $contactId);
 	mysqli_stmt_execute($phone_stmt);
 	$phone_result = mysqli_stmt_get_result($phone_stmt);
+	mysqli_stmt_close($phone_stmt); // close statement
 
 	if ($address_result) {
 		while($row = mysqli_fetch_assoc($address_result)) {
@@ -78,12 +87,16 @@ function getContactDetails($contactId) {
 			'state: ' . $row["state_"] . '<br>' .
 			'country: ' . $row["country"] . '<br>' .
 			'postal: ' . $row["postal"] . '<br>';
+
+			// TODO: Add to result
 		}
 	}
 
 	if ($email_result) {
 		while($row = mysqli_fetch_assoc($email_result)) {
 			echo 'email: ' . $row["email"] . '<br>';
+
+			// TODO: Add to result
 		}
 	}
 
@@ -91,6 +104,8 @@ function getContactDetails($contactId) {
 		while($row = mysqli_fetch_assoc($phone_result)) {
 			echo 'phoneNum: ' . $row["phoneNum"] . '<br>' .
 			'type: ' . $row["type"] . '<br>';
+
+			// TODO: Add to result
 		}
 	}
 
@@ -357,6 +372,9 @@ function deleteItem($itemId) {
 	mysqli_stmt_execute($stmt);
 
 	$affected_rows = mysqli_stmt_affected_rows($stmt);
+
+	mysqli_stmt_close($stmt); // close statement
+
 	return $affected_rows == 1;
 }
 
@@ -373,6 +391,7 @@ function getAccountsInCalendar($calendarId) {
 	mysqli_stmt_execute($stmt);
 
 	$result = mysqli_stmt_get_result($stmt);
+	mysqli_stmt_close($stmt); // close statement
 
 	if ($result) {
 		while($row = mysqli_fetch_assoc($result)) {
@@ -384,5 +403,79 @@ function getAccountsInCalendar($calendarId) {
 	// TODO: return list of accounts
 }
 
+
+/**
+ *	Retrieves all accounts in the database (for Admin Panel)
+ * 	@return array		list of account information (id, username, email, name)
+ */
+function getAllAccounts() {
+	global $conn;
+
+	$query = "SELECT id, username, email, name FROM Accounts ORDER BY id ASC;";
+
+	$result = @mysqli_query($conn, $query);
+
+	if ($result) {
+		while($row = mysqli_fetch_assoc($result)) {
+			echo 'id: ' . $row["id"] . '<br>' . 
+			'username: ' . $row["username"] . '<br>' . 
+			'email: ' . $row["email"] . '<br>' . 
+			'name: ' . $row["name"] . '<br>';
+		}
+	}
+
+	// TODO: return list of accounts
+}
+
+
+/**
+ *	Adds a Account to the given calendar with the given permission level
+ *	@param integer $accId 			the account id
+ *	@param integer $calendarId 		the calendar id
+ *	@param string $permissionType 	the permission level ("viewer", "user", "admin")
+ * 	@return boolean					true if the Account is added successfully
+ */
+function addAccountToCalendar($accId, $calendarId, $permissionType) {
+	global $conn;
+
+	$stmt = mysqli_prepare($conn, "INSERT INTO Groups VALUES(?, ?, ?);");
+	mysqli_stmt_bind_param($stmt, "iis", $accId, $calendarId, $permissionType);
+	mysqli_stmt_execute($stmt);
+
+	$affected_rows = mysqli_stmt_affected_rows($stmt);
+
+	mysqli_stmt_close($stmt); // close statement
+
+	return $affected_rows == 1;
+}
+
+/**
+ *	Adds a Account to the given calendar with the given permission level
+ *	@param integer $accId 			the account id
+ *	@param integer $calendarId 		the calendar id
+ *	@param string $permissionType 	the permission level ("viewer", "user", "admin")
+ * 	@return boolean					true if the Account is added successfully
+ */
+function removeAccountFromCalendar($accId, $calendarId) {
+	global $conn;
+
+	$stmt = mysqli_prepare($conn, "DELETE FROM Groups WHERE accId=? && calendarId=?;");
+	mysqli_stmt_bind_param($stmt, "ii", $accId, $calendarId);
+	mysqli_stmt_execute($stmt);
+
+	$affected_rows = mysqli_stmt_affected_rows($stmt);
+
+	mysqli_stmt_close($stmt); // close statement
+
+	return $affected_rows == 1;
+}
+
+/**
+ *	Retrieves list of accounts that have created all item types (i.e. experienced users)
+ * 	@return array	list of accounts
+ */
+function getExperiencedAccounts() {
+
+}
 
 ?>

@@ -11,7 +11,7 @@ include('styles/header.php');
 // Main content.
 
 // Sample function calls for dev testing:
-getContacts(2);
+// getContacts(2);
 getContactDetails(5);
 // deleteContact(6);
 

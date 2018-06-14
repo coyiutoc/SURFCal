@@ -11,7 +11,9 @@ include('styles/header.php');
 // Main content.
 
 // Sample function calls for dev testing:
-getAccountsInCalendar(3);
+// getAccountsInCalendar(3);
+// getAllAccounts();
+removeAccountFromCalendar(2, 4);
 
 include('styles/footer.php');
 
