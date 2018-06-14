@@ -10,6 +10,7 @@ include('styles/header.php');
 
 // Main content.
 
+// Sample function calls for dev testing:
 getContacts();
 getContactDetails(5);
 
