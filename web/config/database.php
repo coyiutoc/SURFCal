@@ -37,7 +37,7 @@ function getContacts($accId) {
 	$result = mysqli_stmt_get_result($stmt);
 
 	if ($result) {
-		while($row = mysqli_fetch_array($result)) {
+		while($row = mysqli_fetch_assoc($result)) {
 			echo 'contactId: ' . $row["contactId"] . '<br>' .
 			'name: ' . $row["name"] . '<br>';
 		}
@@ -72,7 +72,7 @@ function getContactDetails($contactId) {
 	$phone_result = mysqli_stmt_get_result($phone_stmt);
 
 	if ($address_result) {
-		while($row = mysqli_fetch_array($address_result)) {
+		while($row = mysqli_fetch_assoc($address_result)) {
 			echo 'street: ' . $row["streetField"] . '<br>' .
 			'city: ' . $row["city"] . '<br>' .
 			'state: ' . $row["state_"] . '<br>' .
@@ -82,13 +82,13 @@ function getContactDetails($contactId) {
 	}
 
 	if ($email_result) {
-		while($row = mysqli_fetch_array($email_result)) {
+		while($row = mysqli_fetch_assoc($email_result)) {
 			echo 'email: ' . $row["email"] . '<br>';
 		}
 	}
 
 	if ($phone_result) {
-		while($row = mysqli_fetch_array($phone_result)) {
+		while($row = mysqli_fetch_assoc($phone_result)) {
 			echo 'phoneNum: ' . $row["phoneNum"] . '<br>' .
 			'type: ' . $row["type"] . '<br>';
 		}
@@ -278,6 +278,73 @@ function editItem($itemId, $name, $note, $reminder, $type, $options) {
 }
 
 /**
+ *	Retrieves an Item
+ *	@param integer $itemId 		the item id
+ * 	@return array				a list of the item's information
+ */
+function getItem($itemId) {
+	global $conn;
+
+	$item_stmt = mysqli_prepare($conn, "SELECT * FROM Items WHERE itemId=?;");
+	mysqli_stmt_bind_param($item_stmt, "i", $itemId);
+	mysqli_stmt_execute($item_stmt);
+
+	$item_result = mysqli_stmt_get_result($item_stmt);
+
+	mysqli_stmt_close($item_stmt); // close statement
+
+	if ($item_result) {
+		$item = mysqli_fetch_assoc($item_result);
+		echo 'itemId: ' . $item["itemId"] . '<br>' . 
+			'calendarId: ' . $item["calendarId"] . '<br>' .
+			'name: ' . $item["name"] . '<br>' .
+			'createDate: ' . $item["createDate"] . '<br>' .
+			'note: ' . $item["note"] . '<br>' .
+			'reminder: ' . $item["reminder"] . '<br>' .
+			'type: ' . $item["type"] . '<br>';
+
+		if ($item["type"] == "event") {
+			$stmt = mysqli_prepare($conn, "SELECT * FROM EventItems WHERE itemId=?;");
+			mysqli_stmt_bind_param($stmt, "i", $itemId);
+			mysqli_stmt_execute($stmt);
+
+			$result = mysqli_stmt_get_result($stmt);
+
+			$event = mysqli_fetch_assoc($result);
+
+			mysqli_stmt_close($stmt); // close statement
+
+			// for testing:
+			echo 'itemId: ' . $event["itemId"] . '<br>' . 
+				'startDate: ' . $event["startDate"] . '<br>' .
+				'endDate: ' . $event["endDate"] . '<br>';
+
+			// TODO: Add event information to result
+
+		} else if ($item["type"] == "task") {
+			$stmt = mysqli_prepare($conn, "SELECT * FROM TaskItems WHERE itemId=?;");
+			mysqli_stmt_bind_param($stmt, "i", $itemId);
+			mysqli_stmt_execute($stmt);
+
+			$result = mysqli_stmt_get_result($stmt);
+
+			$task = mysqli_fetch_assoc($result);
+
+			mysqli_stmt_close($stmt); // close statement
+
+			// for testing:
+			echo 'itemId: ' . $task["itemId"] . '<br>' . 
+				'dueDate: ' . $task["dueDate"] . '<br>' .
+				'completionDate: ' . $task["completionDate"] . '<br>';
+
+			// TODO: Add task information to result
+		}
+	}
+	
+	// TODO: return item
+}
+
+/**
  *	Deletes an Item
  *	@param integer $itemId 		the item id
  * 	@return boolean				true if item is deleted successfully
@@ -308,7 +375,7 @@ function getAccountsInCalendar($calendarId) {
 	$result = mysqli_stmt_get_result($stmt);
 
 	if ($result) {
-		while($row = mysqli_fetch_array($result)) {
+		while($row = mysqli_fetch_assoc($result)) {
 			echo 'username: ' . $row["username"] . '<br>' . 
 			'email: ' . $row["email"] . '<br>';
 		}

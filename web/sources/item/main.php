@@ -17,7 +17,8 @@ $options = array (
 );
 // createItem(1, "Random Task", "blah blah blah my new task hahah task", null, "task", $options);
 // deleteItem(22);
-editItem(28, "Not so random task", "This is a new task!!!!!!", "2018-02-22 22:22:22", "task", $options);
+// editItem(28, "Not so random task", "This is a new task!!!!!!", "2018-02-22 22:22:22", "task", $options);
+getItem(28);
 
 
 include('styles/footer.php');
