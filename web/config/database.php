@@ -198,7 +198,7 @@ function createItem($calendarId, $name, $note, $reminder, $type, $options) {
 
 /**
  *	Deletes an Item
- *	@param integer $calendarId 	the calendar id
+ *	@param integer $itemId 		the item id
  * 	@return boolean				true if item is deleted successfully
  */
 function deleteItem($itemId) {
@@ -210,6 +210,30 @@ function deleteItem($itemId) {
 
 	$affected_rows = mysqli_stmt_affected_rows($stmt);
 	return $affected_rows == 1;
+}
+
+/**
+ *	Retrieves a list of account information (username, email) associated with a given calendarId
+ *	@param integer $calendarId 	the calendar id
+ * 	@return array				list of account information (username, email)
+ */
+function getAccountsInCalendar($calendarId) {
+	global $conn;
+
+	$stmt = mysqli_prepare($conn, "SELECT username, email FROM Groups G, Accounts A WHERE G.calendarId=? && G.accId=A.id;");
+	mysqli_stmt_bind_param($stmt, "i", $calendarId);
+	mysqli_stmt_execute($stmt);
+
+	$result = mysqli_stmt_get_result($stmt);
+
+	if ($result) {
+		while($row = mysqli_fetch_array($result)) {
+			echo 'username: ' . $row["username"] . '<br>' . 
+			'email: ' . $row["email"] . '<br>';
+		}
+	}
+
+	// TODO: return list of accounts
 }
 
 

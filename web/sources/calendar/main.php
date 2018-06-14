@@ -10,6 +10,9 @@ include('styles/header.php');
 
 // Main content.
 
+// Sample function calls for dev testing:
+getAccountsInCalendar(3);
+
 include('styles/footer.php');
 
 ?>
