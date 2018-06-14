@@ -16,6 +16,7 @@ $options = array (
 	"completion_date" => "2018-12-02 16:40:00"
 );
 createItem(1, "Random Task", "blah blah blah my new task hahah task", null, "task", $options);
+deleteItem(22);
 
 
 include('styles/footer.php');

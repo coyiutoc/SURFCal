@@ -11,7 +11,7 @@ include('styles/header.php');
 // Main content.
 
 // Sample function calls for dev testing:
-getContacts();
+getContacts(2);
 getContactDetails(5);
 
 include('styles/footer.php');

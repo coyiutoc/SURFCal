@@ -21,16 +21,23 @@ echo "Connection success";
 $conn->set_charset('utf-8');
 
 
-function getContacts() {
+/**
+ *	Retrieves a list of contacts (id and name) given the accountId
+ *	@param integer 	$accId 		the account id
+ *  @return array 				list of contacts 
+ */
+function getContacts($accId) {
 	global $conn;
 
-	// Projection on contactId, name
-	$query = "SELECT contactId, name FROM Contacts ORDER BY name ASC;";
+	// Projection on contactId, name, sort by alphabetical order
+	$stmt = mysqli_prepare($conn, "SELECT contactId, name FROM Contacts WHERE accId=? ORDER BY name ASC;");
+	mysqli_stmt_bind_param($stmt, "i", $accId);
+	mysqli_stmt_execute($stmt);
 
-	$response = mysqli_query($conn, $query);
+	$result = mysqli_stmt_get_result($stmt);
 
-	if ($response) {
-		while($row = mysqli_fetch_array($response)) {
+	if ($result) {
+		while($row = mysqli_fetch_array($result)) {
 			echo 'contactId: ' . $row["contactId"] . '<br>' .
 			'name: ' . $row["name"] . '<br>';
 		}
@@ -40,23 +47,40 @@ function getContacts() {
 
 /**
  *	Retrieves the contact's information, given the contactId
- *	@param integer 	$contactId the contact's id
- *  @return array 	list of contact information 
+ *	@param integer 	$contactId 	the contact's id
+ *  @return array 				list of contact information 
  */
 function getContactDetails($contactId) {
 	global $conn;
 
-	// Projection on contactId, name
-	$address_query = "SELECT * FROM ContactAddresses WHERE contactId=$contactId;";
-	$email_query = "SELECT * FROM ContactEmails WHERE contactId=$contactId;";
-	$phone_query = "SELECT * FROM ContactPhones WHERE contactId=$contactId;";
+	// $address_query = "SELECT * FROM ContactAddresses WHERE contactId=?;";
+	// $email_query = "SELECT * FROM ContactEmails WHERE contactId=$contactId;";
+	// $phone_query = "SELECT * FROM ContactPhones WHERE contactId=$contactId;";
 
-	$address_response = mysqli_query($conn, $address_query);
-	$email_response = mysqli_query($conn, $email_query);
-	$phone_response = mysqli_query($conn, $phone_query);
+	// $address_response = mysqli_query($conn, $address_query);
+	// $email_response = mysqli_query($conn, $email_query);
+	// $phone_response = mysqli_query($conn, $phone_query);
 
-	if ($address_response) {
-		while($row = mysqli_fetch_array($address_response)) {
+	// Get Address
+	$address_stmt = mysqli_prepare($conn, "SELECT * FROM ContactAddresses WHERE contactId=?;");
+	mysqli_stmt_bind_param($address_stmt, "i", $contactId);
+	mysqli_stmt_execute($address_stmt);
+	$address_result = mysqli_stmt_get_result($address_stmt);
+
+	// Get Email
+	$email_stmt = mysqli_prepare($conn, "SELECT * FROM ContactEmails WHERE contactId=?;");
+	mysqli_stmt_bind_param($email_stmt, "i", $contactId);
+	mysqli_stmt_execute($email_stmt);
+	$email_result = mysqli_stmt_get_result($email_stmt);
+
+	// Get Phone numbers
+	$phone_stmt = mysqli_prepare($conn, "SELECT * FROM ContactPhones WHERE contactId=?;");
+	mysqli_stmt_bind_param($phone_stmt, "i", $contactId);
+	mysqli_stmt_execute($phone_stmt);
+	$phone_result = mysqli_stmt_get_result($phone_stmt);
+
+	if ($address_result) {
+		while($row = mysqli_fetch_array($address_result)) {
 			echo 'street: ' . $row["streetField"] . '<br>' .
 			'city: ' . $row["city"] . '<br>' .
 			'state: ' . $row["state_"] . '<br>' .
@@ -65,35 +89,37 @@ function getContactDetails($contactId) {
 		}
 	}
 
-	if ($email_response) {
-		while($row = mysqli_fetch_array($email_response)) {
+	if ($email_result) {
+		while($row = mysqli_fetch_array($email_result)) {
 			echo 'email: ' . $row["email"] . '<br>';
 		}
 	}
 
-	if ($phone_response) {
-		while($row = mysqli_fetch_array($phone_response)) {
+	if ($phone_result) {
+		while($row = mysqli_fetch_array($phone_result)) {
 			echo 'phoneNum: ' . $row["phoneNum"] . '<br>' .
 			'type: ' . $row["type"] . '<br>';
 		}
 	}
+
+	// TODO: return list of contact information
 }
 
 
 /**
  *	Creates an Item and its associated Event/Task if the item type is "event" or "task"
- *	@param integer $calendarId the calendar id
- *	@param string $name     the item's title
- * 	@param string $note   	the item's description
- *	@param string $reminder the item's reminder datetime string
- *  @param string $type 	the item's type (one of "event", "task", "reminder", "note")
- *  @param array $options 	the item's additional information (start_date and end_date for 
- *							event, due_date and completion_date for task)
- * 	@return boolean			true if item is inserted successfully
+ *	@param integer $calendarId 	the calendar id
+ *	@param string $name     	the item's title
+ * 	@param string $note   		the item's description
+ *	@param string $reminder 	the item's reminder datetime string
+ *  @param string $type 		the item's type (one of "event", "task", "reminder", "note")
+ *  @param array $options 		the item's additional information (start_date and end_date for 
+ *								event, due_date and completion_date for task)
+ * 	@return boolean				true if item is inserted successfully
  */
 function createItem($calendarId, $name, $note, $reminder, $type, $options) {
 	global $conn;
-	
+
 	$item_inserted = false; // return value
 
 	// Fix input
@@ -162,5 +188,22 @@ function createItem($calendarId, $name, $note, $reminder, $type, $options) {
 
 	return $item_inserted;
 }
+
+/**
+ *	Deletes an Item
+ *	@param integer $calendarId 	the calendar id
+ * 	@return boolean				true if item is deleted successfully
+ */
+function deleteItem($itemId) {
+	global $conn;
+
+	$stmt = mysqli_prepare($conn, "DELETE FROM Items WHERE itemId=?;");
+	mysqli_stmt_bind_param($stmt, "i", $itemId);
+	mysqli_stmt_execute($stmt);
+
+	$affected_rows = mysqli_stmt_affected_rows($stmt);
+	return $affected_rows == 1;
+}
+
 
 ?>
