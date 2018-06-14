@@ -12,11 +12,12 @@ include('styles/header.php');
 
 // Sample function calls for dev testing:
 $options = array (
-	"due_date" => "2018-12-01 12:40:00",
-	"completion_date" => "2018-12-02 16:40:00"
+	"due_date" => "2018-12-22 22:22:22",
+	"completion_date" => "2018-12-23 22:22:22"
 );
-createItem(1, "Random Task", "blah blah blah my new task hahah task", null, "task", $options);
-deleteItem(22);
+// createItem(1, "Random Task", "blah blah blah my new task hahah task", null, "task", $options);
+// deleteItem(22);
+editItem(28, "Not so random task", "This is a new task!!!!!!", "2018-02-22 22:22:22", "task", $options);
 
 
 include('styles/footer.php');

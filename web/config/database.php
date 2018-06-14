@@ -185,15 +185,96 @@ function createItem($calendarId, $name, $note, $reminder, $type, $options) {
 
 	// this is for testing only, to be deleted -----------------
 	if ($affected_rows == 1) {
-		echo "Added Event or Item";
+		echo "Added Event or Task";
 	} else {
-		echo "Cannot add Event or Item";
+		echo "Cannot add Event or Task";
 	}
 	// ---------------------------------------------------------
 
 	$item_inserted = $item_inserted || ($affected_rows == 1);
 
 	return $item_inserted;
+}
+
+/**
+ *	Edit an Item and its associated Event/Task if the item type is "event" or "task"
+  *	@param integer $itemId 		the item id
+ *	@param string $name     	the item's title
+ * 	@param string $note   		the item's description
+ *	@param string $reminder 	the item's reminder datetime string
+ *  @param string $type 		the item's type (one of "event", "task", "reminder", "note")
+ *  @param array $options 		the item's additional information (start_date and end_date for 
+ *								event, due_date and completion_date for task)
+ * 	@return boolean				true if item is edited successfully
+ */
+function editItem($itemId, $name, $note, $reminder, $type, $options) {
+	// TODO: can refactor createItem and editItem
+	global $conn;
+
+	$item_edited = false; // return value
+
+	// Fix input
+	$name = trim($name);
+	$note = trim($note);
+
+	$item_stmt = mysqli_prepare($conn, "UPDATE Items SET name=?, note=?, reminder=? WHERE itemId=?");
+	mysqli_stmt_bind_param($item_stmt, "sssi", $name, $note, $reminder, $itemId);
+	mysqli_stmt_execute($item_stmt);
+
+	$item_affected_rows = mysqli_stmt_affected_rows($item_stmt);
+	mysqli_stmt_close($item_stmt); // close statement
+	// echo $item_affected_rows;
+
+	$item_edited = $item_edited || ($item_affected_rows == 1);
+
+	// Handle edit Item Subclass (Event/Task)
+	echo $type;
+	$affected_rows = 0;
+	switch($type) {
+		case "event":
+			$start_date = $options["start_date"];
+			$end_date = $options["end_date"];
+
+			$stmt = mysqli_prepare($conn, "UPDATE EventItems SET startDate=?, endDate=? WHERE itemId=?");
+			mysqli_stmt_bind_param($stmt, "ssi", $start_date, $end_date, $itemId);
+			mysqli_stmt_execute($stmt);
+
+			$affected_rows = mysqli_stmt_affected_rows($stmt);
+
+			mysqli_stmt_close($stmt); // close statement
+
+			break;
+		case "task":
+			$due_date = $options['due_date'];
+			$completion_date = $options['completion_date'];
+			echo "got here";
+
+			$stmt = mysqli_prepare($conn, "UPDATE TaskItems SET dueDate=?, completionDate=? WHERE itemId=?");
+			mysqli_stmt_bind_param($stmt, "ssi", $due_date, $completion_date, $itemId);
+			// echo var_dump($stmt);
+			mysqli_stmt_execute($stmt);
+
+			$affected_rows = mysqli_stmt_affected_rows($stmt);
+
+			mysqli_stmt_close($stmt); // close statement
+
+			break;
+		default: 
+			// if item is a reminder or note, then return here
+			return $item_edited;
+	}
+
+	// this is for testing only, to be deleted -----------------
+	if ($affected_rows == 1) {
+		echo "Edited Event or Task";
+	} else {
+		echo "Cannot edit Event or Task";
+	}
+	// ---------------------------------------------------------
+
+	$item_edited = $item_edited || ($affected_rows == 1);
+
+	return $item_edited;
 }
 
 /**
