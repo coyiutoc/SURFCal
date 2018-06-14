@@ -550,7 +550,7 @@ function getAverageContactsPerAccount() {
 }
 
 /**
- *	Retrieves average number of contacts created by accounts (for Admin Panel)
+ *	Retrieves min and max number of contacts created per account (for Admin Panel)
  * 	@return Float 	Average number of contacts
  */
 function getMinMaxContactsPerAccount() {
