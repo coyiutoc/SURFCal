@@ -54,6 +54,8 @@ INSERT INTO Contacts VALUES
 
 INSERT INTO ContactAddresses VALUES
     (1, '1234 Sesame Street', 'Port Coquitlam', 'British Columbia', 'Canada', 'V3B1G3'),
+    (1, '1234 Sesame ave', 'Port Coquitlam', 'British Columbia', 'Canada', 'V3B1G3'),
+    (1, '1234 Sesame lane', 'Port Coquitlam', 'British Columbia', 'Canada', 'V3B1G3'),
     (2, '1700 Hampton Drive', 'Coquitlam', 'British Columbia', 'Canada', 'V3E3C8'),
     (3, '8909 Alaska Way', 'Burnaby', 'British Columbia', 'Canada', 'V5T6S9'),
     (4, '123 Fake st', 'Vancouver', 'British Columbia', 'Canada', 'V4N1N4'),
@@ -73,6 +75,8 @@ INSERT INTO ContactAddresses VALUES
 
 INSERT INTO ContactEmails VALUES
     (1, 'valentinorossi@gmail.com'),
+    (1, 'valentinorossi@aol.com'),
+    (1, 'valentinorossi@hotmail.com'),
     (2, 'aiannone0@hotmail.com'),
     (3, 'marquezthebiker@hotmail.com'),
     (4, 'brocklesnar@gmail.com'),
@@ -91,6 +95,8 @@ INSERT INTO ContactEmails VALUES
 
 INSERT INTO ContactPhones VALUES
     (1, '6042348490', 'home'),
+    (1, '6042428490', 'work'),
+    (1, '6042234290', 'evening'),
     (2, '7789083245', 'work'),
     (3, '6048899020', 'evening');
     (4, '6045234234', 'home'),
