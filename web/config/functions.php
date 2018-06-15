@@ -12,12 +12,16 @@ function destroySession() {
     session_destory();
 }
 
-function sanitizeString($s) {
+function sanitizeString($conn, $s) {
     global $db;
     $s = strip_tags($s);
     $s = htmlentities($s);
     $s = stripslashes($s);
-    return $db->conn->real_escape_string($s);
+    return mysqli_real_escape_string($conn, stripslashes($s));
+}
+
+function sqlSanitize($conn, $s) {
+    return mysqli_real_escape_string($conn, stripslashes($s));
 }
 
 ?>

@@ -782,6 +782,16 @@ function getAllAccounts() {
 }
 
 /**
+ *	Retrieves accounts by username
+ * 	@return array		list of account information (id, username, email, name)
+ */
+function getAccountByUser($user) {
+	global $conn;
+	$query = "SELECT * FROM `Accounts` WHERE `username`='$user';";
+	return mysqli_fetch_array(mysqli_query($conn, $query));
+}
+
+/**
  *	Retrieves list of accounts that have created all item types (i.e. experienced users)
  * 	@return array	list of accounts
  */
