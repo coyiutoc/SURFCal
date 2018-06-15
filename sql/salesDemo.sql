@@ -108,22 +108,50 @@ INSERT INTO ContactPhones VALUES
     (23008925, '6041948193', 'home');
 
 INSERT INTO Items VALUES
-    (1, 23008910, 'event1', '2018-05-25', 'sample text 1', NULL, 'event'),
-    (2, 23008911, 'event2', '2018-05-21', 'sample text 2', NULL, 'event'),
-    (3, 23008912, 'event3', '2018-04-05', 'sample text 3', '2018-06-06 00:00:00', 'event'),
-    (4, 23008913, 'task1', '2018-05-25', 'sample text 1', NULL, 'task'),
-    (5, 23008914, 'task2', '2018-05-21', 'sample text 2', NULL, 'task'),
-    (6, 23008915, 'task3', '2018-04-05', 'sample text 3', '2018-04-06 00:00:00', 'task');
+    (null, 6, 'event1', '2018-05-25', 'sample text 1', NULL, 'event'),
+    (null, 6, 'event2', '2018-05-21', 'sample text 2', NULL, 'event'),
+    (null, 6, 'event3', '2018-04-05', 'sample text 3', '2018-06-06 00:00:00', 'event'),
+    (null, 6, 'event4', '2018-05-24', 'sample text 4', NULL, 'event'),
+    (null, 6, 'event5', '2018-05-22', 'sample text 5', NULL, 'event'),
+    (null, 6, 'event6', '2018-04-07', 'sample text 6', '2018-06-06 00:00:00', 'event'),
+    (null, 6, 'event7', '2018-05-30', 'sample text 7', NULL, 'event'),
+    (null, 6, 'event8', '2018-05-05', 'sample text 8', NULL, 'event'),
+    (null, 6, 'event9', '2018-04-25', 'sample text 9', '2018-06-06 00:00:00', 'event'),
+    (null, 6, 'event10', '2018-03-23', 'sample text 10', NULL, 'event'),
+    (null, 6, 'task1', '2018-05-22', 'sample text 1', NULL, 'task'),
+    (null, 6, 'task2', '2018-05-21', 'sample text 2', NULL, 'task'),
+    (null, 6, 'task3', '2018-04-05', 'sample text 3', '2018-04-06 00:00:00', 'task');
+    (null, 6, 'task4', '2018-05-25', 'sample text 4', NULL, 'task'),
+    (null, 6, 'task5', '2018-05-20', 'sample text 5', NULL, 'task'),
+    (null, 6, 'task6', '2018-04-03', 'sample text 6', '2018-04-06 00:00:00', 'task');
+    (null, 6, 'task7', '2018-05-19', 'sample text 7', NULL, 'task'),
+    (null, 6, 'task8', '2018-05-14', 'sample text 8', NULL, 'task'),
+    (null, 6, 'task9', '2018-04-12', 'sample text 9', '2018-04-06 00:00:00', 'task');
+    (null, 6, 'task10', '2018-05-05', 'sample text 10', NULL, 'task'),
 
 INSERT INTO EventItems VALUES
     (1, '2018-05-25', '2018-05-30'),
     (2, '2018-05-21', '2018-05-30'),
-    (3, '2018-04-05', '2018-05-30');
+    (3, '2018-04-05', '2018-05-30'),
+    (4, '2018-05-24', '2018-05-30'),
+    (5, '2018-05-22', '2018-05-30'),
+    (6, '2018-04-07', '2018-05-30'),
+    (7, '2018-05-30', '2018-05-30'),
+    (8, '2018-05-05', '2018-05-30'),
+    (9, '2018-04-25', '2018-05-30'),
+    (10, '2018-03-23', '2018-05-30');
 
 INSERT INTO TaskItems VALUES
-    (4, '2018-05-25', '2018-05-30'),
-    (5, '2018-05-21', '2018-05-30'),
-    (6, NULL, '2018-05-30');
+    (11, '2018-05-25', '2018-05-30'),
+    (12, '2018-05-21', '2018-05-30'),
+    (13, NULL, '2018-05-30'),
+    (14, '2018-05-29', '2018-05-30'),
+    (15, '2018-05-28', '2018-05-30'),
+    (16, NULL, '2018-05-30'),
+    (17, '2018-05-27', '2018-05-30'),
+    (18, '2018-05-26', '2018-05-30'),
+    (19, NULL, '2018-05-30'),
+    (20, '2018-05-26', '2018-05-30');
 
 INSERT INTO Groups VALUES
     (1, 1),
