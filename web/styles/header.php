@@ -35,23 +35,23 @@ echo "                            <span>" . ($loggedin ? $user[0] : "<i class=\"
                             <h3>" . ($loggedin ? $user : "&nbsp;") . "</h3>
                             <p>" . ($loggedin ? $email : "&nbsp;") . "</p>
                             <ul>
-                                <li><a href=\"?SURFCal=home\">Home</a></li>";
+                                <li><a href=\"?$profile=home\">Home</a></li>";
 
 if ($loggedin) {
     echo "
-                                <li><a href=\"?SURFCal=calendar\">Calendars</a></li>
-                                <li><a href=\"?SURFCal=contact\">Contacts</a></li>
-                                <li><a href=\"?SURFCal=setting\">Settings</a></li>";
+                                <li><a href=\"?$profile=calendar\">Calendars</a></li>
+                                <li><a href=\"?$profile=contact\">Contacts</a></li>
+                                <li><a href=\"?$profile=setting\">Settings</a></li>";
     if ($admin) {
         echo "
-                                <li class=\"acp\"><a href=\"#\">Admin Panel</a></li>";
+                                <li class=\"acp\"><a href=\"?$profile=acp\">Admin Panel</a></li>";
     }
     echo "
-                                <li class=\"logout\"><a href=\"?SURFCal=misc&misc=logout\">Logout</a></li>";
+                                <li class=\"logout\"><a href=\"?$profile=misc&misc=logout\">Logout</a></li>";
 } else {
     echo "
-                                <li class=\"new\"><a href=\"#\">Create Account</a></li>
-                                <li class=\"login\"><a href=\"?SURFCal=login\">Login</a></li>";
+                                <li class=\"new\"><a href=\"?$profile=register\">Create Account</a></li>
+                                <li class=\"login\"><a href=\"?$profile=login\">Login</a></li>";
 }
 
 echo <<<_END

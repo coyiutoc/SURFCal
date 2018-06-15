@@ -19,8 +19,8 @@ if ($loggedin) {
                             <p class="subtitle"></p>
                             <script>document.getElementsByClassName("subtitle")[0].innerHTML += twemoji.parse("🐿 🦄 🐰 🐠");</script>
                             <nav>
-                                <a href="#" class="login">Login</a>
-                                <a href="#">Sign Up</a>
+                                <a href="?$profile=login" class="login">Login</a>
+                                <a href="?$profile=register">Sign Up</a>
                             </nav>
                         </section>
                     </main>

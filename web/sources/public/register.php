@@ -31,7 +31,7 @@ echo <<<_END
                                 </div>
                                 <div class="field"><input type="submit" value="Create" class="button" /></div>
                             </form>
-                            <p>Have an account? <a href="#">Sign in.</a></p>
+                            <p>Have an account? <a href="?$profile=login">Sign in.</a></p>
                         </section>
                     </main>
 _END;
