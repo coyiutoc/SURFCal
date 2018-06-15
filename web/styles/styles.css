@@ -1,0 +1,441 @@
+@charset "UTF-8";
+
+html, body {
+    height: 100%;
+    min-height: auto;
+}
+
+body {
+    background-color: #cccccc;
+    color: black;
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 12pt;
+    font-weight: 300;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+}
+
+h1 { font-size: 24pt; }
+h2 { font-size: 24pt; }
+h3 { font-size: 20pt; }
+h4 { font-size: 15pt; }
+h5 { font-size: 15pt; }
+h6 { font-size: 12pt; }
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+form {
+    margin: 0;
+}
+
+form.type {
+    display: flex;
+}
+
+form.type .radioField {
+    margin: 0 5px;
+}
+
+form .field {
+    align-items: center;
+    display: flex;
+    margin: 5px 0;
+}
+
+form .field label {
+    min-width: 10ch;
+}
+
+form .field input,
+form .field select {
+    border: 1px solid #8b8b8b;
+    border-radius: 3px;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 3px 5px;
+    flex: 1;
+}
+
+form .button {
+    background-color: rgba(139, 139, 139, 0.7);
+    color: white;
+    transition: all 0.3s ease-in;
+}
+
+form .button:hover,
+form .button:active,
+form .button:focus {
+    background-color: rgb(139, 139, 139);
+}
+
+a:link, a:visited {
+    color: #326ed8;
+    text-decoration: none;
+}
+
+a:hover, a:active, a:focus {
+    color: #4353c1;
+}
+
+b, strong {
+    font-weight: 700;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.container {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 1600px;
+    padding: 0 25px;
+    width: 100%;
+}
+
+header.global {
+    background-color: #e22222;
+    border-bottom: 3px solid white;
+    height: 50px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+header.global .container {
+    align-items: center;
+    display: flex;
+    height: 100%;
+}
+
+header.global h1 {
+    color: white;
+    flex: 1;
+}
+
+.userProfile {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    /*margin-right: 10px;*/
+    position: relative;
+}
+
+.userProfile .userAvatar {
+    align-items: center;
+    background-color: grey;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    height: 32px;
+    justify-content: center;
+    position: absolute;
+    right: 9px;
+    width: 32px;
+}
+
+.userProfile .userMenu {
+    background-color: #eeeeee;
+    border-radius: 0 0 3px 3px;
+    box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.2), 1px 1px 3px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px 25px 18px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateY(-105%);
+    transition: transform 0.3s ease-in-out;
+    width: 300px;
+    word-break: break-all;
+}
+
+.userProfile:hover .userMenu {
+    transform: translateY(0);
+}
+
+.userProfile h3 {
+    font-size: 18pt;
+    font-weight: 300;
+}
+
+.userProfile h6 {
+    font-size: 18pt;
+}
+
+.userProfile .version {
+    font-weight: 300;
+}
+
+.userProfile ul {
+    border-top: 1px solid grey;
+    list-style: none;
+    margin: 25px 0;
+    padding: 0;
+    text-align: center;
+}
+
+.userProfile a:link,
+.userProfile a:visited {
+    border-bottom: 1px solid grey;
+    display: block;
+    padding: 10px 0;
+    transition: all 0.3s ease-in;
+}
+
+.userProfile a:hover,
+.userProfile a:active,
+.userProfile a:focus {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.userProfile .login a:link,
+.userProfile .login a:visited {
+    color: #3b3737;
+}
+
+.userProfile .logout a:link,
+.userProfile .logout a:visited {
+    color: #e31c1c;
+}
+
+.userProfile .acp a:link,
+.userProfile .acp a:visited {
+    color: #651add;
+}
+
+.main.global {
+    flex: 1;
+}
+
+main header, main section, .addItem {
+    background-color: white;
+    border-radius: 3px;
+    box-sizing: border-box;
+    padding: 18px 25px;
+}
+
+main > * {
+    margin-bottom: 15px;
+}
+
+main header.calendar {
+    display: flex;
+}
+
+main header.calendar h2 {
+    flex: 1;
+}
+
+.items article {
+    background-color: rgba(119, 119, 119, 0.5);
+    border-left: 3pt solid rgb(119, 119, 119);
+    color: rgb(119, 119, 119);
+    display: flex;
+    margin: 5px 0;
+    padding: 3px 5px;
+}
+
+.items article:hover, .items article:active, .items article:focus {
+    background-color: rgba(119, 119, 119, 0.65);
+}
+
+.items article .time {
+    text-align: right;
+    font-size: 10pt;
+    line-height: 18pt;
+    width: 9ch;
+}
+
+.reminders .items article .time{
+    width: 10ch;
+}
+
+.items article .time > * {
+    display: block;
+}
+
+.items article .indicator {
+    display: flex;
+    justify-content: center;
+    width: 20pt;
+    margin-top: 5pt;
+}
+
+.items article.red {
+    background-color: rgba(233, 39, 39, 0.5);
+    border-color: rgb(233, 39, 39);
+    color: rgb(233, 39, 39);
+}
+
+.items article.red:hover, .items article.red:active, .items article.red:focus {
+    background-color: rgba(233, 39, 39, 0.65);
+}
+
+.items article.orange {
+    background-color: rgba(233, 128, 39, 0.5);
+    border-left-color: rgb(233, 128, 39);
+    color: rgb(233, 128, 39);
+}
+
+.items article.orange:hover, .items article.orange:active, .items article.orange:focus {
+    background-color: rgba(233, 128, 39, 0.65);
+}
+
+.items article.yellow {
+    background-color: rgba(222, 188, 0, 0.5);
+    border-color: rgb(222, 188, 0);
+    color: rgb(222, 188, 0);
+}
+
+.items article.yellow:hover, .items article.yellow:active, .items article.yellow:focus {
+    background-color: rgba(222, 188, 0, 0.65);
+}
+
+.items article.green {
+    background-color: rgba(36, 183, 36, 0.5);
+    border-left-color: rgb(36, 183, 36);
+    color: rgb(36, 183, 36);
+}
+
+.items article.green:hover, .items article.green:active, .items article.green:focus {
+    background-color: rgba(36, 183, 36, 0.65);
+}
+
+.items article.blue {
+    background-color: rgba(31, 123, 221, 0.5);
+    border-left-color: rgb(31, 123, 221);
+    color: rgb(31, 123, 221);
+}
+
+.items article.blue:hover, .items article.blue:active, .items article.blue:focus {
+    background-color: rgba(31, 123, 221, 0.65);
+}
+
+.items article.purple {
+    background-color: rgba(160, 60, 198, 0.5);
+    border-left-color: rgb(160, 60, 198);
+    color: rgb(160, 60, 198);
+}
+
+.items article.purple:hover, .items article.purple:active, .items article.purple:focus {
+    background-color: rgba(160, 60, 198, 0.65);
+}
+
+.items article.grey {
+    background-color: rgba(70, 70, 70, 0.5);
+    border-left-color: rgb(70, 70, 70);
+    color: rgb(70, 70, 70);
+}
+
+.items article.grey:hover, .items article.grey:active, .items article.grey:focus {
+    background-color: rgba(70, 70, 70, 0.65);
+}
+
+.items .itemInfo {
+    min-width: 0;
+    width: 100%;
+}
+
+.items .itemInfo h5,
+.items .itemInfo p {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.landing {
+    text-align: center;
+}
+
+.landing nav {
+    display: flex;
+    justify-content: space-around;
+}
+
+.landing nav a:link, .landing nav a:visited {
+    border: 2px solid #e22222;
+    border-radius: 3px;
+    color: #e22222;
+    display: block;
+    padding: 8px 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+.landing nav a.login {
+    background-color: #e22222;
+    color: white;
+}
+
+.landing nav a:hover, .landing nav a:active, .landing nav a:focus {
+    background-color: #b51717;
+    color: white;
+}
+
+.login p, .register p {
+    font-size: 10pt;
+    text-align: center;
+}
+
+.register form .field label {
+    min-width: 20ch;
+}
+
+.register form .field.birthdate input {
+    flex: initial;
+    margin-right: 5px;
+    width: 10ch;
+}
+
+footer.global {
+    padding: 25px 0;
+}
+
+@media all and (min-width: 800px) {
+    .container {
+        width: 80%;
+    }
+    
+    .micro .container {
+        width: 400px;
+    }
+    
+    .macro .container {
+        width: 600px;
+    }
+    
+    .main .container {
+        align-items: flex-start;
+        display: flex;
+    }
+    
+    main {
+        flex: 1;
+    }
+    
+    main > *:last-child {
+        margin-bottom: 0;
+    }
+    
+    .addItem {
+        margin-left: 25px;
+        width: 375px;
+    }
+}

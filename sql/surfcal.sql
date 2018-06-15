@@ -1,3 +1,4 @@
+CREATE SCHEMA `surfcal`;
 
 CREATE TABLE Calendars (
     calendarId  INTEGER AUTO_INCREMENT,

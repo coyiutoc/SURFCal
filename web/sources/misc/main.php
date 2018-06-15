@@ -5,6 +5,7 @@ if (basename($_SERVER['PHP_SELF']) === 'main.php') {
 }
 
 $pageTitle = '';
+$pageMode = '';
 
 include('styles/header.php');
 

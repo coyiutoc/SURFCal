@@ -10,4 +10,7 @@ $siteTitle = 'SURFCal';
 $copy = '2018';
 $warnings = '';
 
+$SiteMeta = (object)array('version' => '', 'commit' => '', 'lastUpdated' => '');
+include('meta.php');
+
 ?>

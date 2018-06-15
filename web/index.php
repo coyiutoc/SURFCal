@@ -9,15 +9,18 @@ if (extension_loaded('zlib')) {
     ob_start('ob_gzhandler');
 }
 
-require_once('config/functions.php');
-require_once('config/database.php');
 require_once('config/properties.php');
+require_once('config/database.php');
+require_once('config/functions.php');
 
 $getSection = isset($_GET[$profile]) ? $_GET[$profile] : '';
 
-if (isset($_SESSION['user'])) {
+if (isset($_SESSION['user']) && isset($_SESSION['admin']) && isset($_SESSION['email']) && isset($_SESSION['calId'])) {
     $loggedin = true;
     $user = $_SESSION['user'];
+    $admin = $_SESSION['admin'];
+    $email = $_SESSION['email'];
+    $calId = $_SESSION['calId'];
 } else {
     $loggedin = false;
 }

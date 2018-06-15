@@ -20,7 +20,7 @@ if (!$conn) {
     // die('Connection Error: ' . mysqli_connect_error());
     require_once('../500.php');
 }
-echo "Connection success";
+
 $conn->set_charset('utf-8');
 
 // =============================================================================
