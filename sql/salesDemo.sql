@@ -5,7 +5,8 @@ INSERT INTO Calendars VALUES
     (null, 'Katies Calendar', 'mock calendar for sales demo'),
     (null, 'valentinas Calendar', 'mock calendar for sales demo'),
     (null, 'borts calendar', 'borts personal calendar'),
-    (null, 'johns calendar', 'johns personal calendar');
+    (null, 'johns calendar', 'johns personal calendar'),
+    (null, 'group calendar', 'mock group calendar');
 
 INSERT INTO ItemType VALUES
     ('event'),
@@ -127,5 +128,12 @@ INSERT INTO TaskItems VALUES
 INSERT INTO Groups VALUES
     (1, 1),
     (2, 2),
-    (3, 3);
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (1, 6),
+    (2, 6),
+    (3, 6),
+    (4, 6),
+    (5, 6);
 
