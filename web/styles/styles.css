@@ -146,6 +146,7 @@ header.global h1 {
     justify-content: center;
     position: absolute;
     right: 9px;
+    text-transform: uppercase;
     width: 32px;
 }
 
@@ -402,6 +403,25 @@ main header.calendar h2 {
     flex: initial;
     margin-right: 5px;
     width: 10ch;
+}
+.alert {
+    background-color: #5b9960;
+    color: white;
+    padding: 20px;
+}
+
+.closebtn {
+    color: white;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 20px;
+    margin-left: 15px;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
 }
 
 footer.global {

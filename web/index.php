@@ -13,8 +13,6 @@ require_once('config/properties.php');
 require_once('config/database.php');
 require_once('config/functions.php');
 
-$getSection = isset($_GET[$profile]) ? $_GET[$profile] : '';
-
 if (isset($_SESSION['id']) && isset($_SESSION['user']) && isset($_SESSION['admin']) && isset($_SESSION['email']) && isset($_SESSION['calId'])) {
     $loggedin = true;
     $id = $_SESSION['id'];
@@ -25,6 +23,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['user']) && isset($_SESSION['admin
 } else {
     $loggedin = false;
 }
+
+$getSection = isset($_GET[$profile]) ? $_GET[$profile] : '';
 
 switch ($getSection) {
     case NULL:

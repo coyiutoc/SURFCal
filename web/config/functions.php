@@ -5,11 +5,8 @@ if (basename($_SERVER['PHP_SELF']) === 'functions.php') {
 }
 
 function destroySession() {
+    session_destroy();
     $_SESSION = array();
-    if (session_id() != "" || isset($_COOKIE[session_name()])) {
-        setcookie(session_name(), '', time() - 2592000, '/');
-    }
-    session_destory();
 }
 
 function sanitizeString($conn, $s) {
