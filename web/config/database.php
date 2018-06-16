@@ -10,7 +10,7 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = '';
+$user = 'root';
 $pass = '';
 $schema = 'surfcal';
 

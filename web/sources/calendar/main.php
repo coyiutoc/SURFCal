@@ -22,7 +22,12 @@ else
 {	
 	include('styles/header.php');
 
-	// Check endpoint is addItem:
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // ENDPOINT CHANGE TO ?$profile=calendar&calendar=ID&addItem=true.
+    // Make sure it is changed in the form divs too.
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    // Check endpoint is addItem:
 	if(isset($_GET['calendar']) && $_GET['calendar'] === 'addItem'){
 
 		// ----------- debugging ------------------------------------

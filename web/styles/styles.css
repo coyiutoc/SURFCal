@@ -403,21 +403,19 @@ main header.calendar h2 {
     margin-right: 5px;
     width: 10ch;
 }
-
 .alert {
-    padding: 20px;
     background-color: #5b9960;
     color: white;
+    padding: 20px;
 }
 
 .closebtn {
-    margin-left: 15px;
     color: white;
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
     cursor: pointer;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 20px;
+    margin-left: 15px;
     transition: 0.3s;
 }
 
