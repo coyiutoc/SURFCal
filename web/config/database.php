@@ -344,17 +344,24 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 
 	$expected_affected_rows = count($addresses) + count($emails) + count($phones) + 1;
 
+	echo "EMAILS";
+	echo var_dump($emails);
+	echo "ADDRESSES";
+	echo var_dump($addresses);
+	echo "PHONES";
+	echo var_dump($phones);
+
 	// Handle adding contact info (address, email, phone)
 	foreach($addresses as &$address) {
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactAddresses VALUES(?, ?, ?, ?, ?, ?);");
 		mysqli_stmt_bind_param($stmt, 
 								"isssss", 
 								$contactId, 
-								$info["street"], 
-								$info["city"],
-								$info["state"],
-								$info["country"],
-								$info["postal"]);
+								$address["street"], 
+								$address["city"],
+								$address["state"],
+								$address["country"],
+								$address["postal"]);
 		mysqli_stmt_execute($stmt);
 
 		if (mysqli_stmt_affected_rows($stmt) > 0) {
@@ -369,7 +376,7 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 		mysqli_stmt_bind_param($stmt, 
 								"is", 
 								$contactId, 
-								$info["email"]);
+								$email["email"]);
 		mysqli_stmt_execute($stmt);
 
 		if (mysqli_stmt_affected_rows($stmt) > 0) {
@@ -384,8 +391,8 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 		mysqli_stmt_bind_param($stmt, 
 								"iss", 
 								$contactId,
-								$info["phone"],
-								$info["type"]);
+								$phone["phone"],
+								$phone["type"]);
 		mysqli_stmt_execute($stmt);
 
 		if (mysqli_stmt_affected_rows($stmt) > 0) {

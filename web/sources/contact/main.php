@@ -16,16 +16,8 @@ if (!$loggedin) {
 
 	if (isset($_GET["contact"]) && $_GET["contact"] === "addContact") {
 		// handle add contact
-		echo "Adding contact <br>";
-		print_r (var_dump($_POST));
-
-		$name= trim($_POST["name"]);
-		$birthday= $_POST["birthday"] === "" ? null : $_POST["birthday"]; 
-		// if (trim($_POST["city"]) !== "") {
-		// 	echo "city is not empty";
-		// } else {
-		// 	echo "city is empty";
-		// }
+		$name = trim($_POST["name"]);
+		$birthday = trim($_POST["birthday"]) === "" ? null : trim($_POST["birthday"]); 
 
 		$addresses = [];
 		$emails = [];
@@ -38,26 +30,35 @@ if (!$loggedin) {
 				isset($_POST["country" . $addressIndex]) && trim($_POST["country" . $addressIndex]) !== "" &&
 				isset($_POST["postal" . $addressIndex]) && trim($_POST["postal" . $addressIndex])!== "") {
 			// add info to array
-			array_push($addresses, array(trim($_POST["street" . $addressIndex]),
-											trim($_POST["street" . $addressIndex]),
-											trim($_POST["state" . $addressIndex]),
-											trim($_POST["country" . $addressIndex]),
-											trim($_POST["postal" . $addressIndex])));
+			array_push($addresses, 
+						array(
+							"street" => trim($_POST["street" . $addressIndex]),
+							"city" => trim($_POST["city" . $addressIndex]),
+							"state" => trim($_POST["state" . $addressIndex]),
+							"country" => trim($_POST["country" . $addressIndex]),
+							"postal" => trim($_POST["postal" . $addressIndex])));
 			$addressIndex++;
 		}
 
 		$emailIndex = 0;
 		while (isset($_POST["email" . $emailIndex]) && trim($_POST["email" . $emailIndex]) !== "") {
 			// add info to array
-			array_push($emails, array(trim($_POST["email" . $emailIndex])));
+			array_push($emails, 
+						array(
+							"email" => trim($_POST["email" . $emailIndex])
+						));
 			$emailIndex++;
 		}
 
 		$phoneIndex = 0;
 		while (isset($_POST["phone" . $phoneIndex]) && trim($_POST["phone" . $phoneIndex]) !== "") {
 			// add info to array
-			array_push($phones, array(trim($_POST["phone" . $phoneIndex]),
-										trim($_POST["type" . $phoneIndex])));
+			array_push($phones, 
+						array(
+							"phone" => trim($_POST["phone" . $phoneIndex]),
+							"type" => trim($_POST["type" . $phoneIndex])
+						));
+
 			$phoneIndex++;
 		}
 
@@ -76,26 +77,26 @@ if (!$loggedin) {
 				<input type="date" name="birthday" placeholder="birthday" maxlength="64">
 			</div>
 			<div class="field">
-				<label for="street">Street</label>
-				<input type="text" name="street" placeholder="street" required="required" maxlength="64">
-				<label for="city">City</label>
-				<input type="text" name="city" placeholder="city" required="required" maxlength="64">
-				<label for="state">State</label>
-				<input type="text" name="state" placeholder="state" required="required" maxlength="64">
-				<label for="country">Country</label>
-				<input type="text" name="country" placeholder="country" required="required" maxlength="64">
-				<label for="postal">Postal Code</label>
-				<input type="text" name="postal" placeholder="postal code" required="required" maxlength="7">
+				<label for="street0">Street</label>
+				<input type="text" name="street0" placeholder="street" required="required" maxlength="64">
+				<label for="city0">City</label>
+				<input type="text" name="city0" placeholder="city" required="required" maxlength="64">
+				<label for="state0">State</label>
+				<input type="text" name="state0" placeholder="state" required="required" maxlength="64">
+				<label for="country0">Country</label>
+				<input type="text" name="country0" placeholder="country" required="required" maxlength="64">
+				<label for="postal0">Postal Code</label>
+				<input type="text" name="postal0" placeholder="postal code" required="required" maxlength="7">
 			</div>
 			<div class="field">
-				<label for="email">Email</label>
-				<input type="text" name="email" placeholder="email" required="required" maxlength="64">
+				<label for="email0">Email</label>
+				<input type="text" name="email0" placeholder="email" required="required" maxlength="64">
 			</div>
 			<div class="field">
-				<label for="phone">Phone</label>
-				<input type="text" name="phone" placeholder="phone" required="required" maxlength="64">
-				<label for="type">Type</label>
-				<select>
+				<label for="phone0">Phone</label>
+				<input type="text" name="phone0" placeholder="phone" required="required" maxlength="64">
+				<label for="type0">Type</label>
+				<select name="type0">
 					<option value="home">Home</option>
 					<option value="work">Work</option>
 					<option value="evening">Evening</option>
