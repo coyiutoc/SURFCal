@@ -46,7 +46,7 @@ if ($loggedin) {
                     <main>
                         <section class=\"login\">
                             <h4>Login</h4>
-" . ($warnings !== '' ? "                            <aside class=\"warning\">$warnings\n                            </aside>" : '') .
+" . ($warnings !== '' ? "                            <aside class=\"warning\">$warnings\n                            </aside>\n" : '') .
     "                            <form action=\"?$profile=login\" method=\"post\">
                                 <div class=\"field\"><label for=\"username\">Username</label><input type=\"text\" name=\"username\" placeholder=\"Username\" required=\"required\" maxlength=\"32\" /></div>
                                 <div class=\"field\"><label for=\"password\">Password</label><input type=\"password\" name=\"password\" placeholder=\"Password\" required=\"required\" maxlength=\"64\" /></div>

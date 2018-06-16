@@ -47,7 +47,7 @@ if ($loggedin) {
                                 <li class=\"acp\"><a href=\"?$profile=acp\">Admin Panel</a></li>";
     }
     echo "
-                                <li class=\"logout\"><a href=\"?$profile=misc&misc=logout\">Logout</a></li>";
+                                <li class=\"logout\"><a href=\"?$profile=misc&amp;misc=logout\">Logout</a></li>";
 } else {
     echo "
                                 <li class=\"new\"><a href=\"?$profile=register\">Create Account</a></li>
@@ -63,6 +63,7 @@ echo <<<_END
                     </nav>
                 </div><!-- .container ends -->
             </header>
+
 _END;
 
 echo "            <div class=\"main " . ($pageMode === '' ? '' : $pageMode.' ') ."global\">

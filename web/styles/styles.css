@@ -146,6 +146,7 @@ header.global h1 {
     justify-content: center;
     position: absolute;
     right: 9px;
+    text-transform: uppercase;
     width: 32px;
 }
 
