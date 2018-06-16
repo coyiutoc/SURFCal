@@ -54,8 +54,7 @@ if (!$loggedin) {
 		}
 
 		$phoneIndex = 0;
-		while (isset($_POST["phone" . $phoneIndex]) && trim($_POST["phone" . $phoneIndex]) !== "" &&
-				isset($_POST["type" . $phoneIndex]) && trim($_POST["type" . $phoneIndex]) !== "") {
+		while (isset($_POST["phone" . $phoneIndex]) && trim($_POST["phone" . $phoneIndex]) !== "") {
 			// add info to array
 			array_push($phones, array(trim($_POST["phone" . $phoneIndex]),
 										trim($_POST["type" . $phoneIndex])));
@@ -78,23 +77,23 @@ if (!$loggedin) {
 			</div>
 			<div class="field">
 				<label for="street">Street</label>
-				<input type="text" name="street" placeholder="street" maxlength="64">
+				<input type="text" name="street" placeholder="street" required="required" maxlength="64">
 				<label for="city">City</label>
-				<input type="text" name="city" placeholder="city" maxlength="64">
+				<input type="text" name="city" placeholder="city" required="required" maxlength="64">
 				<label for="state">State</label>
-				<input type="text" name="state" placeholder="state" maxlength="64">
+				<input type="text" name="state" placeholder="state" required="required" maxlength="64">
 				<label for="country">Country</label>
-				<input type="text" name="country" placeholder="country" maxlength="64">
+				<input type="text" name="country" placeholder="country" required="required" maxlength="64">
 				<label for="postal">Postal Code</label>
-				<input type="text" name="postal" placeholder="postal code" maxlength="7">
+				<input type="text" name="postal" placeholder="postal code" required="required" maxlength="7">
 			</div>
 			<div class="field">
 				<label for="email">Email</label>
-				<input type="text" name="email" placeholder="email" maxlength="64">
+				<input type="text" name="email" placeholder="email" required="required" maxlength="64">
 			</div>
 			<div class="field">
 				<label for="phone">Phone</label>
-				<input type="text" name="phone" placeholder="phone" maxlength="64">
+				<input type="text" name="phone" placeholder="phone" required="required" maxlength="64">
 				<label for="type">Type</label>
 				<select>
 					<option value="home">Home</option>
