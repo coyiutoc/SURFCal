@@ -17,7 +17,7 @@ $getSection = isset($_GET[$profile]) ? $_GET[$profile] : '';
 
 if (isset($_SESSION['id']) && isset($_SESSION['user']) && isset($_SESSION['admin']) && isset($_SESSION['email']) && isset($_SESSION['calId'])) {
     $loggedin = true;
-    $user = $_SESSION['id'];
+    $id = $_SESSION['id'];
     $user = $_SESSION['user'];
     $admin = $_SESSION['admin'];
     $email = $_SESSION['email'];

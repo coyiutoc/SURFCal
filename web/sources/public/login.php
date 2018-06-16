@@ -18,7 +18,7 @@ if ($loggedin) {
         $loggedin = true;
         $user = $_SESSION['id'] = $r['id'];
         $user = $_SESSION['user'] = $r['username'];
-        $admin = $_SESSION['admin'] = $r['admin'];
+        $admin = $_SESSION['admin'] = /*$r['admin']*/ true;
         $email = $_SESSION['email'] = $r['email'];
         $calId = $_SESSION['calId'] = $r['calendarId'];
         $pageTitle = "Logged In";
