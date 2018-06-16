@@ -10,8 +10,8 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'hyngan';
-$pass = 'hyngan';
+$user = 'root';
+$pass = '';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
@@ -343,13 +343,6 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	mysqli_stmt_close($contact_stmt); // close statement
 
 	$expected_affected_rows = count($addresses) + count($emails) + count($phones) + 1;
-
-	echo "EMAILS";
-	echo var_dump($emails);
-	echo "ADDRESSES";
-	echo var_dump($addresses);
-	echo "PHONES";
-	echo var_dump($phones);
 
 	// Handle adding contact info (address, email, phone)
 	foreach($addresses as &$address) {
