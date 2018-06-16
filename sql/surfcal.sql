@@ -23,7 +23,7 @@ CREATE TABLE Accounts (
     lastKnownIp VARCHAR(32),
     calendarId  INTEGER NOT NULL,
     createDate  DATE NOT NULL,
-    isDeactivated BOOLEAN NOT NULL,
+    isDeactivated BOOLEAN,
     PRIMARY KEY (id),
     UNIQUE (username),
     UNIQUE (email),
@@ -77,10 +77,13 @@ CREATE TABLE Items (
     itemId      INTEGER AUTO_INCREMENT,
     calendarId  INTEGER,
     name        VARCHAR(32),
-    createDate  DATE,
+    createDate  DATE NOT NULL,
     note        VARCHAR(256),
     reminder    DATETIME,
     type        ENUM('event', 'task', 'reminder', 'note') NOT NULL,
+    createdBy   INTEGER,
+    location    VARCHAR(32),
+    colour      INTEGER,
     PRIMARY KEY (itemId),
     FOREIGN KEY (calendarId) REFERENCES Calendars(calendarId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (type) REFERENCES ItemType(type) ON DELETE CASCADE ON UPDATE CASCADE
@@ -88,7 +91,7 @@ CREATE TABLE Items (
 
 CREATE TABLE EventItems (
     itemId      INTEGER,
-    startDate   DATETIME,
+    startDate   DATETIME NOT NULL,
     endDate     DATETIME,
     PRIMARY KEY (itemId),
     FOREIGN KEY (itemId) REFERENCES Items(itemId) ON DELETE CASCADE ON UPDATE CASCADE
@@ -96,7 +99,7 @@ CREATE TABLE EventItems (
 
 CREATE TABLE TaskItems (
     itemId      INTEGER,
-    dueDate     DATETIME,
+    dueDate     DATETIME NOT NULL,
     completionDate DATETIME,
     PRIMARY KEY (itemId),
     FOREIGN KEY (itemId) REFERENCES Items(itemId) ON DELETE CASCADE ON UPDATE CASCADE

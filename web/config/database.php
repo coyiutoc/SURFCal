@@ -10,7 +10,7 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'root';
+$user = '';
 $pass = '';
 $schema = 'surfcal';
 
@@ -360,11 +360,21 @@ function deleteContact($contactId) {
  * 	@param string $note   		the item's description
  *	@param string $reminder 	the item's reminder datetime string
  *  @param string $type 		the item's type (one of "event", "task", "reminder", "note")
+ *  @param integer $colour		the item's colour
+ *									0 = grey
+ *									1 = red
+ *									2 = orange
+ *									3 = yellow
+ *									4 = green
+ *									5 = blue
+ *									6 = purple
+ *									7 = black
+ *  @param string $location     the item's location
  *  @param array $options 		the item's additional information (start_date and end_date for 
  *								event, due_date and completion_date for task)
  * 	@return boolean				true if item is inserted successfully
- */
-function createItem($calendarId, $accId, $name, $note, $reminder, $type, $options) {
+ */ 
+function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $colour, $location, $options) {
 	global $conn;
 
 	$item_inserted = false; // return value
@@ -373,8 +383,8 @@ function createItem($calendarId, $accId, $name, $note, $reminder, $type, $option
 	$name = trim($name);
 	$note = trim($note);
 
-	$item_stmt = mysqli_prepare($conn, "INSERT INTO Items VALUES(NULL, ?, ?, NOW(), ?, ?, ?, ?);");
-	mysqli_stmt_bind_param($item_stmt, "issssi", $calendarId, $name, $note, $reminder, $type, $accId);
+	$item_stmt = mysqli_prepare($conn, "INSERT INTO Items VALUES(0, ?, ?, NOW(), ?, ?, ?, ?, ?, ?);");
+	mysqli_stmt_bind_param($item_stmt, "issssiis", $calendarId, $name, $note, $reminder, $type, $createdBy, $location, $colour);
 	mysqli_stmt_execute($item_stmt);
 
 	$item_affected_rows = mysqli_stmt_affected_rows($item_stmt);
@@ -387,7 +397,6 @@ function createItem($calendarId, $accId, $name, $note, $reminder, $type, $option
 
 	// Return if item insert fails
 	if (!$item_inserted) return false;
-
 
 	// Handle insert Item Subclass (Event/Task)
 	$affected_rows = 0;
