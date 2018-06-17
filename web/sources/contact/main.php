@@ -12,7 +12,7 @@ function showContactList($id) {
 
 	// Contact List Display
 	echo "<main>";
-	echo "<section class='items'>"; // class='contacts'
+	echo "<section class='contacts'>"; // class='contacts'
 	
 	foreach($contacts as &$contact) {
 		echo "<article>";
@@ -30,6 +30,7 @@ if (!$loggedin) {
 } else {
 	include('styles/header.php');
 
+	// display contact list
 	showContactList($id);
 
 	if (isset($_GET["contact"]) && $_GET["contact"] === "addContact") {
@@ -88,7 +89,7 @@ if (!$loggedin) {
 		}
 	}
 
-	// Main content.
+	// display add contact section
 	echo <<< _END
 	<aside class="addContact">
 		<form id="addContact" action="?$profile=contact&contact=addContact" method="post">
