@@ -7,12 +7,31 @@ if (basename($_SERVER['PHP_SELF']) === 'main.php') {
 $pageTitle = '';
 $pageMode = '';
 
+function showContactList($id) {
+	$contacts = getContacts($id); // get contact list from DB
+
+	// Contact List Display
+	echo "<main>";
+	echo "<section class='contacts'>"; // class='contacts'
+	
+	foreach($contacts as &$contact) {
+		echo "<article>";
+		echo "<h4>" . $contact["name"] . "</h4>";
+		echo "</article>";
+	}
+
+	echo "</section>";
+	echo "</main>";
+}
 
 if (!$loggedin) {
 	echo "NOT LOGGED IN";
 	header("Location: ?$profile=login");
 } else {
 	include('styles/header.php');
+
+	// display contact list
+	showContactList($id);
 
 	if (isset($_GET["contact"]) && $_GET["contact"] === "addContact") {
 		// handle add contact
@@ -62,11 +81,17 @@ if (!$loggedin) {
 			$phoneIndex++;
 		}
 
-		createContact($id, $name, $birthday, $addresses, $emails, $phones);
+		if (createContact($id, $name, $birthday, $addresses, $emails, $phones)) {
+			// refresh page (redirect back to main contact page)
+			header("Location: ?$profile=contact");
+		} else {
+			echo "Failed to add contact, please try again later. <br>";
+		}
 	}
 
-	// Main content.
+	// display add contact section
 	echo <<< _END
+	<aside class="addContact">
 		<form id="addContact" action="?$profile=contact&contact=addContact" method="post">
 			<div class="field">
 				<label for="name">Name</label>
@@ -90,11 +115,11 @@ if (!$loggedin) {
 			</div>
 			<div class="field">
 				<label for="email0">Email</label>
-				<input type="text" name="email0" placeholder="email" required="required" maxlength="64">
+				<input type="email" name="email0" placeholder="email" required="required" maxlength="64">
 			</div>
 			<div class="field">
 				<label for="phone0">Phone</label>
-				<input type="text" name="phone0" placeholder="phone" required="required" maxlength="64">
+				<input type="tel" name="phone0" placeholder="phone" required="required" maxlength="64">
 				<label for="type0">Type</label>
 				<select name="type0">
 					<option value="home">Home</option>
@@ -109,6 +134,7 @@ if (!$loggedin) {
 		      <input type="submit" name="addContact" value="Add Contact" />
 		    </div>
 	    </form>
+	</aside>
 _END;
 
 	include('styles/footer.php');

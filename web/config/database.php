@@ -258,19 +258,18 @@ function getContacts($accId) {
 	mysqli_stmt_execute($stmt);
 
 	$result = mysqli_stmt_get_result($stmt);
-
-	if ($result) {
-		while($row = mysqli_fetch_assoc($result)) {
-			echo 'contactId: ' . $row["contactId"] . '<br>' .
-			'name: ' . $row["name"] . '<br>';
-
-			// TODO: add to result
-		}
-	}
-
 	mysqli_stmt_close($stmt); // close statement
 
-	// TODO: return list of contacts
+	if ($result) {
+		$contacts = [];
+		while ($contact = mysqli_fetch_assoc($result)) {
+			array_push($contacts, $contact);
+		}
+		return $contacts;
+	}
+
+	// Return empty list if there are no contacts associated with the user
+	return [];
 }
 
 /**
@@ -411,53 +410,8 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 		mysqli_stmt_close($stmt); // close statement
 	}
 
-	// foreach($args as &$info) {
-	// 	if ($info['type'] === "address") {
-	// 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactAddresses VALUES(?, ?, ?, ?, ?, ?);");
-	// 		mysqli_stmt_bind_param($stmt, 
-	// 								"isssss", 
-	// 								$contactId, 
-	// 								$info["street"], 
-	// 								$info["city"],
-	// 								$info["state"],
-	// 								$info["country"],
-	// 								$info["postal"]);
-	// 		mysqli_stmt_execute($stmt);
-
-	// 		if (mysqli_stmt_affected_rows($stmt) > 0) {
-	// 			$affected_rows++;
-	// 		}
-
-	// 		mysqli_stmt_close($stmt); // close statement
-	// 	} else if ($info['type'] === "email") {
-	// 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactEmails VALUES(?, ?);");
-	// 		mysqli_stmt_bind_param($stmt, 
-	// 								"is", 
-	// 								$contactId, 
-	// 								$info["email"]);
-	// 		mysqli_stmt_execute($stmt);
-
-	// 		if (mysqli_stmt_affected_rows($stmt) > 0) {
-	// 			$affected_rows++;
-	// 		}
-
-	// 		mysqli_stmt_close($stmt); // close statement
-	// 	} else if ($info['type'] === "phone") {
-	// 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactPhones VALUES(?, ?, ?);");
-	// 		mysqli_stmt_bind_param($stmt, 
-	// 								"iss", 
-	// 								$contactId,
-	// 								$info["phone"],
-	// 								$info["phoneType"]);
-	// 		mysqli_stmt_execute($stmt);
-
-	// 		if (mysqli_stmt_affected_rows($stmt) > 0) {
-	// 			$affected_rows++;
-	// 		}
-
-	// 		mysqli_stmt_close($stmt); // close statement
-	// 	}
-	// }
+	echo "EXPECTED: " . $expected_affected_rows;
+	echo "ACTUAL: " . $affected_rows;
 	return $expected_affected_rows === $affected_rows;
 }
 
