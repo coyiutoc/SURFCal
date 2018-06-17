@@ -404,12 +404,17 @@ main header.calendar h2 {
     margin-right: 5px;
     width: 10ch;
 }
-.alert {
+.positive_alert {
     background-color: #5b9960;
     color: white;
     padding: 20px;
 }
 
+.negative_alert {
+    background-color: #e86e55;
+    color: white;
+    padding: 20px;
+}
 .closebtn {
     color: white;
     cursor: pointer;

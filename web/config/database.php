@@ -1,6 +1,6 @@
 <?php
 
-ini_set('display_errors', 'On');
+//ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
 
 if (basename($_SERVER['PHP_SELF']) === 'database.php') {
@@ -53,20 +53,23 @@ function getCalendar($calendarId){
 
     global $conn;
 
-    echo "<br> ******* Getting all info on Calendar with calendarId = " . $calendarId . " ******* <br>";
+    // echo "<br> ******* Getting all info on Calendar with calendarId = " . $calendarId . " ******* <br>";
 
     $query = "SELECT * FROM Calendars";
     $response = @mysqli_query($conn, $query);
 
     if ($response){
-        while($row = mysqli_fetch_assoc($response)){
-            echo "<br> calendarId: " . $row["calendarId"] . 
-            "<br>" . "name: " . $row["name"] . 
-            "<br>" . "description: " . $row["description"] . 
-            "<br>" ;
-        }
+        // while($row = mysqli_fetch_assoc($response)){
+        //     echo "<br> calendarId: " . $row["calendarId"] . 
+        //     "<br>" . "name: " . $row["name"] . 
+        //     "<br>" . "description: " . $row["description"] . 
+        //     "<br>" ;
+        // }
 
         return mysqli_fetch_assoc($response);
+    }
+    else{
+    	return NULL;
     }
 }
 
@@ -527,9 +530,9 @@ function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $co
 
 	// this is for testing only, to be deleted -----------------
 	if ($affected_rows > 0) {
-		echo "Added Event or Task";
+		// echo "Added Event or Task";
 	} else {
-		echo "Cannot add Event or Task";
+		// echo "Cannot add Event or Task";
 	}
 	// ---------------------------------------------------------
 
@@ -662,27 +665,32 @@ function getItemsByType($type, $calendarId){
     if ($queries[$type]){
 
         $response = @mysqli_query($conn, $queries[$type]);
-        echo "<br> ******* Getting all " . $type . " items with calendarId = " . $calendarId . " ******* <br>";
+        // echo "<br> ******* Getting all " . $type . " items with calendarId = " . $calendarId . " ******* <br>";
 
         if ($response){
+        	$items = [];
+            while($item = mysqli_fetch_assoc($response)){
+                // echo "<br> itemId: " . $row["itemId"] . 
+                // "<br>" . "name: " . $row["name"] . 
+                // "<br>" . "createDate: " . $row["createDate"] . 
+                // "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") . 
+                // "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . 
+                // "<br>" . "type: " . $row["type"] . 
+                // "<br>" . "EVENT SPECIFIC: startDate: " . ($row["startDate"] ? $row["startDate"] : "NULL") . ", endDate: " .     ($row["endDate"] ? $row["endDate"] : "NULL") . 
+                // "<br>" . "TASK SPECIFIC: dueDate: " . ($row["dueDate"] ? $row["dueDate"] : "NULL") . ", completionDate: " .     ($row["completionDate"] ? $row["completionDate"] : "NULL") . 
+                // "<br>"; 
 
-            while($row = mysqli_fetch_assoc($response)){
-                echo "<br> itemId: " . $row["itemId"] . 
-                "<br>" . "name: " . $row["name"] . 
-                "<br>" . "createDate: " . $row["createDate"] . 
-                "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") . 
-                "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . 
-                "<br>" . "type: " . $row["type"] . 
-                "<br>" . "EVENT SPECIFIC: startDate: " . ($row["startDate"] ? $row["startDate"] : "NULL") . ", endDate: " .     ($row["endDate"] ? $row["endDate"] : "NULL") . 
-                "<br>" . "TASK SPECIFIC: dueDate: " . ($row["dueDate"] ? $row["dueDate"] : "NULL") . ", completionDate: " .     ($row["completionDate"] ? $row["completionDate"] : "NULL") . 
-                "<br>"; 
+                array_push($items, $item);
             }
-
-            return mysqli_fetch_assoc($response);
+            return $items;
         }
-    }
+        else{
+        	return NULL;
+        } // end if($response)
+    } 
     else{
         echo("<br> !!!! Incorrect type inputted: " . $type . " !!!! <br>");
+  		return NULL;
     }
 }
 
