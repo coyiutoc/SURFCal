@@ -80,6 +80,9 @@ CREATE TABLE Items (
     note        VARCHAR(256),
     reminder    DATETIME,
     type        ENUM('event', 'task', 'reminder', 'note') NOT NULL,
+    createdBy   INTEGER,
+    location    VARCHAR(32),
+    colour      INTEGER,
     PRIMARY KEY (itemId),
     FOREIGN KEY (calendarId) REFERENCES Calendars(calendarId) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (type) REFERENCES ItemType(type) ON DELETE CASCADE ON UPDATE CASCADE
