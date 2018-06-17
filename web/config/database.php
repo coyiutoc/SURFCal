@@ -322,6 +322,129 @@ function getContactDetails($contactId) {
 //							       UPDATE
 // .............................................................................
 
+/**
+ *	Creates a contact (name and birthday)
+ * 	@param integer 	$accId 		the Account (owner of contact) id associated with the contact
+ *	@param string 	$name 		the contact's name
+ * 	@param string 	$birthday 	the contact's birthday
+ *  @return boolean 			true if contact is added successfully
+ */
+function createContact($accId, $name, $birthday, array $addresses = array(), array $emails = array(),array $phones = array()) {
+	global $conn;
+
+	$contact_stmt = mysqli_prepare($conn, "INSERT INTO Contacts VALUES(NULL, ?, ?, ?);");
+	mysqli_stmt_bind_param($contact_stmt, "iss", $accId, $name, $birthday);
+	mysqli_stmt_execute($contact_stmt);
+
+	$affected_rows = mysqli_stmt_affected_rows($contact_stmt);
+
+	// Get inserted contact's id (for adding address/email/phone, if applicable)
+	$contactId = mysqli_insert_id($conn);
+	mysqli_stmt_close($contact_stmt); // close statement
+
+	$expected_affected_rows = count($addresses) + count($emails) + count($phones) + 1;
+
+	// Handle adding contact info (address, email, phone)
+	foreach($addresses as &$address) {
+		$stmt = mysqli_prepare($conn, "INSERT INTO ContactAddresses VALUES(?, ?, ?, ?, ?, ?);");
+		mysqli_stmt_bind_param($stmt, 
+								"isssss", 
+								$contactId, 
+								$address["street"], 
+								$address["city"],
+								$address["state"],
+								$address["country"],
+								$address["postal"]);
+		mysqli_stmt_execute($stmt);
+
+		if (mysqli_stmt_affected_rows($stmt) > 0) {
+			$affected_rows++;
+		}
+
+		mysqli_stmt_close($stmt); // close statement
+	}
+
+	foreach($emails as &$email) {
+		$stmt = mysqli_prepare($conn, "INSERT INTO ContactEmails VALUES(?, ?);");
+		mysqli_stmt_bind_param($stmt, 
+								"is", 
+								$contactId, 
+								$email["email"]);
+		mysqli_stmt_execute($stmt);
+
+		if (mysqli_stmt_affected_rows($stmt) > 0) {
+			$affected_rows++;
+		}
+
+		mysqli_stmt_close($stmt); // close statement
+	}
+
+	foreach($phones as &$phone) {
+		$stmt = mysqli_prepare($conn, "INSERT INTO ContactPhones VALUES(?, ?, ?);");
+		mysqli_stmt_bind_param($stmt, 
+								"iss", 
+								$contactId,
+								$phone["phone"],
+								$phone["type"]);
+		mysqli_stmt_execute($stmt);
+
+		if (mysqli_stmt_affected_rows($stmt) > 0) {
+			$affected_rows++;
+		}
+
+		mysqli_stmt_close($stmt); // close statement
+	}
+
+	// foreach($args as &$info) {
+	// 	if ($info['type'] === "address") {
+	// 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactAddresses VALUES(?, ?, ?, ?, ?, ?);");
+	// 		mysqli_stmt_bind_param($stmt, 
+	// 								"isssss", 
+	// 								$contactId, 
+	// 								$info["street"], 
+	// 								$info["city"],
+	// 								$info["state"],
+	// 								$info["country"],
+	// 								$info["postal"]);
+	// 		mysqli_stmt_execute($stmt);
+
+	// 		if (mysqli_stmt_affected_rows($stmt) > 0) {
+	// 			$affected_rows++;
+	// 		}
+
+	// 		mysqli_stmt_close($stmt); // close statement
+	// 	} else if ($info['type'] === "email") {
+	// 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactEmails VALUES(?, ?);");
+	// 		mysqli_stmt_bind_param($stmt, 
+	// 								"is", 
+	// 								$contactId, 
+	// 								$info["email"]);
+	// 		mysqli_stmt_execute($stmt);
+
+	// 		if (mysqli_stmt_affected_rows($stmt) > 0) {
+	// 			$affected_rows++;
+	// 		}
+
+	// 		mysqli_stmt_close($stmt); // close statement
+	// 	} else if ($info['type'] === "phone") {
+	// 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactPhones VALUES(?, ?, ?);");
+	// 		mysqli_stmt_bind_param($stmt, 
+	// 								"iss", 
+	// 								$contactId,
+	// 								$info["phone"],
+	// 								$info["phoneType"]);
+	// 		mysqli_stmt_execute($stmt);
+
+	// 		if (mysqli_stmt_affected_rows($stmt) > 0) {
+	// 			$affected_rows++;
+	// 		}
+
+	// 		mysqli_stmt_close($stmt); // close statement
+	// 	}
+	// }
+	return $expected_affected_rows === $affected_rows;
+}
+
 
 // .............................................................................
 //							       DELETE
