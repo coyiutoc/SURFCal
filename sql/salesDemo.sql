@@ -35,22 +35,22 @@ INSERT INTO EmailCodes (accId, code) VALUES
     (5, '30J3I');
 
 INSERT INTO Contacts (contactId, accId, name, birthday) VALUES
-    (1, 1, 'Josephine Adimari'),
-    (2, 1, 'Andrea Iannone'),
-    (3, 1, 'Marc Marquez'),
-    (4, 2, 'Brock Lesnar'),
-    (5, 2, 'Stephen Thompson'),
-    (6, 2, 'Fedor Emilionenko'),
-    (7, 2, 'Jose Aldo'),
-    (8, 3, 'Conor Mcgregor'),
-    (9, 3, 'Alistar Overeem'),
-    (10, 3, 'Dominic Cruz'),
-    (11, 4, 'Cody Garbrandt'),
-    (12, 4, 'Max Holloway'),
-    (13, 4, 'Brendan Schaub'),
-    (14, 5, 'Bobby Lee'),
-    (15, 5, 'Theo Von'),
-    (16, 5, 'Chris Delia');
+    (1, 1, 'Josephine Adimari', '1992-12-24'),
+    (2, 1, 'Andrea Iannone', '1988-12-12'),
+    (3, 1, 'Marc Marquez', '1923-09-09'),
+    (4, 2, 'Brock Lesnar', '1985-05-12'),
+    (5, 2, 'Stephen Thompson', '1999-09-09'),
+    (6, 2, 'Fedor Emilionenko', '1934-12-12'),
+    (7, 2, 'Jose Aldo', '1995-03-23'),
+    (8, 3, 'Conor Mcgregor', '1989-12-12'),
+    (9, 3, 'Alistar Overeem', '1998-04-05'),
+    (10, 3, 'Dominic Cruz', '1990-12-23'),
+    (11, 4, 'Cody Garbrandt', '1999-12-12'),
+    (12, 4, 'Max Holloway', '1994-12-12'),
+    (13, 4, 'Brendan Schaub', '1990-10-10'),
+    (14, 5, 'Bobby Lee', '1992-10-10'),
+    (15, 5, 'Theo Von', '1989-10-10'),
+    (16, 5, 'Chris Delia', '1990-05-23');
 
 INSERT INTO ContactAddresses (contactId, streetField, city, state_, country, postal) VALUES
     (1, '1234 Sesame Street', 'Port Coquitlam', 'British Columbia', 'Canada', 'V3B1G3'),
