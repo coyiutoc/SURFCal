@@ -52,7 +52,7 @@ if ($loggedin) {
         if (checkExistingUsernameEmail($formInput['username'], $formInput['email'])) {
             $errors .= "\n                                    <li>Username or email is taken. Enter a different one.</li>";
         } else {
-            $createdAcc = createAccountHelper($formInput['username'], $formInput['email'], sha1($formInput['password']), , $formInput['name'], , $formInput['bdateY'] . '-' . $formInput['bdateM'] . '-' . $formInput['bdateD']);
+            $createdAcc = createAccountHelper($formInput['username'], $formInput['email'], sha1($formInput['password']), $formInput['name'], $formInput['bdateY'] . '-' . $formInput['bdateM'] . '-' . $formInput['bdateD']);
             if (!$createdAcc) {
                 $errors .= "\n                                    <li>An unknown error occured.</li>";
             }
