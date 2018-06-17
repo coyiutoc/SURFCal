@@ -180,14 +180,14 @@ INSERT INTO TaskItems (itemId, dueDate, completionDate) VALUES
     (20, '2018-05-26', '2018-05-30');
 
 INSERT INTO Groups (accId, calendarId, permissionType) VALUES
-    (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 4),
-    (5, 5),
-    (1, 6),
-    (2, 6),
-    (3, 6),
-    (4, 6),
-    (5, 6);
+    (1, 1, 'user'),
+    (2, 2, 'user'),
+    (3, 3, 'user'),
+    (4, 4, 'user'),
+    (5, 5, 'user'),
+    (1, 6, 'admin'),
+    (2, 6, 'viewer'),
+    (3, 6, 'viewer'),
+    (4, 6, 'viewer'),
+    (5, 6, 'viewer');
 
