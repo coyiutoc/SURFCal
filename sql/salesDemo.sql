@@ -1,58 +1,58 @@
 /* populating tables */
 
-INSERT INTO Calendars VALUES
-    (null, 'mclovin calendar', 'justins personal calendar'),
-    (null, 'Katies Calendar', 'mock calendar for sales demo'),
-    (null, 'valentinas Calendar', 'mock calendar for sales demo'),
-    (null, 'borts calendar', 'borts personal calendar'),
-    (null, 'johns calendar', 'johns personal calendar'),
-    (null, 'group calendar', 'mock group calendar');
+INSERT INTO Calendars (calendarId, name, description) VALUES
+    (1, 'mclovin calendar', 'justins personal calendar'),
+    (2, 'Katies Calendar', 'mock calendar for sales demo'),
+    (3, 'valentinas Calendar', 'mock calendar for sales demo'),
+    (4, 'borts calendar', 'borts personal calendar'),
+    (5, 'johns calendar', 'johns personal calendar'),
+    (6, 'group calendar', 'mock group calendar');
 
-INSERT INTO ItemType VALUES
+INSERT INTO ItemType (type) VALUES
     ('event'),
     ('reminder'),
     ('note'),
     ('task');
 
-INSERT INTO Accounts VALUES
-    (null, 'mcLovin123', 'mcLovin123@gmail.com', '7c6a180b36896a0a8c02787eeafb0e4c',
+INSERT INTO Accounts (id, username, email, password, salt, name, birthday, lastKnownIp, calendarId, createDate, isDeactivated) VALUES
+    (1, 'mcLovin123', 'mcLovin123@gmail.com', '7c6a180b36896a0a8c02787eeafb0e4c',
         null, 'mcLovin', '1990-04-15', '208.159.243.92', 50086912, '2018-05-30', FALSE),
-    (null, 'coolcatz', 'coolcat@aol.com', '849667e75fd3e18d98f731f87caeaa43',
+    (2, 'coolcatz', 'coolcat@aol.com', '849667e75fd3e18d98f731f87caeaa43',
         null, 'Katie Lannone', '1994-12-18', '80.254.202.72', 50086913, '2018-06-01', FALSE),
-    (null, 'valentinarossi', 'valentinarossi@gmail.com', 'e5d910a90d8672b7cb63ef4087ab3146f45064',
+    (3, 'valentinarossi', 'valentinarossi@gmail.com', 'e5d910a90d8672b7cb63ef4087ab3146f45064',
         null, 'Valentina Rossi', '1988-07-01', '67.131.190.8', 50086909, '2018-05-24', FALSE),
-    (null, 'bort', 'bort@aol.com', '123457e75fg3e18d23f731f87cacdd94',
+    (4, 'bort', 'bort@aol.com', '123457e75fg3e18d23f731f87cacdd94',
         null, 'Bort Simpson', '1994-10-29', '80.432.202.71', 50086911, '2018-06-01', FALSE),
-    (null, 'johndoe', 'johndoe@gmail.com', 'a5d110b90d8673a7cd63ef4087ds3146g35023',
+    (5, 'johndoe', 'johndoe@gmail.com', 'a5d110b90d8673a7cd63ef4087ds3146g35023',
         null, 'John Doe', '1992-03-23', '67.132.191.9', 50086910, '2018-05-25', FALSE);
 
 
-INSERT INTO EmailCodes VALUES
+INSERT INTO EmailCodes (accId, code) VALUES
     (1, '45S6Y'),
     (2, '25S6Y'),
     (3, '45T6Y'),
     (4, '42U2U'),
     (5, '30J3I');
 
-INSERT INTO Contacts VALUES
-    (null, 1, 'Josephine Adimari'),
-    (null, 1, 'Andrea Iannone'),
-    (null, 1, 'Marc Marquez'),
-    (null, 2, 'Brock Lesnar'),
-    (null, 2, 'Stephen Thompson'),
-    (null, 2, 'Fedor Emilionenko'),
-    (null, 2, 'Jose Aldo'),
-    (null, 3, 'Conor Mcgregor'),
-    (null, 3, 'Alistar Overeem'),
-    (null, 3, 'Dominic Cruz'),
-    (null, 4, 'Cody Garbrandt'),
-    (null, 4, 'Max Holloway'),
-    (null, 4, 'Brendan Schaub'),
-    (null, 5, 'Bobby Lee'),
-    (null, 5, 'Theo Von'),
-    (null, 5, 'Chris Delia');
+INSERT INTO Contacts (contactId, accId, name, birthday) VALUES
+    (1, 1, 'Josephine Adimari'),
+    (2, 1, 'Andrea Iannone'),
+    (3, 1, 'Marc Marquez'),
+    (4, 2, 'Brock Lesnar'),
+    (5, 2, 'Stephen Thompson'),
+    (6, 2, 'Fedor Emilionenko'),
+    (7, 2, 'Jose Aldo'),
+    (8, 3, 'Conor Mcgregor'),
+    (9, 3, 'Alistar Overeem'),
+    (10, 3, 'Dominic Cruz'),
+    (11, 4, 'Cody Garbrandt'),
+    (12, 4, 'Max Holloway'),
+    (13, 4, 'Brendan Schaub'),
+    (14, 5, 'Bobby Lee'),
+    (15, 5, 'Theo Von'),
+    (16, 5, 'Chris Delia');
 
-INSERT INTO ContactAddresses VALUES
+INSERT INTO ContactAddresses (contactId, streetField, city, state_, country, postal) VALUES
     (1, '1234 Sesame Street', 'Port Coquitlam', 'British Columbia', 'Canada', 'V3B1G3'),
     (1, '1234 Sesame ave', 'Port Coquitlam', 'British Columbia', 'Canada', 'V3B1G3'),
     (1, '1234 Sesame lane', 'Port Coquitlam', 'British Columbia', 'Canada', 'V3B1G3'),
@@ -73,7 +73,7 @@ INSERT INTO ContactAddresses VALUES
     (16, '777 Howe st', 'Surrey', 'British Columbia', 'Canada', 'V4S1N4');
 
 
-INSERT INTO ContactEmails VALUES
+INSERT INTO ContactEmails (contactId, email) VALUES
     (1, 'valentinorossi@gmail.com'),
     (1, 'valentinorossi@aol.com'),
     (1, 'valentinorossi@hotmail.com'),
@@ -93,7 +93,7 @@ INSERT INTO ContactEmails VALUES
     (15, 'theovon@gmail.com'),
     (16, 'chrisdelia@gmail.com');
 
-INSERT INTO ContactPhones VALUES
+INSERT INTO ContactPhones (contactId, phoneNum, type) VALUES
     (1, '6042348490', 'home'),
     (1, '6042428490', 'work'),
     (1, '6042234290', 'evening'),
@@ -113,49 +113,49 @@ INSERT INTO ContactPhones VALUES
     (15, '6041048193', 'evening'),
     (16, '6041948193', 'home');
 
-INSERT INTO Items VALUES
-    (null, 6, 'event1', '2018-05-25', 'sample text 1', NULL, 'event'),
-    (null, 6, 'event2', '2018-05-21', 'sample text 2', NULL, 'event'),
-    (null, 6, 'event3', '2018-04-05', 'sample text 3', '2018-06-06 00:00:00', 'event'),
-    (null, 6, 'event4', '2018-05-24', 'sample text 4', NULL, 'event'),
-    (null, 6, 'event5', '2018-05-22', 'sample text 5', NULL, 'event'),
-    (null, 6, 'event6', '2018-04-07', 'sample text 6', '2018-06-06 00:00:00', 'event'),
-    (null, 6, 'event7', '2018-05-30', 'sample text 7', NULL, 'event'),
-    (null, 6, 'event8', '2018-05-05', 'sample text 8', NULL, 'event'),
-    (null, 6, 'event9', '2018-04-25', 'sample text 9', '2018-06-06 00:00:00', 'event'),
-    (null, 6, 'event10', '2018-03-23', 'sample text 10', NULL, 'event'),
-    (null, 6, 'task1', '2018-05-22', 'sample text 1', NULL, 'task'),
-    (null, 6, 'task2', '2018-05-21', 'sample text 2', NULL, 'task'),
-    (null, 6, 'task3', '2018-04-05', 'sample text 3', '2018-04-06 00:00:00', 'task'),
-    (null, 6, 'task4', '2018-05-25', 'sample text 4', NULL, 'task'),
-    (null, 6, 'task5', '2018-05-20', 'sample text 5', NULL, 'task'),
-    (null, 6, 'task6', '2018-04-03', 'sample text 6', '2018-04-06 00:00:00', 'task'),
-    (null, 6, 'task7', '2018-05-19', 'sample text 7', NULL, 'task'),
-    (null, 6, 'task8', '2018-05-14', 'sample text 8', NULL, 'task'),
-    (null, 6, 'task9', '2018-04-12', 'sample text 9', '2018-04-06 00:00:00', 'task'),
-    (null, 6, 'task10', '2018-05-05', 'sample text 10', NULL, 'task'),
-    (null, 6, 'note1', '2018-05-25', 'sample text 1', NULL, 'note'),
-    (null, 6, 'note2', '2018-05-21', 'sample text 2', NULL, 'note'),
-    (null, 6, 'note3', '2018-04-05', 'sample text 3', '2018-06-06 00:00:00', 'note'),
-    (null, 6, 'note4', '2018-05-24', 'sample text 4', NULL, 'note'),
-    (null, 6, 'note5', '2018-05-22', 'sample text 5', NULL, 'note'),
-    (null, 6, 'note6', '2018-04-07', 'sample text 6', '2018-06-06 00:00:00', 'note'),
-    (null, 6, 'note7', '2018-05-30', 'sample text 7', NULL, 'note'),
-    (null, 6, 'note8', '2018-05-05', 'sample text 8', NULL, 'note'),
-    (null, 6, 'note9', '2018-04-25', 'sample text 9', '2018-06-06 00:00:00', 'note'),
-    (null, 6, 'note10', '2018-03-23', 'sample text 10', NULL, 'note'),
-    (null, 6, 'reminder1', '2018-05-22', 'sample text 1', NULL, 'reminder'),
-    (null, 6, 'reminder2', '2018-05-21', 'sample text 2', NULL, 'reminder'),
-    (null, 6, 'reminder3', '2018-04-05', 'sample text 3', '2018-04-06 00:00:00', 'reminder'),
-    (null, 6, 'reminder4', '2018-05-25', 'sample text 4', NULL, 'reminder'),
-    (null, 6, 'reminder5', '2018-05-20', 'sample text 5', NULL, 'reminder'),
-    (null, 6, 'reminder6', '2018-04-03', 'sample text 6', '2018-04-06 00:00:00', 'reminder'),
-    (null, 6, 'reminder7', '2018-05-19', 'sample text 7', NULL, 'reminder'),
-    (null, 6, 'reminder8', '2018-05-14', 'sample text 8', NULL, 'reminder'),
-    (null, 6, 'reminder9', '2018-04-12', 'sample text 9', '2018-04-06 00:00:00', 'reminder'),
-    (null, 6, 'reminder10', '2018-05-05', 'sample text 10', NULL, 'reminder');
+INSERT INTO Items (itemId, calendarId, name, createDate, note, reminder, type) VALUES
+    (1, 6, 'event1', '2018-05-25', 'sample text 1', NULL, 'event'),
+    (2, 6, 'event2', '2018-05-21', 'sample text 2', NULL, 'event'),
+    (3, 6, 'event3', '2018-04-05', 'sample text 3', '2018-06-06 00:00:00', 'event'),
+    (4, 6, 'event4', '2018-05-24', 'sample text 4', NULL, 'event'),
+    (5, 6, 'event5', '2018-05-22', 'sample text 5', NULL, 'event'),
+    (6, 6, 'event6', '2018-04-07', 'sample text 6', '2018-06-06 00:00:00', 'event'),
+    (7, 6, 'event7', '2018-05-30', 'sample text 7', NULL, 'event'),
+    (8, 6, 'event8', '2018-05-05', 'sample text 8', NULL, 'event'),
+    (9, 6, 'event9', '2018-04-25', 'sample text 9', '2018-06-06 00:00:00', 'event'),
+    (10, 6, 'event10', '2018-03-23', 'sample text 10', NULL, 'event'),
+    (11, 6, 'task1', '2018-05-22', 'sample text 1', NULL, 'task'),
+    (12, 6, 'task2', '2018-05-21', 'sample text 2', NULL, 'task'),
+    (13, 6, 'task3', '2018-04-05', 'sample text 3', '2018-04-06 00:00:00', 'task'),
+    (14, 6, 'task4', '2018-05-25', 'sample text 4', NULL, 'task'),
+    (15, 6, 'task5', '2018-05-20', 'sample text 5', NULL, 'task'),
+    (16, 6, 'task6', '2018-04-03', 'sample text 6', '2018-04-06 00:00:00', 'task'),
+    (17, 6, 'task7', '2018-05-19', 'sample text 7', NULL, 'task'),
+    (18, 6, 'task8', '2018-05-14', 'sample text 8', NULL, 'task'),
+    (19, 6, 'task9', '2018-04-12', 'sample text 9', '2018-04-06 00:00:00', 'task'),
+    (20, 6, 'task10', '2018-05-05', 'sample text 10', NULL, 'task'),
+    (21, 6, 'note1', '2018-05-25', 'sample text 1', NULL, 'note'),
+    (22, 6, 'note2', '2018-05-21', 'sample text 2', NULL, 'note'),
+    (23, 6, 'note3', '2018-04-05', 'sample text 3', '2018-06-06 00:00:00', 'note'),
+    (24, 6, 'note4', '2018-05-24', 'sample text 4', NULL, 'note'),
+    (25, 6, 'note5', '2018-05-22', 'sample text 5', NULL, 'note'),
+    (26, 6, 'note6', '2018-04-07', 'sample text 6', '2018-06-06 00:00:00', 'note'),
+    (27, 6, 'note7', '2018-05-30', 'sample text 7', NULL, 'note'),
+    (28, 6, 'note8', '2018-05-05', 'sample text 8', NULL, 'note'),
+    (29, 6, 'note9', '2018-04-25', 'sample text 9', '2018-06-06 00:00:00', 'note'),
+    (30, 6, 'note10', '2018-03-23', 'sample text 10', NULL, 'note'),
+    (31, 6, 'reminder1', '2018-05-22', 'sample text 1', NULL, 'reminder'),
+    (32, 6, 'reminder2', '2018-05-21', 'sample text 2', NULL, 'reminder'),
+    (33, 6, 'reminder3', '2018-04-05', 'sample text 3', '2018-04-06 00:00:00', 'reminder'),
+    (34, 6, 'reminder4', '2018-05-25', 'sample text 4', NULL, 'reminder'),
+    (35, 6, 'reminder5', '2018-05-20', 'sample text 5', NULL, 'reminder'),
+    (36, 6, 'reminder6', '2018-04-03', 'sample text 6', '2018-04-06 00:00:00', 'reminder'),
+    (37, 6, 'reminder7', '2018-05-19', 'sample text 7', NULL, 'reminder'),
+    (38, 6, 'reminder8', '2018-05-14', 'sample text 8', NULL, 'reminder'),
+    (39, 6, 'reminder9', '2018-04-12', 'sample text 9', '2018-04-06 00:00:00', 'reminder'),
+    (40, 6, 'reminder10', '2018-05-05', 'sample text 10', NULL, 'reminder');
 
-INSERT INTO EventItems VALUES
+INSERT INTO EventItems (itemId, startDate, endDate) VALUES
     (1, '2018-05-25', '2018-05-30'),
     (2, '2018-05-21', '2018-05-30'),
     (3, '2018-04-05', '2018-05-30'),
@@ -167,7 +167,7 @@ INSERT INTO EventItems VALUES
     (9, '2018-04-25', '2018-05-30'),
     (10, '2018-03-23', '2018-05-30');
 
-INSERT INTO TaskItems VALUES
+INSERT INTO TaskItems (itemId, dueDate, completionDate) VALUES
     (11, '2018-05-25', '2018-05-30'),
     (12, '2018-05-21', '2018-05-30'),
     (13, NULL, '2018-05-30'),
@@ -179,7 +179,7 @@ INSERT INTO TaskItems VALUES
     (19, NULL, '2018-05-30'),
     (20, '2018-05-26', '2018-05-30');
 
-INSERT INTO Groups VALUES
+INSERT INTO Groups (accId, calendarId, permissionType) VALUES
     (1, 1),
     (2, 2),
     (3, 3),
