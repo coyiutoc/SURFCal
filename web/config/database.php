@@ -10,8 +10,8 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'hyngan';
-$pass = 'hyngan';
+$user = 'root';
+$pass = '';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
