@@ -10,8 +10,8 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'root';
-$pass = '';
+$user = 'hyngan';
+$pass = 'hyngan';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
@@ -345,6 +345,16 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 
 	// Handle adding contact info (address, email, phone)
 	foreach($addresses as &$address) {
+		if (!isset($address)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($address["street"]) ||
+			!isset($address["city"]) ||
+			!isset($address["state"]) ||
+			!isset($address["country"]) ||
+			!isset($address["postal"]))
+			 continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactAddresses VALUES(?, ?, ?, ?, ?, ?);");
 		mysqli_stmt_bind_param($stmt, 
 								"isssss", 
@@ -364,6 +374,11 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	}
 
 	foreach($emails as &$email) {
+		if (!isset($email)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($email["email"])) continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactEmails VALUES(?, ?);");
 		mysqli_stmt_bind_param($stmt, 
 								"is", 
@@ -379,6 +394,11 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	}
 
 	foreach($phones as &$phone) {
+		if (!isset($phone)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($phone["phone"]) || !isset($phone["type"])) continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactPhones VALUES(?, ?, ?);");
 		mysqli_stmt_bind_param($stmt, 
 								"iss", 
@@ -394,8 +414,6 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 		mysqli_stmt_close($stmt); // close statement
 	}
 
-	echo "EXPECTED: " . $expected_affected_rows;
-	echo "ACTUAL: " . $affected_rows;
 	return $expected_affected_rows === $affected_rows;
 }
 

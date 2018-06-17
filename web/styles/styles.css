@@ -362,6 +362,14 @@ main header.calendar h2 {
     width: 100%;
 }
 
+.removeField {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 22px;
+    font-weight: bold;
+}
+
 .landing {
     text-align: center;
 }
