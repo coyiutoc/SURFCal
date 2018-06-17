@@ -118,7 +118,7 @@ INSERT INTO Items (itemId, calendarId, name, createDate, note, reminder, type, c
     (2, 6, 'event2', '2018-05-21', 'sample text 2', NULL, 'event', 1, 'Vancouver', 1),
     (3, 6, 'event3', '2018-04-05', 'sample text 3', '2018-06-06 00:00:00', 'event', 2, 'Vancouver', 1),
     (4, 6, 'event4', '2018-05-24', 'sample text 4', NULL, 'event', 1, 'Vancouver', 1),
-    (5, 6, 'event5', '2018-05-22', 'sample text 5', NULL, 'event', 1, 'Vancouver', 1, 2, 'Vancouver', 1),
+    (5, 6, 'event5', '2018-05-22', 'sample text 5', NULL, 'event', 1, 'Vancouver', 2, 'Vancouver', 1),
     (6, 6, 'event6', '2018-04-07', 'sample text 6', '2018-06-06 00:00:00', 'event', 1, 'Vancouver', 1),
     (7, 6, 'event7', '2018-05-30', 'sample text 7', NULL, 'event', 1, 'Vancouver', 1),
     (8, 6, 'event8', '2018-05-05', 'sample text 8', NULL, 'event', 1, 'Vancouver', 1),
