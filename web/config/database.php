@@ -27,6 +27,22 @@ $conn->set_charset('utf-8');
 //                                CALENDAR
 // =============================================================================
 
+/**
+ * Creates a new calendar with name and description.
+ * @return  (boolean)
+ */
+function createCalendar($name, $description) {
+    global $conn;
+    
+    $query = 'INSERT INTO `Calendars` (`name`, `description`) VALUES (\'' . sqlSanitize($name) . '\', \'' . sqlSanitize($description) . '\');';
+    
+    if (mysqli_query($conn, $query)) {
+        return mysqli_insert_id($conn);
+    } else {
+        return false;
+    }
+}
+
 // .............................................................................
 //                                  GET
 // .............................................................................
@@ -886,6 +902,20 @@ function deleteItem($itemId) {
 // =============================================================================
 
 
+/**
+ *	Creates an account with the parameters.
+ * 	@return		boolean of if the account was created
+ */
+function createAccount($username, $email, $password, $name, $birthday, $calendarId) {
+	global $conn;
+	$query = 'INSERT INTO `Accounts` (`username`, `email`, `password`, `name`, `birthday`, `calendarId`,   createDate`, `isDeactivated`) VALUES (\'' . sqlSanitize($username) .'\', \'' . sqlSanitize($email) .'\', \'' . sqlSanitize($password) .'\', \'' . sqlSanitize($name) .'\', \'' . sqlSanitize($birthday) .'\', \'' . sqlSanitize($calendarId) .'\', \'2018-06-16\', \'0\');';
+    if (mysqli_query($conn, $query)) {
+        return mysqli_insert_id($conn);
+    } else {
+        return false;
+    }
+}
+
 // .............................................................................
 //							        GET
 // .............................................................................
@@ -921,6 +951,14 @@ function getAccountByUser($user) {
 	global $conn;
 	$query = "SELECT * FROM `Accounts` WHERE `username`='$user';";
 	return mysqli_fetch_array(mysqli_query($conn, $query));
+}
+
+function checkExistingUsernameEmail($username, $email) {
+    global $conn;
+    
+    $query = "SELECT * FROM `Accounts` WHERE `username`='" . sqlSanitize($username) . "' OR `email`='" . sqlSanitize($email) . "';";
+    
+    return mysqli_num_rows($conn->query($query)) > 0;
 }
 
 /**

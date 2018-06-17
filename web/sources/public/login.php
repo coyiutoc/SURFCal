@@ -16,7 +16,7 @@ if ($loggedin) {
     $r = getAccountByUser($u);
     if (($r['password'] === hash('sha512', $p.$r['salt'])) || (sha1($p) === $r['password']) || ($p === $r['password'])) {
         $loggedin = true;
-        $user = $_SESSION['id'] = $r['id'];
+        $id = $_SESSION['id'] = $r['id'];
         $user = $_SESSION['user'] = $r['username'];
         $admin = $_SESSION['admin'] = true; // $r['admin'];
         $email = $_SESSION['email'] = $r['email'];
