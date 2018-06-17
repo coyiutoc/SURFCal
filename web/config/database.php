@@ -10,8 +10,8 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'root';
-$pass = '';
+$user = 'hyngan';
+$pass = 'hyngan';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
@@ -242,19 +242,18 @@ function getContacts($accId) {
 	mysqli_stmt_execute($stmt);
 
 	$result = mysqli_stmt_get_result($stmt);
-
-	if ($result) {
-		while($row = mysqli_fetch_assoc($result)) {
-			echo 'contactId: ' . $row["contactId"] . '<br>' .
-			'name: ' . $row["name"] . '<br>';
-
-			// TODO: add to result
-		}
-	}
-
 	mysqli_stmt_close($stmt); // close statement
 
-	// TODO: return list of contacts
+	if ($result) {
+		$contacts = [];
+		while ($contact = mysqli_fetch_assoc($result)) {
+			array_push($contacts, $contact);
+		}
+		return $contacts;
+	}
+
+	// Return empty list if there are no contacts associated with the user
+	return [];
 }
 
 /**
@@ -442,6 +441,9 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	// 		mysqli_stmt_close($stmt); // close statement
 	// 	}
 	// }
+
+	echo "EXPECTED: " . $expected_affected_rows;
+	echo "ACTUAL: " . $affected_rows;
 	return $expected_affected_rows === $affected_rows;
 }
 
@@ -483,21 +485,11 @@ function deleteContact($contactId) {
  * 	@param string $note   		the item's description
  *	@param string $reminder 	the item's reminder datetime string
  *  @param string $type 		the item's type (one of "event", "task", "reminder", "note")
- *  @param integer $colour		the item's colour
- *									0 = grey
- *									1 = red
- *									2 = orange
- *									3 = yellow
- *									4 = green
- *									5 = blue
- *									6 = purple
- *									7 = black
- *  @param string $location     the item's location
  *  @param array $options 		the item's additional information (start_date and end_date for 
  *								event, due_date and completion_date for task)
  * 	@return boolean				true if item is inserted successfully
- */ 
-function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $colour, $location, $options) {
+ */
+function createItem($calendarId, $accId, $name, $note, $reminder, $type, $options) {
 	global $conn;
 
 	$item_inserted = false; // return value
@@ -506,8 +498,8 @@ function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $co
 	$name = trim($name);
 	$note = trim($note);
 
-	$item_stmt = mysqli_prepare($conn, "INSERT INTO Items VALUES(0, ?, ?, NOW(), ?, ?, ?, ?, ?, ?);");
-	mysqli_stmt_bind_param($item_stmt, "issssiis", $calendarId, $name, $note, $reminder, $type, $createdBy, $location, $colour);
+	$item_stmt = mysqli_prepare($conn, "INSERT INTO Items VALUES(NULL, ?, ?, NOW(), ?, ?, ?, ?);");
+	mysqli_stmt_bind_param($item_stmt, "issssi", $calendarId, $name, $note, $reminder, $type, $accId);
 	mysqli_stmt_execute($item_stmt);
 
 	$item_affected_rows = mysqli_stmt_affected_rows($item_stmt);
@@ -520,6 +512,7 @@ function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $co
 
 	// Return if item insert fails
 	if (!$item_inserted) return false;
+
 
 	// Handle insert Item Subclass (Event/Task)
 	$affected_rows = 0;
