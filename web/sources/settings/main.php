@@ -17,14 +17,11 @@ else
 
 	// get information associated with current user
 	$accountInfo = getAccountByUser($user);
-	echo("<script>console.log('PHP: $accountInfo');</script>");
-	while($row = $accountInfo)
-        {
-            $cat_id = $row['cat_id'];
-            $cat_title = $row['cat_title'];
-
-            echo $cat_id . " " . $cat_title  ."<br>";
-        }
+	echo("<script>console.log('PHP: id');</script>");
+        echo "<tr><th>".$accountInfo['username']."</th>";
+        echo "<th>".$accountInfo['email']."</th>";
+        echo "<th>".$accountInfo['name']."</th>";
+        echo "<th>".$accountInfo['birthday']."</th></tr>";
 	// display form filled out with user information
 	// have update button which updates user information (PUT)
 
