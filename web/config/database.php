@@ -11,7 +11,7 @@ ini_set('display_errors', 'On');
 
 $host = 'localhost';
 $user = 'bort';
-$pass = '';
+$pass = 'bort';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
