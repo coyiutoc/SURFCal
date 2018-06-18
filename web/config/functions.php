@@ -19,7 +19,7 @@ function sanitizeString($s) {
 
 function sqlSanitize($s) {
     global $conn;
-    return mysqli_real_escape_string($conn, $s);
+    return mysqli_real_escape_string($conn, stripslashes($s));
 }
 
 function createAccountHelper($username, $email, $password, $name, $birthday) {
