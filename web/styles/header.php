@@ -42,7 +42,7 @@ if ($loggedin) {
     echo "
                                 <li><a href=\"?$profile=calendar\">Calendars</a></li>
                                 <li><a href=\"?$profile=contact\">Contacts</a></li>
-                                <li><a href=\"?$profile=setting\">Settings</a></li>";
+                                <li><a href=\"?$profile=settings\">Settings</a></li>";
     if ($admin) {
         echo "
                                 <li class=\"acp\"><a href=\"?$profile=acp\">Admin Panel</a></li>";
