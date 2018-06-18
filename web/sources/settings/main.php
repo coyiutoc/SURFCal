@@ -18,11 +18,11 @@ else
     		// handle update user info
     		$name = trim($_POST["name"]);
     		$birthday = trim($_POST["birthday"]) === "" ? null : trim($_POST["birthday"]);
-    		$email = trim($_POST["email"]);
-    		$username = trim($_POST["username"]);
+    		password = trim($_POST["password"]);
     		$infoArray = array();
     		$infoArray["name"] = $name;
     		$infoArray["birthday"] = $birthday;
+    		$infoArray["password"] = $password;
 
     		if (updateAccount($id, $infoArray)) {
     			// refresh page (redirect back to main contact page)
