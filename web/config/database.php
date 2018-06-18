@@ -741,12 +741,11 @@ function getMinMaxItemsPerAccount($operation){
     if ($queries[$operation]){
 
         $response = @mysqli_query($conn, $queries[$operation]);
-        echo "<br> ******* Get " . $operation . " of number of items created per Account. ******* <br>";
 
         if ($response){
 
             $result = mysqli_fetch_assoc($response)["Result"];
-            echo ("{$operation} : {$result}");
+            // echo ("{$operation} : {$result}");
 
             return $result;
         }
@@ -758,14 +757,41 @@ function getMinMaxItemsPerAccount($operation){
 
 function getTotalItems() {
     global $conn;
-    $query = "SELECT COUNT FROM `Items`;";
-    return mysqli_fetch_array(mysqli_query($conn, $query));
+
+    $query = "SELECT COUNT(*) as Count FROM `Items`;";
+
+    $response = mysqli_query($conn, $query);
+
+    if ($response) {
+    	return mysqli_fetch_assoc($response)["Count"];
+    }
+
+    // if no response, return 0
+    return 0;
 }
 
 function getTotalItemsByType() {
     global $conn;
-    $query = "SELECT `type`, COUNT FROM `Items` GROUP BY `type`;";
-    return mysqli_query($conn, $query);
+
+    $query = "SELECT `type`, COUNT(*) as Count FROM `Items` GROUP BY `type`;";
+
+    $response = mysqli_query($conn, $query);
+
+    $result = [];
+
+    if ($response) {
+    	while ($row = mysqli_fetch_assoc($response)) {
+    		$type = $row["type"];
+    		$count = $row["Count"];
+    		
+    		$result[$row["type"]] = $row["Count"];
+    	}
+
+    	return $result;
+    }
+
+    // if no response, return 0
+    return 0;
 }
 
 // .............................................................................
@@ -1032,7 +1058,6 @@ function getAverageContactsPerAccount() {
 
 	if ($result) {
 		$row = mysqli_fetch_assoc($result);
-		echo $row["AVG(C.count)"];
 		return $row["AVG(C.count)"];
 	}
 
@@ -1043,21 +1068,30 @@ function getAverageContactsPerAccount() {
  *	Retrieves min and max number of contacts created per account (for Admin Panel)
  * 	@return Float 	Average number of contacts
  */
-function getMinMaxContactsPerAccount() {
+function getMinMaxContactsPerAccount($operation) {
 	global $conn;
 
-	$query = "SELECT MIN(C.count), MAX(C.count)
-			  FROM (SELECT COUNT(*) as count
-					FROM Contacts
-					GROUP BY accId) C";
+	$queries = array("min"    => "SELECT MIN(C.count)
+								  FROM (SELECT COUNT(*) as count
+										FROM Contacts
+										GROUP BY accId) C",
+                     "max"    => "SELECT MAX(C.count)
+								  FROM (SELECT COUNT(*) as count
+										FROM Contacts
+										GROUP BY accId) C");
 
-	$result = mysqli_query($conn, $query);
+	if ($queries[$operation]) {
+		$result = mysqli_query($conn, $queries[$operation]);
 
-	if ($result) {
-		$row = mysqli_fetch_assoc($result);
-		echo $row["MIN(C.count)"];
-		echo $row["MAX(C.count)"];
-		// TODO: return result
+		if ($result) {
+			$row = mysqli_fetch_assoc($result);
+
+			if ($operation === "min") {
+				return $row["MIN(C.count)"];
+			} else if ($operation === "max") {
+				return $row["MAX(C.count)"];
+			}
+		}
 	}
 
 	return 0;
