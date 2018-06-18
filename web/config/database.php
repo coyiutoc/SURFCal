@@ -27,22 +27,6 @@ $conn->set_charset('utf-8');
 //                                CALENDAR
 // =============================================================================
 
-/**
- * Creates a new calendar with name and description.
- * @return  (boolean)
- */
-function createCalendar($name, $description) {
-    global $conn;
-
-    $query = 'INSERT INTO `Calendars` (`name`, `description`) VALUES (\'' . sqlSanitize($name) . '\', \'' . sqlSanitize($description) . '\');';
-
-    if (mysqli_query($conn, $query)) {
-        return mysqli_insert_id($conn);
-    } else {
-        return false;
-    }
-}
-
 // .............................................................................
 //                                  GET
 // .............................................................................
@@ -757,13 +741,18 @@ function getMinMaxItemsPerAccount($operation){
 
 /**
  *	Edit an Item and its associated Event/Task if the item type is "event" or "task"
-  *	@param integer $itemId 		the item id
- *	@param string $name     	the item's title
- * 	@param string $note   		the item's description
- *	@param string $reminder 	the item's reminder datetime string
- *  @param string $type 		the item's type (one of "event", "task", "reminder", "note")
- *  @param array $options 		the item's additional information (start_date and end_date for
- *								event, due_date and completion_date for task)
+ *  @param integer $accountId   the account id, REQUIRED
+ *  @param integer $calendarId  the calendar id, REQUIRED
+ *	@param integer $itemId 		the item id, REQUIRED
+ *  @param string $type 		the item's type (one of "event", "task", "reminder", "note"), REQUIRED
+ *	@param string $name     	the item's title, NULLABLE
+ * 	@param string $note   		the item's description, NULLABLE
+ *	@param string $reminder 	the item's reminder datetime string, NULLABLE
+ *  @param array $args 		    the item's additional information (start_date and end_date for
+ *								event, due_date and completion_date for task), NULLABLE.
+ *                              if null, set it to array()
+ *  @param string $location     the item's location, NULLABLE
+ *  @param integer $colour 		the item's colour value (0-7), NULLABLE
  * 	@return boolean				true if item is edited successfully
  */
 function editItem($itemId, $name, $note, $reminder, $type, $options) {
@@ -817,11 +806,9 @@ function editItem($itemId, $name, $note, $reminder, $type, $options) {
 
 			mysqli_stmt_close($stmt); // close statement
 
-			break;
-		default:
-			// if item is a reminder or note, then return here
-			return $item_edited;
-	}
+			if ($reminder){
+                array_push($params, "reminder = '$reminder'");
+            }
 
 	// this is for testing only, to be deleted -----------------
 	if ($affected_rows > 0) {
@@ -913,14 +900,6 @@ function getAccountByUser($user) {
 	global $conn;
 	$query = "SELECT * FROM `Accounts` WHERE `username`='$user';";
 	return mysqli_fetch_array(mysqli_query($conn, $query));
-}
-
-function checkExistingUsernameEmail($username, $email) {
-    global $conn;
-
-    $query = "SELECT * FROM `Accounts` WHERE `username`='" . sqlSanitize($username) . "' OR `email`='" . sqlSanitize($email) . "';";
-
-    return mysqli_num_rows($conn->query($query)) > 0;
 }
 
 /**
@@ -1136,8 +1115,8 @@ function hasCalendarPermission($accountId, $calendarId, $operationType){
         $permissionType = mysqli_fetch_assoc($response)["permissionType"];
 
         if (in_array($permissionType, $operationPermission[$operationType])){
-            echo "<br> [Permission Check: AccountId " . $accountId . " has permission to
-            modify Calendar with id = " . $calendarId . ".]<br>";
+            // echo "<br> [Permission Check: AccountId " . $accountId . " has permission to
+            // modify Calendar with id = " . $calendarId . ".]<br>";
 
             return true;
         }
