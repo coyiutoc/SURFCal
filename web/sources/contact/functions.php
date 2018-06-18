@@ -24,7 +24,7 @@ function showContactList() {
 	echo "</main>";
 }
 
-function displayContactDetails($details) {
+function displayContactDetails($contactId, $details) {
 	global $profile;
 
 	// Parse details
@@ -42,7 +42,7 @@ function displayContactDetails($details) {
 			array_push($addresses, $detail);
 		} else if (isset($detail["email"])) {
 			array_push($emails, $detail);
-		} else if (isset($detail["phone"])) {
+		} else if (isset($detail["phoneNum"])) {
 			array_push($phones, $detail);
 		}
 	}
@@ -54,8 +54,12 @@ function displayContactDetails($details) {
 
 	// Name
 	echo '<h2 id="contactName">' . $name . '</h2>';
+
+	displayDeleteContactOption($contactId);
+
 	// Birthday
 	if ($birthday !== "") {
+		echo '<hr>';
 		echo '<span class="infoField">';
 		echo '<label>Birthday</label>  ' . $birthday;
 		echo '</span>';
@@ -63,6 +67,7 @@ function displayContactDetails($details) {
 
 	// Address(es)
 	if (count($addresses) > 0) {
+		echo '<hr>';
 		echo '<h4>Address</h4>';
 		foreach($addresses as &$address) {
 			echo '<div class="contactInfoSection">';
@@ -73,6 +78,7 @@ function displayContactDetails($details) {
 
 	// Email(s)
 	if (count($emails) > 0) {
+		echo '<hr>';
 		echo '<h4>Email</h4>';
 		foreach($emails as &$email) {
 			echo '<div class="contactInfoSection">';
@@ -83,6 +89,7 @@ function displayContactDetails($details) {
 
 	// Phone(s)
 	if (count($phones) > 0) {
+		echo '<hr>';
 		echo '<h4>Phone</h4>';
 		foreach($phones as &$phone) {
 			echo '<div class="contactInfoSection">';
@@ -123,10 +130,10 @@ function infoKeyToLabel($key) {
 			$label = "Postal";
 			break;
 		case "email":
-			$label = "Email";
+			$label = "Email Address";
 			break;
 		case "phoneNum":
-			$label = "Phone";
+			$label = "Phone #";
 			break;
 		case "type":
 			$label = "Type";
@@ -224,9 +231,9 @@ function displayAddContactSection() {
 					<input type="date" name="birthday" placeholder="birthday" maxlength="64">
 				</div>
 
-				<button id="addAddress" type="button" onclick="addFieldSection('address')">Add Address</button>
-				<button id="addEmail" type="button" onclick="addFieldSection('email')">Add Email</button>
-				<button id="addPhone" type="button" onclick="addFieldSection('phone')">Add Phone</button>
+				<button class="addFieldBtn" id="addAddress" type="button" onclick="addFieldSection('address')">Add Address</button>
+				<button class="addFieldBtn" id="addEmail" type="button" onclick="addFieldSection('email')">Add Email</button>
+				<button class="addFieldBtn" id="addPhone" type="button" onclick="addFieldSection('phone')">Add Phone</button>
 				
 				<br>
 		      	<input id="addContactBtn" type="submit" name="addContact" value="Add Contact" />
