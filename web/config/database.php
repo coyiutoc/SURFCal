@@ -1093,7 +1093,7 @@ function updateAccount($accountId, array $args = array()){
     $query .= $params[count($params)-1] . " WHERE id = $accountId";
 
     // Do update query and check if rows were affected:
-    echo("RESULTING QUERY: " . $query);
+    // echo("RESULTING QUERY: " . $query);
     mysqli_query($conn, $query);
 
     return checkUpdateSuccess($conn);

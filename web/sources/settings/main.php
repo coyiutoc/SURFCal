@@ -59,10 +59,6 @@ else
     </aside>
 _END;
 
-	// get calendar information associated with current user
-	// display form with calendar information
-	// have update button which updates calendar information (PUT)
-
 	include('styles/footer.php');
 
 }
