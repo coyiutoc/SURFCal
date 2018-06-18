@@ -9,9 +9,9 @@ $pageMode = '';
 
 $loadMain = false;
 
-if ($admin !== true) {
-    header("Location: ?$profile=404");
-} else {
+//if ($loggedin !== true || $admin !== true) {
+//    header("Location: ?$profile=404");
+//} else {
     $getSection = isset($_GET['acp']) ? $_GET['acp'] : '';
     switch ($getSection) {
         case NULL:
@@ -35,9 +35,10 @@ if ($admin !== true) {
     if ($loadMain === true) {
         include('styles/header.php');
         
-        // Main content.        
+        // Main content.
+        
         include('styles/footer.php');
     }
-}
+//}
 
 ?>

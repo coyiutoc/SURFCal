@@ -14,12 +14,12 @@ function sanitizeString($s) {
     $s = strip_tags($s);
     $s = htmlentities($s);
     $s = stripslashes($s);
-    return mysqli_real_escape_string($conn, stripslashes($s));
+    return mysqli_real_escape_string($conn, $s);
 }
 
 function sqlSanitize($s) {
     global $conn;
-    return mysqli_real_escape_string($conn, stripslashes($s));
+    return mysqli_real_escape_string($conn, $s);
 }
 
 function createAccountHelper($username, $email, $password, $name, $birthday) {

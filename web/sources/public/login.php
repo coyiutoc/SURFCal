@@ -8,7 +8,7 @@ $pageTitle = 'Login';
 $pageMode = 'micro';
 $warnings = '';
 
-if ($loggedin) {
+if ($loggedin === true) {
     header("Location: ?$profile=home");
 } else if (isset($_POST['username']) && isset($_POST['password'])) {
     $u = sqlSanitize($_POST['username']);
