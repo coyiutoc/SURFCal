@@ -16,13 +16,15 @@ else
 	include('styles/footer.php');
 
 	// get information associated with current user
-	$accountInfo = getAccountByUser(user);
+	$accountInfo = getAccountByUser($user);
 	echo("<script>console.log('PHP: $accountInfo');</script>");
-	foreach($accountInfo as &$attribute) {
-    		echo "<article>";
-    		echo "<h4>" . attribute . "</h4>";
-    		echo "</article>";
-    	}
+	while($row = $accountInfo)
+        {
+            $cat_id = $row['cat_id'];
+            $cat_title = $row['cat_title'];
+
+            echo $cat_id . " " . $cat_title  ."<br>";
+        }
 	// display form filled out with user information
 	// have update button which updates user information (PUT)
 
