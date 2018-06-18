@@ -49,7 +49,7 @@ else
    			</div>
     		<div class="field">
     			<label for="password">password</label>
-    			<input type="password" name="password" required="required" maxlength="64">
+    			<input type="password" name="password" value=$accountInfo[password] required="required" maxlength="64">
     		</div>
     		<div>
     		   <input type="submit" name="updateUserInfo" value="Update User Info" />
