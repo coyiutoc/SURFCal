@@ -24,14 +24,12 @@ else
 {	
 	include('styles/header.php');
 
-    // Check endpoint is addItem:
+    // ------------ ENDPOINT HANDLING -------------------------------------------------- // 
+
+    // addItem:
 	if(isset($_GET['calendar']) && $_GET['calendar'] === 'addItem'){
 
 		// ----------- debugging ------------------------------------
-		// echo("<br> GET: <br>");
-		// print_r($_GET);
-
-		// // Looking at what is POSTED in form.
 		// echo("<br> POST: <br>");
 		// print_r ($_POST);
 		// ----------- debugging ------------------------------------
@@ -40,14 +38,35 @@ else
         $POST_RESULT = $_POST;
 
         // Add item to DB: 
-        addItem($POST_RESULT);
+        handleAddItem($POST_RESULT);
 
-	} // end if(isset($_GET['calendar'])...		
+	}	
+
+    // editItem:
+    if(isset($_GET['calendar']) && $_GET['calendar'] === 'editItem'){
+
+        // ----------- debugging ------------------------------------
+        // echo("<br> POST: <br>");
+        // print_r ($_POST);
+        // ----------- debugging ------------------------------------
+
+        // Must reassign to avoid global variable reassignment issues:
+        $POST_RESULT = $_POST;
+
+        handleEditItem($POST_RESULT);
+    }
+
+    // removeItem:
+    if(isset($_GET['calendar']) && $_GET['calendar'] === 'removeItem'
+        && isset($_GET['id'])){
+
+        handleDeleteItem($_GET['id']);
+    }
 
     // ------------ HTML FOR CALENDAR HEADER ------------------------------------------- // 
 
-    // Dynamically will change form depending on radio button:
-    loadFormDisplayJS(); 
+    loadModalHTML();
+    loadJS(); 
 
     // Retrieve Calendar data for header class = "calendar"
     $calendar_data = getCalendar($_SESSION['calId']);
@@ -85,6 +104,7 @@ _END;
                     else{
                         echo "<h6>No events have been added yet.</h6>";
                     }
+                    echo "<div class='item_type_border'></div>";
 
                     // Populate Tasks:
                     echo "<h3>Tasks</h3>";
@@ -94,6 +114,29 @@ _END;
                     }
                     else{
                         echo "<h6>No tasks have been added yet.</h6>";
+                    }
+                    echo "<div class='item_type_border'></div>";
+
+
+                    // Populate Reminders:
+                    echo "<h3>Reminders</h3>";
+                    $reminder_items = getItemsByType('reminder', $_SESSION['calId']);
+                    if ($reminder_items){
+                        itemsToHTML('reminder', $reminder_items);
+                    }
+                    else{
+                        echo "<h6>No reminders have been added yet.</h6>";
+                    }
+                    echo "<div class='item_type_border'></div>";
+
+                    // Populate Notes:
+                    echo "<h3>Notes</h3>";
+                    $note_items = getItemsByType('note', $_SESSION['calId']);
+                    if ($note_items){
+                        itemsToHTML('note', $note_items);
+                    }
+                    else{
+                        echo "<h6>No notes have been added yet.</h6>";
                     }
 
                     echo "</section>";
@@ -114,8 +157,8 @@ _END;
                     <form id="event" action="?$profile=calendar&calendar=addItem" method="post">
                         <input type="hidden" name="type" value="event"/>
                         <div class="field"><label for="name">Name</label><input type="text" name="name" placeholder="Name" required="required" maxlength="64"></div>
-                        <div class="field"><label for="start">Start</label><input type="datetime-local" name="start_date" placeholder="Start Date" required="required" value = "start_date"></div>
-                        <div class="field"><label for="end">End</label><input type="datetime-local" name="end_date" placeholder="End Date" required="required" value = "end_date"></div>
+                        <div class="field"><label for="start">Start</label><input type="datetime-local" name="start_date" placeholder="Start Date" required="required" value="start_date"></div>
+                        <div class="field"><label for="end">End</label><input type="datetime-local" name="end_date" placeholder="End Date" value = "end_date"></div>
                         <div class="field"><label for="reminder">Reminder</label><input type="datetime-local" name="reminder" placeholder="Reminder"></div>
                         <div class="field"><label for="note">Note</label><input type="text" name="note" placeholder="Note" maxlength="1024" class="note"></div>
                         <div class="field"><label for="location">Location</label><input type="text" name="location" placeholder="Location" maxlength="256"></div>
@@ -140,7 +183,7 @@ _END;
                         <input type="hidden" name="type" value="task"/>
                         <div class="field"><label for="name">Name</label><input type="text" name="name" placeholder="Name" required="required" maxlength="64"></div>
                         <div class="field"><label for="due">Due</label><input type="datetime-local" name="due_date" placeholder="Due Date" required="required" value="due_date"></div>
-                        <div class="field"><label for="completion">Completion</label><input type="datetime-local" name="completion_date" placeholder="Completion Date" required="required" value="completion_date"></div>
+                        <div class="field"><label for="completion">Completion</label><input type="datetime-local" name="completion_date" placeholder="Completion Date" value="completion_date"></div>
                         <div class="field"><label for="reminder">Reminder</label><input type="datetime-local" name="reminder" placeholder="Reminder"></div>
                         <div class="field"><label for="note">Note</label><input type="text" name="note" placeholder="Note" maxlength="1024" class="note"></div>
                         <div class="field"><label for="location">Location</label><input type="text" name="location" placeholder="Location" maxlength="256"></div>
