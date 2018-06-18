@@ -1,4 +1,5 @@
 /* populating tables */
+USE `surfcal`;
 
 INSERT INTO Calendars (calendarId, name, description) VALUES
     (1, 'mclovin calendar', 'mclovins personal calendar'),
