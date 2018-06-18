@@ -18,7 +18,7 @@ else
     		// handle update user info
     		$name = trim($_POST["name"]);
     		$birthday = trim($_POST["birthday"]) === "" ? null : trim($_POST["birthday"]);
-    		password = trim($_POST["password"]);
+    		$password = trim($_POST["password"]);
     		$infoArray = array();
     		$infoArray["name"] = $name;
     		$infoArray["birthday"] = $birthday;
