@@ -38,6 +38,7 @@ else
 	// display form filled out with user information
 	echo <<< _END
     <aside class="updateUserInfo">
+        <h4>Update User Info</h4>
    		<form id="updateUserInfo" action="?$profile=settings&settings=updateUserInfo" method="post">
     		<div class="field">
                 <label for="name">Name</label>
