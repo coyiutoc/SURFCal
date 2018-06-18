@@ -55,7 +55,7 @@ else
             </div>
     		<div class="field">
     			<label for="email0">Email</label>
-    			<input type="email" name="email0" value="$accountInfo[email]" required="required" maxlength="64">
+    			<input type="email" name="email" value="$accountInfo[email]" required="required" maxlength="64">
     		</div>
     		<div>
     		   <input type="submit" name="updateUserInfo" value="Update User Info" />
