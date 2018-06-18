@@ -16,15 +16,15 @@ INSERT INTO ItemType (type) VALUES
     ('task');
 
 INSERT INTO Accounts (id, username, email, password, salt, name, birthday, lastKnownIp, calendarId, createDate, isDeactivated) VALUES
-    (1, 'mcLovin123', 'mcLovin123@gmail.com', '7c6a180b36896a0a8c02787eeafb0e4c',
+    (1, 'mcLovin123', 'mcLovin123@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8',
         null, 'mcLovin', '1990-04-15', '208.159.243.92', 1, '2018-05-30', FALSE),
-    (2, 'coolcatz', 'coolcat@aol.com', '849667e75fd3e18d98f731f87caeaa43',
+    (2, 'coolcatz', 'coolcat@aol.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8',
         null, 'Katie Lannone', '1994-12-18', '80.254.202.72', 2, '2018-06-01', FALSE),
-    (3, 'valentinarossi', 'valentinarossi@gmail.com', 'e5d910a90d8672b7cb63ef4087ab3146f45064',
+    (3, 'valentinarossi', 'valentinarossi@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8',
         null, 'Valentina Rossi', '1988-07-01', '67.131.190.8', 3, '2018-05-24', FALSE),
-    (4, 'bort', 'bort@aol.com', '123457e75fg3e18d23f731f87cacdd94',
+    (4, 'bort', 'bort@aol.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8',
         null, 'Bort Simpson', '1994-10-29', '80.432.202.71', 4, '2018-06-01', FALSE),
-    (5, 'johndoe', 'johndoe@gmail.com', 'a5d110b90d8673a7cd63ef4087ds3146g35023',
+    (5, 'johndoe', 'johndoe@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8',
         null, 'John Doe', '1992-03-23', '67.132.191.9', 5, '2018-05-25', FALSE);
 
 

@@ -1035,7 +1035,6 @@ function getAverageItemsPerAccount() {
 
 	if ($result) {
 		$row = mysqli_fetch_assoc($result);
-		echo $row["AVG(C.count)"];
 		return $row["AVG(C.count)"];
 	}
 

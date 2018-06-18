@@ -91,6 +91,10 @@ thead tr {
     border-top: 3px solid black;
 }
 
+td {
+    padding: 0 5px;
+}
+
 a:link, a:visited {
     color: #326ed8;
     text-decoration: none;
