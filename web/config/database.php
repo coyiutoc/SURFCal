@@ -756,6 +756,18 @@ function getMinMaxItemsPerAccount($operation){
     }
 }
 
+function getTotalItems() {
+    global $conn;
+    $query = "SELECT COUNT FROM `Items`;";
+    return mysqli_fetch_array(mysqli_query($conn, $query));
+}
+
+function getTotalItemsByType() {
+    global $conn;
+    $query = "SELECT `type`, COUNT FROM `Items` GROUP BY `type`;";
+    return mysqli_query($conn, $query);
+}
+
 // .............................................................................
 //							       UPDATE
 // .............................................................................
@@ -924,6 +936,7 @@ function deleteItem($itemId) {
  */
 function getAllAccounts() {
 	global $conn;
+<<<<<<< HEAD
 
 	$query = "SELECT id, username, email, name FROM Accounts ORDER BY id ASC;";
 
@@ -939,6 +952,10 @@ function getAllAccounts() {
 	}
 
 	// TODO: return list of accounts
+=======
+	$query = "SELECT `id`, `username`, `email`, `name` FROM `Accounts` ORDER BY `id`;";
+    return mysqli_query($conn, $query);
+>>>>>>> Partial implementation for pages for Admin Panel.
 }
 
 /**
@@ -957,8 +974,12 @@ function getAccountByUser($user) {
  */
 function getExperiencedAccounts() {
 	global $conn;
+<<<<<<< HEAD
 
 	$query = "	SELECT id, username, email, name
+=======
+	$query = "	SELECT `id`
+>>>>>>> Partial implementation for pages for Admin Panel.
 				FROM Accounts A
 				WHERE NOT EXISTS
 						(SELECT T.type
@@ -966,6 +987,7 @@ function getExperiencedAccounts() {
 						 WHERE NOT EXISTS (SELECT I.type
 						   				FROM Items I
 										WHERE I.createdBy=A.id AND T.type=I.type));";
+<<<<<<< HEAD
 
 	$result = mysqli_query($conn, $query);
 
@@ -981,6 +1003,9 @@ function getExperiencedAccounts() {
 	}
 
 	// TODO: return result
+=======
+	return mysqli_query($conn, $query);
+>>>>>>> Partial implementation for pages for Admin Panel.
 }
 
 
