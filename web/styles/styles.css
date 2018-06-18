@@ -372,6 +372,7 @@ main header.calendar h2 {
 
 #backToContacts {
     margin-bottom: 20px;
+    color: black;
 }
 
 #deleteContact {
@@ -390,6 +391,15 @@ main header.calendar h2 {
     display: block;
 }
 
+.contactDetail {
+    width: 100%;
+}
+
+.contactDetail hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .infoFieldSection {
     display: block;
     border: 1px solid lightgrey;
@@ -398,13 +408,19 @@ main header.calendar h2 {
     padding: 10px;
 }
 
+.infoField {
+    display: block;
+}
+
 .infoField label {
     font-weight: bold;
     padding-right: 20px;
 }
 
-#addFieldBtn {
+.addFieldBtn {
     width: 30%;
+    background-color: lightgrey;
+    text-align: center;
 }
 
 #addContactBtn {

@@ -42,7 +42,7 @@ function displayContactDetails($contactId, $details) {
 			array_push($addresses, $detail);
 		} else if (isset($detail["email"])) {
 			array_push($emails, $detail);
-		} else if (isset($detail["phone"])) {
+		} else if (isset($detail["phoneNum"])) {
 			array_push($phones, $detail);
 		}
 	}
@@ -59,6 +59,7 @@ function displayContactDetails($contactId, $details) {
 
 	// Birthday
 	if ($birthday !== "") {
+		echo '<hr>';
 		echo '<span class="infoField">';
 		echo '<label>Birthday</label>  ' . $birthday;
 		echo '</span>';
@@ -66,6 +67,7 @@ function displayContactDetails($contactId, $details) {
 
 	// Address(es)
 	if (count($addresses) > 0) {
+		echo '<hr>';
 		echo '<h4>Address</h4>';
 		foreach($addresses as &$address) {
 			echo '<div class="contactInfoSection">';
@@ -76,6 +78,7 @@ function displayContactDetails($contactId, $details) {
 
 	// Email(s)
 	if (count($emails) > 0) {
+		echo '<hr>';
 		echo '<h4>Email</h4>';
 		foreach($emails as &$email) {
 			echo '<div class="contactInfoSection">';
@@ -86,6 +89,7 @@ function displayContactDetails($contactId, $details) {
 
 	// Phone(s)
 	if (count($phones) > 0) {
+		echo '<hr>';
 		echo '<h4>Phone</h4>';
 		foreach($phones as &$phone) {
 			echo '<div class="contactInfoSection">';
@@ -126,10 +130,10 @@ function infoKeyToLabel($key) {
 			$label = "Postal";
 			break;
 		case "email":
-			$label = "Email";
+			$label = "Email Address";
 			break;
 		case "phoneNum":
-			$label = "Phone";
+			$label = "Phone #";
 			break;
 		case "type":
 			$label = "Type";
