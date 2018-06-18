@@ -450,7 +450,7 @@ function deleteContact($contactId) {
  *									6 = purple
  *									7 = black
  *  @param string $location     the item's location
- *  @param array $options 		the item's additional information (start_date and end_date for  
+ *  @param array $options 		the item's additional information (start_date and end_date for 
  *								event, due_date and completion_date for task)
  * 	@return boolean				true if item is inserted successfully
  */
