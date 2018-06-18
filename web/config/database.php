@@ -436,11 +436,30 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 function deleteContact($contactId) {
 	global $conn;
 
+	$affected_rows = 0;
+	echo "<script type='text/javascript'>alert('$contactId');</script>";
+
 	$stmt = mysqli_prepare($conn, "DELETE FROM Contacts WHERE contactId=?;");
 	mysqli_stmt_bind_param($stmt, "i", $contactId);
 	mysqli_stmt_execute($stmt);
 
 	$affected_rows = mysqli_stmt_affected_rows($stmt);
+
+	$address_stmt = mysqli_prepare($conn, "DELETE FROM ContactAddresses WHERE contactId=?;");
+	mysqli_stmt_bind_param($address_stmt, "i", $contactId);
+	mysqli_stmt_execute($address_stmt);
+	$affected_rows += mysqli_stmt_affected_rows($address_stmt);
+
+	$email_stmt = mysqli_prepare($conn, "DELETE FROM ContactEmails WHERE contactId=?;");
+	mysqli_stmt_bind_param($email_stmt, "i", $contactId);
+	mysqli_stmt_execute($email_stmt);
+	$affected_rows += mysqli_stmt_affected_rows($email_stmt);
+
+	$phone_stmt = mysqli_prepare($conn, "DELETE FROM ContactPhones WHERE contactId=?;");
+	mysqli_stmt_bind_param($phone_stmt, "i", $contactId);
+	mysqli_stmt_execute($phone_stmt);
+	$affected_rows += mysqli_stmt_affected_rows($phone_stmt);
+
 	return $affected_rows > 0;
 }
 

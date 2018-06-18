@@ -23,10 +23,20 @@ if (!$loggedin) {
 		handleAddContact($POST_RESULT);
 	}
 
+	if (isset($_GET["contact"]) && $_GET["contact"] === "deleteContact" && isset($_GET["contactId"])) {
+		$contactId = $_GET["contactId"];
+
+		// Remove contact from DB: 
+		handleRemoveContact($contactId);
+	}
+
 	if (isset($_GET["contact"]) && $_GET["contact"] === "contactDetail" && isset($_GET["contactId"])) {
 		$details = getContactDetails($_GET["contactId"]); // get contact list from DB
 
 		displayContactDetails($details);
+
+		$contactId = $_GET["contactId"];
+		displayDeleteContactOption($contactId);
 	} else {
 		// display contact list
 		showContactList();

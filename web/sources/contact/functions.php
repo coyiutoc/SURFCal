@@ -193,6 +193,20 @@ function handleAddContact($POST_RESULT) {
 	}
 }
 
+function handleRemoveContact($contactId) {
+	global $profile;
+
+	echo "<script type='text/javascript'>alert('$contactId');</script>";
+	if (deleteContact($contactId)) {
+		// refresh page (redirect back to main contact page)
+		header("Location: ?$profile=contact");
+	} else {
+		$message = "Error occurred, please try again later.";
+		echo "<script type='text/javascript'>alert('$message');</script>";
+		// header("Location: ?$profile=contact");
+	}
+}
+
 function displayAddContactSection() {
 	global $profile;
 
@@ -218,6 +232,11 @@ function displayAddContactSection() {
 		    </form>
 		</aside>
 _END;
+}
+
+function displayDeleteContactOption($contactId) {
+	global $profile;
+	echo '<a id="deleteContact" href="?' . $profile . '=contact&contact=deleteContact&contactId=' . $contactId . '">Delete Contact</a>';
 }
 
 ?>
