@@ -17,7 +17,7 @@ else
 
 	// get information associated with current user
 	$accountInfo = getAccountByUser($id);
-	printf($accountInfo);
+	echo("<script>console.log('PHP: ".$accountInfo."');</script>");
 	// display form filled out with user information
 	// have update button which updates user information (PUT)
 
