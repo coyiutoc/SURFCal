@@ -10,7 +10,7 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'root';
+$user = 'bort';
 $pass = '';
 $schema = 'surfcal';
 
@@ -33,9 +33,9 @@ $conn->set_charset('utf-8');
  */
 function createCalendar($name, $description) {
     global $conn;
-    
+
     $query = 'INSERT INTO `Calendars` (`name`, `description`) VALUES (\'' . sqlSanitize($name) . '\', \'' . sqlSanitize($description) . '\');';
-    
+
     if (mysqli_query($conn, $query)) {
         return mysqli_insert_id($conn);
     } else {
@@ -60,9 +60,9 @@ function getCalendar($calendarId){
 
     if ($response){
         // while($row = mysqli_fetch_assoc($response)){
-        //     echo "<br> calendarId: " . $row["calendarId"] . 
-        //     "<br>" . "name: " . $row["name"] . 
-        //     "<br>" . "description: " . $row["description"] . 
+        //     echo "<br> calendarId: " . $row["calendarId"] .
+        //     "<br>" . "name: " . $row["name"] .
+        //     "<br>" . "description: " . $row["description"] .
         //     "<br>" ;
         // }
 
@@ -88,9 +88,9 @@ function getAllCalendars($accountId){
     if ($response){
         while($row = mysqli_fetch_assoc($response)){
             echo "<br> accountId: " . $row["accId"] .
-            "<br> calendarId: " . $row["calendarId"] . 
-            "<br>" . "name: " . $row["name"] . 
-            "<br>" . "description: " . $row["description"] . 
+            "<br> calendarId: " . $row["calendarId"] .
+            "<br>" . "name: " . $row["name"] .
+            "<br>" . "description: " . $row["description"] .
             "<br>" . "permissionType: " . $row["permissionType"] .
             "<br>" ;
         }
@@ -116,7 +116,7 @@ function getAccountsInCalendar($calendarId) {
 
 	if ($result) {
 		while($row = mysqli_fetch_assoc($result)) {
-			echo 'username: ' . $row["username"] . '<br>' . 
+			echo 'username: ' . $row["username"] . '<br>' .
 			'email: ' . $row["email"] . '<br>';
 		}
 	}
@@ -128,13 +128,13 @@ function getAccountsInCalendar($calendarId) {
 //                                 UPDATE
 // .............................................................................
 
-// Updates a Calendar given that the accountId doing the updating has 
-// permission to do so. 
+// Updates a Calendar given that the accountId doing the updating has
+// permission to do so.
 // ___ ARRAY PARAMETERS: array('name' => 'Calendar',
 //                             'description' => 'I am fabulous')
 // ___ RETURN: true if update is successful, false otherwise.
 //
-// ___ NOTE: Not all parameters need to be supplied to update. 
+// ___ NOTE: Not all parameters need to be supplied to update.
 function updateCalendar($accountId, $calendarId, array $args = array()){
 
     if (hasCalendarPermission($accountId, $calendarId, 'update')){
@@ -145,7 +145,7 @@ function updateCalendar($accountId, $calendarId, array $args = array()){
 
         $query = "UPDATE Calendars SET ";
         $params = array();
-        
+
         if (isset($args['description'])){
             $description = $args['description'];
             array_push($params, "description = '$description'");
@@ -162,7 +162,7 @@ function updateCalendar($accountId, $calendarId, array $args = array()){
         }
         $query .= $params[count($params)-1] . " WHERE calendarId = $calendarId";
 
-        echo("RESULTING QUERY: " . $query); 
+        echo("RESULTING QUERY: " . $query);
         mysqli_query($conn, $query);
 
         return checkUpdateSuccess($conn);
@@ -228,7 +228,7 @@ function deleteCalendar($accountId, $calendarId){
         echo "<br> ******* Deleting Calendar with CalendarId = " . $calendarId . " ******* <br>";
 
         $query = "DELETE FROM Calendars WHERE calendarId = $calendarId";
-        echo("RESULTING QUERY: " . $query); 
+        echo("RESULTING QUERY: " . $query);
         mysqli_query($conn, $query);
 
         return checkUpdateSuccess($conn);
@@ -250,7 +250,7 @@ function deleteCalendar($accountId, $calendarId){
 /**
  *	Retrieves a list of contacts (id and name) given the accountId
  *	@param integer 	$accId 		the account id
- *  @return array 				list of contacts 
+ *  @return array 				list of contacts
  */
 function getContacts($accId) {
 	global $conn;
@@ -278,7 +278,7 @@ function getContacts($accId) {
 /**
  *	Retrieves the contact's information, given the contactId
  *	@param integer 	$contactId 	the contact's id
- *  @return array 				list of contact information 
+ *  @return array 				list of contact information
  */
 function getContactDetails($contactId) {
 	global $conn;
@@ -365,10 +365,10 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	// Handle adding contact info (address, email, phone)
 	foreach($addresses as &$address) {
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactAddresses VALUES(?, ?, ?, ?, ?, ?);");
-		mysqli_stmt_bind_param($stmt, 
-								"isssss", 
-								$contactId, 
-								$address["street"], 
+		mysqli_stmt_bind_param($stmt,
+								"isssss",
+								$contactId,
+								$address["street"],
 								$address["city"],
 								$address["state"],
 								$address["country"],
@@ -384,9 +384,9 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 
 	foreach($emails as &$email) {
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactEmails VALUES(?, ?);");
-		mysqli_stmt_bind_param($stmt, 
-								"is", 
-								$contactId, 
+		mysqli_stmt_bind_param($stmt,
+								"is",
+								$contactId,
 								$email["email"]);
 		mysqli_stmt_execute($stmt);
 
@@ -399,8 +399,8 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 
 	foreach($phones as &$phone) {
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactPhones VALUES(?, ?, ?);");
-		mysqli_stmt_bind_param($stmt, 
-								"iss", 
+		mysqli_stmt_bind_param($stmt,
+								"iss",
 								$contactId,
 								$phone["phone"],
 								$phone["type"]);
@@ -441,7 +441,7 @@ function deleteContact($contactId) {
 
 
 // =============================================================================
-//							       ITEMS 
+//							       ITEMS
 // =============================================================================
 
 // .............................................................................
@@ -466,10 +466,10 @@ function deleteContact($contactId) {
  *									6 = purple
  *									7 = black
  *  @param string $location     the item's location
- *  @param array $options 		the item's additional information (start_date and end_date for 
+ *  @param array $options 		the item's additional information (start_date and end_date for
  *								event, due_date and completion_date for task)
  * 	@return boolean				true if item is inserted successfully
- */ 
+ */
 function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $colour, $location, $options) {
 	global $conn;
 
@@ -523,7 +523,7 @@ function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $co
 			mysqli_stmt_close($stmt); // close statement
 
 			break;
-		default: 
+		default:
 			// if item is a reminder or note, then return here
 			return $item_inserted;
 	}
@@ -563,7 +563,7 @@ function getItem($itemId) {
 
 	if ($item_result) {
 		$item = mysqli_fetch_assoc($item_result);
-		echo 'itemId: ' . $item["itemId"] . '<br>' . 
+		echo 'itemId: ' . $item["itemId"] . '<br>' .
 			'calendarId: ' . $item["calendarId"] . '<br>' .
 			'name: ' . $item["name"] . '<br>' .
 			'createDate: ' . $item["createDate"] . '<br>' .
@@ -583,7 +583,7 @@ function getItem($itemId) {
 			mysqli_stmt_close($stmt); // close statement
 
 			// for testing:
-			echo 'itemId: ' . $event["itemId"] . '<br>' . 
+			echo 'itemId: ' . $event["itemId"] . '<br>' .
 				'startDate: ' . $event["startDate"] . '<br>' .
 				'endDate: ' . $event["endDate"] . '<br>';
 
@@ -601,23 +601,23 @@ function getItem($itemId) {
 			mysqli_stmt_close($stmt); // close statement
 
 			// for testing:
-			echo 'itemId: ' . $task["itemId"] . '<br>' . 
+			echo 'itemId: ' . $task["itemId"] . '<br>' .
 				'dueDate: ' . $task["dueDate"] . '<br>' .
 				'completionDate: ' . $task["completionDate"] . '<br>';
 
 			// TODO: Add task information to result
 		}
 	}
-	
+
 	// TODO: return item
 }
 
 // Returns all Items and their attributes (Task and Event only) for display in
-// the main list view of a given calendar. 
+// the main list view of a given calendar.
 // ___ RETURNS per Item: itemId, name, createDate, note, reminder, type
-// 
-// ___ NOTE: Does not include attributes specific to Task and Event, use 
-//           getItemsByType for this. 
+//
+// ___ NOTE: Does not include attributes specific to Task and Event, use
+//           getItemsByType for this.
 function getItemsForCalendarDisplay($calendarId) {
 
     global $conn;
@@ -629,12 +629,12 @@ function getItemsForCalendarDisplay($calendarId) {
 
     if ($response){
         while($row = mysqli_fetch_assoc($response)){
-        	echo "<br> itemId: " . $row["itemId"] . 
-                "<br>" . "name: " . $row["name"] . 
-                "<br>" . "createDate: " . $row["createDate"] . 
-                "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") . 
-                "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . 
-                "<br>" . "type: " . $row["type"] . 
+        	echo "<br> itemId: " . $row["itemId"] .
+                "<br>" . "name: " . $row["name"] .
+                "<br>" . "createDate: " . $row["createDate"] .
+                "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") .
+                "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") .
+                "<br>" . "type: " . $row["type"] .
                 "<br>";
         }
 
@@ -642,24 +642,24 @@ function getItemsForCalendarDisplay($calendarId) {
     }
 }
 
-// Returns all Items and their attributes of a specific type for the given CalendarId. 
-// 
+// Returns all Items and their attributes of a specific type for the given CalendarId.
+//
 // Queries for different types:
-// - Event:     Join on Items and Events to return all events corresponding to a specific Calendar, 
+// - Event:     Join on Items and Events to return all events corresponding to a specific Calendar,
 //              ordered in ascending order by startDate.
 // - Task:      Join on Items and Tasks to return all tasks corresponding to a specific Calendar,
-//              ordered in ascending order by dueDate. 
+//              ordered in ascending order by dueDate.
 // - Reminder:  Return all Reminders corresponding to a specific Calendar, ordered in ascending order by date.
-// - Note:      Return all Notes corresponding to a specific Calendar, ordered in descending order by 
+// - Note:      Return all Notes corresponding to a specific Calendar, ordered in descending order by
 //              creationDate (newest one comes first)
 function getItemsByType($type, $calendarId){
 
 	global $conn;
 
-    $queries = array("event"    => "SELECT * FROM Items I, EventItems E WHERE I.type = 'event' && I.itemId = E.itemId 
-                                    ORDER BY E.startDate ASC;", 
-                     "task"     => "SELECT * FROM Items I, TaskItems E WHERE I.type = 'task' && I.itemId = E.itemId           ORDER BY E.dueDate ASC;", 
-                     "reminder" => "SELECT * FROM Items WHERE type = 'reminder' ORDER BY createDate ASC;", 
+    $queries = array("event"    => "SELECT * FROM Items I, EventItems E WHERE I.type = 'event' && I.itemId = E.itemId
+                                    ORDER BY E.startDate ASC;",
+                     "task"     => "SELECT * FROM Items I, TaskItems E WHERE I.type = 'task' && I.itemId = E.itemId           ORDER BY E.dueDate ASC;",
+                     "reminder" => "SELECT * FROM Items WHERE type = 'reminder' ORDER BY createDate ASC;",
                      "note"     => "SELECT * FROM Items WHERE type = 'note' ORDER BY createDate DESC;");
 
     if ($queries[$type]){
@@ -670,15 +670,15 @@ function getItemsByType($type, $calendarId){
         if ($response){
         	$items = [];
             while($item = mysqli_fetch_assoc($response)){
-                // echo "<br> itemId: " . $row["itemId"] . 
-                // "<br>" . "name: " . $row["name"] . 
-                // "<br>" . "createDate: " . $row["createDate"] . 
-                // "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") . 
-                // "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . 
-                // "<br>" . "type: " . $row["type"] . 
-                // "<br>" . "EVENT SPECIFIC: startDate: " . ($row["startDate"] ? $row["startDate"] : "NULL") . ", endDate: " .     ($row["endDate"] ? $row["endDate"] : "NULL") . 
-                // "<br>" . "TASK SPECIFIC: dueDate: " . ($row["dueDate"] ? $row["dueDate"] : "NULL") . ", completionDate: " .     ($row["completionDate"] ? $row["completionDate"] : "NULL") . 
-                // "<br>"; 
+                // echo "<br> itemId: " . $row["itemId"] .
+                // "<br>" . "name: " . $row["name"] .
+                // "<br>" . "createDate: " . $row["createDate"] .
+                // "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") .
+                // "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") .
+                // "<br>" . "type: " . $row["type"] .
+                // "<br>" . "EVENT SPECIFIC: startDate: " . ($row["startDate"] ? $row["startDate"] : "NULL") . ", endDate: " .     ($row["endDate"] ? $row["endDate"] : "NULL") .
+                // "<br>" . "TASK SPECIFIC: dueDate: " . ($row["dueDate"] ? $row["dueDate"] : "NULL") . ", completionDate: " .     ($row["completionDate"] ? $row["completionDate"] : "NULL") .
+                // "<br>";
 
                 array_push($items, $item);
             }
@@ -687,7 +687,7 @@ function getItemsByType($type, $calendarId){
         else{
         	return NULL;
         } // end if($response)
-    } 
+    }
     else{
         echo("<br> !!!! Incorrect type inputted: " . $type . " !!!! <br>");
   		return NULL;
@@ -701,9 +701,9 @@ function countNumCalendarItems($calendarId){
 
     echo "<br> ******* Counting all items with calendarId = " . $calendarId . " ******* <br>";
 
-    $query = "SELECT I.calendarId, COUNT(*) AS itemCount 
-              FROM Calendars C, Items I 
-              WHERE C.calendarId = I.calendarId && C.calendarId = $calendarId 
+    $query = "SELECT I.calendarId, COUNT(*) AS itemCount
+              FROM Calendars C, Items I
+              WHERE C.calendarId = I.calendarId && C.calendarId = $calendarId
               GROUP BY C.calendarId;";
     $response = @mysqli_query($conn, $query);
 
@@ -725,13 +725,13 @@ function getMinMaxItemsPerAccount($operation){
 
     global $conn;
 
-    $queries = array("min"    => "SELECT MIN(A.itemCount) AS Result 
-                                  FROM (SELECT COUNT(*) as itemCount 
-                                        FROM Items GROUP BY createdBy) 
-                                        AS A;", 
+    $queries = array("min"    => "SELECT MIN(A.itemCount) AS Result
+                                  FROM (SELECT COUNT(*) as itemCount
+                                        FROM Items GROUP BY createdBy)
+                                        AS A;",
                      "max"    => "SELECT MAX(A.itemCount) AS Result
-                                  FROM (SELECT COUNT(*) as itemCount 
-                                        FROM Items GROUP BY createdBy) 
+                                  FROM (SELECT COUNT(*) as itemCount
+                                        FROM Items GROUP BY createdBy)
                                         AS A;");
     if ($queries[$operation]){
 
@@ -762,7 +762,7 @@ function getMinMaxItemsPerAccount($operation){
  * 	@param string $note   		the item's description
  *	@param string $reminder 	the item's reminder datetime string
  *  @param string $type 		the item's type (one of "event", "task", "reminder", "note")
- *  @param array $options 		the item's additional information (start_date and end_date for 
+ *  @param array $options 		the item's additional information (start_date and end_date for
  *								event, due_date and completion_date for task)
  * 	@return boolean				true if item is edited successfully
  */
@@ -818,7 +818,7 @@ function editItem($itemId, $name, $note, $reminder, $type, $options) {
 			mysqli_stmt_close($stmt); // close statement
 
 			break;
-		default: 
+		default:
 			// if item is a reminder or note, then return here
 			return $item_edited;
 	}
@@ -895,9 +895,9 @@ function getAllAccounts() {
 
 	if ($result) {
 		while($row = mysqli_fetch_assoc($result)) {
-			echo 'id: ' . $row["id"] . '<br>' . 
-			'username: ' . $row["username"] . '<br>' . 
-			'email: ' . $row["email"] . '<br>' . 
+			echo 'id: ' . $row["id"] . '<br>' .
+			'username: ' . $row["username"] . '<br>' .
+			'email: ' . $row["email"] . '<br>' .
 			'name: ' . $row["name"] . '<br>';
 		}
 	}
@@ -917,9 +917,9 @@ function getAccountByUser($user) {
 
 function checkExistingUsernameEmail($username, $email) {
     global $conn;
-    
+
     $query = "SELECT * FROM `Accounts` WHERE `username`='" . sqlSanitize($username) . "' OR `email`='" . sqlSanitize($email) . "';";
-    
+
     return mysqli_num_rows($conn->query($query)) > 0;
 }
 
@@ -930,7 +930,7 @@ function checkExistingUsernameEmail($username, $email) {
 function getExperiencedAccounts() {
 	global $conn;
 
-	$query = "	SELECT id, username, email, name 
+	$query = "	SELECT id, username, email, name
 				FROM Accounts A
 				WHERE NOT EXISTS
 						(SELECT T.type
@@ -943,9 +943,9 @@ function getExperiencedAccounts() {
 
 	if ($result) {
 		while($row = mysqli_fetch_assoc($result)) {
-			echo 'id: ' . $row["id"] . '<br>' . 
-			'username: ' . $row["username"] . '<br>' . 
-			'email: ' . $row["email"] . '<br>' . 
+			echo 'id: ' . $row["id"] . '<br>' .
+			'username: ' . $row["username"] . '<br>' .
+			'email: ' . $row["email"] . '<br>' .
 			'name: ' . $row["name"] . '<br>';
 
 			// TODO: Add to result
@@ -962,9 +962,9 @@ function countNumContact($accountId){
 
     echo "<br> ******* Counting number of Contacts for AccountId = " . $accountId . " ******* <br>";
 
-    $query = "SELECT A.id, COUNT(*) AS contactCount 
-              FROM Accounts A, Contacts C 
-              WHERE A.id = C.accId && A.id = $accountId 
+    $query = "SELECT A.id, COUNT(*) AS contactCount
+              FROM Accounts A, Contacts C
+              WHERE A.id = C.accId && A.id = $accountId
               GROUP BY A.id;";
     $response = @mysqli_query($conn, $query);
 
@@ -1061,7 +1061,7 @@ function getMinMaxContactsPerAccount() {
 //                             'birthday' => '1998-5-13')
 // ___ RETURN: true if update is successful, false otherwise.
 //
-// ___ NOTE: Not all parameters need to be supplied to update. 
+// ___ NOTE: Not all parameters need to be supplied to update.
 function updateAccount($accountId, array $args = array()){
 
     global $conn;
@@ -1070,7 +1070,7 @@ function updateAccount($accountId, array $args = array()){
 
     $query = "UPDATE Accounts SET ";
     $params = array();
-    
+
     if (isset($args['password'])){
         $password = $args['password'];
         array_push($params, "password = '$password'");
@@ -1093,7 +1093,7 @@ function updateAccount($accountId, array $args = array()){
     $query .= $params[count($params)-1] . " WHERE id = $accountId";
 
     // Do update query and check if rows were affected:
-    echo("RESULTING QUERY: " . $query); 
+    echo("RESULTING QUERY: " . $query);
     mysqli_query($conn, $query);
 
     return checkUpdateSuccess($conn);
@@ -1109,11 +1109,11 @@ function updateAccount($accountId, array $args = array()){
 
 // Validates permission of an account modifying a specific calendar.
 // If type = "update", only admin and users can update.
-// If type = "delete", only admin can delete. 
+// If type = "delete", only admin can delete.
 //
 // ___ PARAMS: type = 'update' or 'delete'.
-// ___ RETURNS: true if has permission, 
-//              false otherwise. 
+// ___ RETURNS: true if has permission,
+//              false otherwise.
 function hasCalendarPermission($accountId, $calendarId, $operationType){
 
     global $conn;
@@ -1136,7 +1136,7 @@ function hasCalendarPermission($accountId, $calendarId, $operationType){
         $permissionType = mysqli_fetch_assoc($response)["permissionType"];
 
         if (in_array($permissionType, $operationPermission[$operationType])){
-            echo "<br> [Permission Check: AccountId " . $accountId . " has permission to 
+            echo "<br> [Permission Check: AccountId " . $accountId . " has permission to
             modify Calendar with id = " . $calendarId . ".]<br>";
 
             return true;
@@ -1144,11 +1144,11 @@ function hasCalendarPermission($accountId, $calendarId, $operationType){
         else{
             echo "<br> [Permission Check: AccountId " . $accountId . " DOES NOT have permission to "
             . $operationType . " modify Calendar with id = " . $calendarId . ".]<br>";
-            
+
             return false;
         }
-    }  
-    else { return false; }  
+    }
+    else { return false; }
 }
 
 // Checks whether an update to the DB was successful.
@@ -1159,7 +1159,7 @@ function checkUpdateSuccess($conn){
     if (mysqli_affected_rows($conn) > 0) {
         echo "<br> Record updated successfully. Rows affected: " . mysqli_affected_rows($conn) . "<br>";
         return true;
-        } 
+        }
     else {
         echo "<br> !!!! Record not updated. No rows affected. Check query. <br>";
         return false;
