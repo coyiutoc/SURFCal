@@ -14,13 +14,28 @@ else
 {
 	include('styles/header.php');
 
+	if (isset($_GET["settings"]) && $_GET["settings"] === "updateUserInfo") {
+    		// handle update user info
+    		$name = trim($_POST["name"]);
+    		$birthday = trim($_POST["birthday"]) === "" ? null : trim($_POST["birthday"]);
+    		$email = trim($_POST["email"]);
+    		$username = trim($_POST["username"]);
+
+    		if (updateAccount($id, $name, $birthday, $email, $username)) {
+    			// refresh page (redirect back to main contact page)
+    			header("Location: ?$profile=settings");
+    		} else {
+    			echo "Failed to update user info, please try again later. <br>";
+    		}
+    	}
+
 	// get information associated with current user
 	$accountInfo = getAccountByUser($user);
 
 	// display form filled out with user information
 	echo <<< _END
-    <aside class="userInfo">
-   		<form id="userInfo" action="?$profile=contact&contact=addContact" method="post">
+    <aside class="updateUserInfo">
+   		<form id="updateUserInfo" action="?$profile=settings&settings=updateUserInfo" method="post">
    			<div class="field">
    				<label for="username">Username</label>
     			<input type="text" name="username" value="$accountInfo[username]" required="required" maxlength="64">
@@ -38,7 +53,7 @@ else
     			<input type="email" name="email0" value="$accountInfo[email]" required="required" maxlength="64">
     		</div>
     		<div>
-    		   <input type="submit" name="updateContact" value="Update User Info" />
+    		   <input type="submit" name="updateUserInfo" value="Update User Info" />
     		</div>
     	</form>
     </aside>
