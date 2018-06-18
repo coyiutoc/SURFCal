@@ -33,10 +33,8 @@ if (!$loggedin) {
 	if (isset($_GET["contact"]) && $_GET["contact"] === "contactDetail" && isset($_GET["contactId"])) {
 		$details = getContactDetails($_GET["contactId"]); // get contact list from DB
 
-		displayContactDetails($details);
-
 		$contactId = $_GET["contactId"];
-		displayDeleteContactOption($contactId);
+		displayContactDetails($contactId, $details);
 	} else {
 		// display contact list
 		showContactList();
@@ -120,6 +118,7 @@ if (!$loggedin) {
         		}
 
         		fieldDiv.setAttribute("id", id);
+        		fieldDiv.classList.add("infoFieldSection");
 				fieldDiv.innerHTML = field;
 
         		contactForm.insertBefore(fieldDiv, addContactBtn);

@@ -11,8 +11,8 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'root';
-$pass = '';
+$user = 'hyngan';
+$pass = 'hyngan';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
@@ -64,23 +64,18 @@ function getAllCalendars($accountId){
 
     global $conn;
 
-    echo "<br> ******* Getting all Calendars associated with accountId = " . $accountId . " ******* <br>";
+    // echo "<br> ******* Getting all Calendars associated with accountId = " . $accountId . " ******* <br>";
 
     $query = "SELECT G.accId, G.calendarId, G.permissionType, C.name, C.description FROM Groups G, Calendars C WHERE
               G.accId=$accountId && G.calendarId = C.calendarId;";
     $response = @mysqli_query($conn, $query);
+    $calendars = [];
 
     if ($response){
-        while($row = mysqli_fetch_assoc($response)){
-            echo "<br> accountId: " . $row["accId"] .
-            "<br> calendarId: " . $row["calendarId"] . 
-            "<br>" . "name: " . $row["name"] . 
-            "<br>" . "description: " . $row["description"] . 
-            "<br>" . "permissionType: " . $row["permissionType"] .
-            "<br>" ;
+        while($row = mysqli_fetch_assoc($response)) {
+            array_push($calendars, $row);
         }
-
-        return mysqli_fetch_assoc($response);
+        return $calendars;
     }
 }
 

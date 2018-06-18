@@ -24,7 +24,7 @@ function showContactList() {
 	echo "</main>";
 }
 
-function displayContactDetails($details) {
+function displayContactDetails($contactId, $details) {
 	global $profile;
 
 	// Parse details
@@ -54,6 +54,9 @@ function displayContactDetails($details) {
 
 	// Name
 	echo '<h2 id="contactName">' . $name . '</h2>';
+
+	displayDeleteContactOption($contactId);
+
 	// Birthday
 	if ($birthday !== "") {
 		echo '<span class="infoField">';
@@ -224,9 +227,9 @@ function displayAddContactSection() {
 					<input type="date" name="birthday" placeholder="birthday" maxlength="64">
 				</div>
 
-				<button id="addAddress" type="button" onclick="addFieldSection('address')">Add Address</button>
-				<button id="addEmail" type="button" onclick="addFieldSection('email')">Add Email</button>
-				<button id="addPhone" type="button" onclick="addFieldSection('phone')">Add Phone</button>
+				<button class="addFieldBtn" id="addAddress" type="button" onclick="addFieldSection('address')">Add Address</button>
+				<button class="addFieldBtn" id="addEmail" type="button" onclick="addFieldSection('email')">Add Email</button>
+				<button class="addFieldBtn" id="addPhone" type="button" onclick="addFieldSection('phone')">Add Phone</button>
 				
 				<br>
 		      	<input id="addContactBtn" type="submit" name="addContact" value="Add Contact" />

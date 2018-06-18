@@ -43,6 +43,9 @@ switch ($getSection) {
     case 'calendar':
         include('sources/calendar/main.php');
         break;
+    case 'group':
+        include('sources/group/main.php');
+        break;
     case 'item':
         include('sources/item/main.php');
         break;

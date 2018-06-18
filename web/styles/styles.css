@@ -378,6 +378,8 @@ main header.calendar h2 {
     color: red;
     font-size: 16px;
     display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .contactInfoSection {
@@ -388,13 +390,31 @@ main header.calendar h2 {
     display: block;
 }
 
-.infoField {
+.infoFieldSection {
     display: block;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 10px;
 }
 
 .infoField label {
     font-weight: bold;
     padding-right: 20px;
+}
+
+#addFieldBtn {
+    width: 30%;
+}
+
+#addContactBtn {
+    display: block;
+    width: 100%;
+    background-color: #cccccc;
+    font-size: 12px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .landing {

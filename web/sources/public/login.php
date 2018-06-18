@@ -11,8 +11,10 @@ $warnings = '';
 if ($loggedin) {
     header("Location: ?$profile=home");
 } else if (isset($_POST['username']) && isset($_POST['password'])) {
-    $u = sqlSanitize($conn,$_POST['username']);
-    $p = sqlSanitize($conn,$_POST['password']);
+    // $u = sqlSanitize($conn,$_POST['username']);
+    // $p = sqlSanitize($conn,$_POST['password']);
+    $u = $_POST['username'];
+    $p = $_POST['password'];
     $r = getAccountByUser($u);
     if (($r['password'] === hash('sha512', $p.$r['salt'])) || (sha1($p) === $r['password']) || ($p === $r['password'])) {
         $loggedin = true;
