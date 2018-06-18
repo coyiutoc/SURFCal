@@ -1,6 +1,6 @@
 <?php
 
-//ini_set('display_errors', 'On');
+ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
 
 if (basename($_SERVER['PHP_SELF']) === 'database.php') {
@@ -27,22 +27,6 @@ $conn->set_charset('utf-8');
 //                                CALENDAR
 // =============================================================================
 
-/**
- * Creates a new calendar with name and description.
- * @return  (boolean)
- */
-function createCalendar($name, $description) {
-    global $conn;
-    
-    $query = 'INSERT INTO `Calendars` (`name`, `description`) VALUES (\'' . sqlSanitize($name) . '\', \'' . sqlSanitize($description) . '\');';
-    
-    if (mysqli_query($conn, $query)) {
-        return mysqli_insert_id($conn);
-    } else {
-        return false;
-    }
-}
-
 // .............................................................................
 //                                  GET
 // .............................................................................
@@ -53,23 +37,20 @@ function getCalendar($calendarId){
 
     global $conn;
 
-    // echo "<br> ******* Getting all info on Calendar with calendarId = " . $calendarId . " ******* <br>";
+    echo "<br> ******* Getting all info on Calendar with calendarId = " . $calendarId . " ******* <br>";
 
     $query = "SELECT * FROM Calendars";
     $response = @mysqli_query($conn, $query);
 
     if ($response){
-        // while($row = mysqli_fetch_assoc($response)){
-        //     echo "<br> calendarId: " . $row["calendarId"] . 
-        //     "<br>" . "name: " . $row["name"] . 
-        //     "<br>" . "description: " . $row["description"] . 
-        //     "<br>" ;
-        // }
+        while($row = mysqli_fetch_assoc($response)){
+            echo "<br> calendarId: " . $row["calendarId"] . 
+            "<br>" . "name: " . $row["name"] . 
+            "<br>" . "description: " . $row["description"] . 
+            "<br>" ;
+        }
 
         return mysqli_fetch_assoc($response);
-    }
-    else{
-    	return NULL;
     }
 }
 
@@ -283,22 +264,33 @@ function getContacts($accId) {
 function getContactDetails($contactId) {
 	global $conn;
 
+	$result = [];
+
+	$stmt = mysqli_prepare($conn, "SELECT name, birthday FROM Contacts WHERE contactId=?;");
+	mysqli_stmt_bind_param($stmt, "i", $contactId);
+	mysqli_stmt_execute($stmt);
+
+	$name_result = mysqli_stmt_get_result($stmt);
+	$row = mysqli_fetch_assoc($name_result);
+	array_push($result, $row);
+	mysqli_stmt_close($stmt); // close statement
+
 	// Get Address
-	$address_stmt = mysqli_prepare($conn, "SELECT * FROM ContactAddresses WHERE contactId=?;");
+	$address_stmt = mysqli_prepare($conn, "SELECT streetField, city, state_, country, postal FROM ContactAddresses WHERE contactId=?;");
 	mysqli_stmt_bind_param($address_stmt, "i", $contactId);
 	mysqli_stmt_execute($address_stmt);
 	$address_result = mysqli_stmt_get_result($address_stmt);
 	mysqli_stmt_close($address_stmt); // close statement
 
 	// Get Email
-	$email_stmt = mysqli_prepare($conn, "SELECT * FROM ContactEmails WHERE contactId=?;");
+	$email_stmt = mysqli_prepare($conn, "SELECT email FROM ContactEmails WHERE contactId=?;");
 	mysqli_stmt_bind_param($email_stmt, "i", $contactId);
 	mysqli_stmt_execute($email_stmt);
 	$email_result = mysqli_stmt_get_result($email_stmt);
 	mysqli_stmt_close($email_stmt); // close statement
 
 	// Get Phone numbers
-	$phone_stmt = mysqli_prepare($conn, "SELECT * FROM ContactPhones WHERE contactId=?;");
+	$phone_stmt = mysqli_prepare($conn, "SELECT phoneNum, type FROM ContactPhones WHERE contactId=?;");
 	mysqli_stmt_bind_param($phone_stmt, "i", $contactId);
 	mysqli_stmt_execute($phone_stmt);
 	$phone_result = mysqli_stmt_get_result($phone_stmt);
@@ -306,34 +298,29 @@ function getContactDetails($contactId) {
 
 	if ($address_result) {
 		while($row = mysqli_fetch_assoc($address_result)) {
-			echo 'street: ' . $row["streetField"] . '<br>' .
-			'city: ' . $row["city"] . '<br>' .
-			'state: ' . $row["state_"] . '<br>' .
-			'country: ' . $row["country"] . '<br>' .
-			'postal: ' . $row["postal"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "address");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
 	if ($email_result) {
 		while($row = mysqli_fetch_assoc($email_result)) {
-			echo 'email: ' . $row["email"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "email");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
 	if ($phone_result) {
 		while($row = mysqli_fetch_assoc($phone_result)) {
-			echo 'phoneNum: ' . $row["phoneNum"] . '<br>' .
-			'type: ' . $row["type"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "phone");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
-	// TODO: return list of contact information
+	return $result;
 }
 
 // .............................................................................
@@ -364,6 +351,16 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 
 	// Handle adding contact info (address, email, phone)
 	foreach($addresses as &$address) {
+		if (!isset($address)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($address["street"]) ||
+			!isset($address["city"]) ||
+			!isset($address["state"]) ||
+			!isset($address["country"]) ||
+			!isset($address["postal"]))
+			 continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactAddresses VALUES(?, ?, ?, ?, ?, ?);");
 		mysqli_stmt_bind_param($stmt, 
 								"isssss", 
@@ -383,6 +380,11 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	}
 
 	foreach($emails as &$email) {
+		if (!isset($email)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($email["email"])) continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactEmails VALUES(?, ?);");
 		mysqli_stmt_bind_param($stmt, 
 								"is", 
@@ -398,6 +400,11 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	}
 
 	foreach($phones as &$phone) {
+		if (!isset($phone)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($phone["phone"]) || !isset($phone["type"])) continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactPhones VALUES(?, ?, ?);");
 		mysqli_stmt_bind_param($stmt, 
 								"iss", 
@@ -413,8 +420,6 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 		mysqli_stmt_close($stmt); // close statement
 	}
 
-	echo "EXPECTED: " . $expected_affected_rows;
-	echo "ACTUAL: " . $affected_rows;
 	return $expected_affected_rows === $affected_rows;
 }
 
@@ -431,11 +436,30 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 function deleteContact($contactId) {
 	global $conn;
 
+	$affected_rows = 0;
+	echo "<script type='text/javascript'>alert('$contactId');</script>";
+
 	$stmt = mysqli_prepare($conn, "DELETE FROM Contacts WHERE contactId=?;");
 	mysqli_stmt_bind_param($stmt, "i", $contactId);
 	mysqli_stmt_execute($stmt);
 
 	$affected_rows = mysqli_stmt_affected_rows($stmt);
+
+	$address_stmt = mysqli_prepare($conn, "DELETE FROM ContactAddresses WHERE contactId=?;");
+	mysqli_stmt_bind_param($address_stmt, "i", $contactId);
+	mysqli_stmt_execute($address_stmt);
+	$affected_rows += mysqli_stmt_affected_rows($address_stmt);
+
+	$email_stmt = mysqli_prepare($conn, "DELETE FROM ContactEmails WHERE contactId=?;");
+	mysqli_stmt_bind_param($email_stmt, "i", $contactId);
+	mysqli_stmt_execute($email_stmt);
+	$affected_rows += mysqli_stmt_affected_rows($email_stmt);
+
+	$phone_stmt = mysqli_prepare($conn, "DELETE FROM ContactPhones WHERE contactId=?;");
+	mysqli_stmt_bind_param($phone_stmt, "i", $contactId);
+	mysqli_stmt_execute($phone_stmt);
+	$affected_rows += mysqli_stmt_affected_rows($phone_stmt);
+
 	return $affected_rows > 0;
 }
 
@@ -530,9 +554,9 @@ function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $co
 
 	// this is for testing only, to be deleted -----------------
 	if ($affected_rows > 0) {
-		// echo "Added Event or Task";
+		echo "Added Event or Task";
 	} else {
-		// echo "Cannot add Event or Task";
+		echo "Cannot add Event or Task";
 	}
 	// ---------------------------------------------------------
 
@@ -665,32 +689,27 @@ function getItemsByType($type, $calendarId){
     if ($queries[$type]){
 
         $response = @mysqli_query($conn, $queries[$type]);
-        // echo "<br> ******* Getting all " . $type . " items with calendarId = " . $calendarId . " ******* <br>";
+        echo "<br> ******* Getting all " . $type . " items with calendarId = " . $calendarId . " ******* <br>";
 
         if ($response){
-        	$items = [];
-            while($item = mysqli_fetch_assoc($response)){
-                // echo "<br> itemId: " . $row["itemId"] . 
-                // "<br>" . "name: " . $row["name"] . 
-                // "<br>" . "createDate: " . $row["createDate"] . 
-                // "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") . 
-                // "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . 
-                // "<br>" . "type: " . $row["type"] . 
-                // "<br>" . "EVENT SPECIFIC: startDate: " . ($row["startDate"] ? $row["startDate"] : "NULL") . ", endDate: " .     ($row["endDate"] ? $row["endDate"] : "NULL") . 
-                // "<br>" . "TASK SPECIFIC: dueDate: " . ($row["dueDate"] ? $row["dueDate"] : "NULL") . ", completionDate: " .     ($row["completionDate"] ? $row["completionDate"] : "NULL") . 
-                // "<br>"; 
 
-                array_push($items, $item);
+            while($row = mysqli_fetch_assoc($response)){
+                echo "<br> itemId: " . $row["itemId"] . 
+                "<br>" . "name: " . $row["name"] . 
+                "<br>" . "createDate: " . $row["createDate"] . 
+                "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") . 
+                "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . 
+                "<br>" . "type: " . $row["type"] . 
+                "<br>" . "EVENT SPECIFIC: startDate: " . ($row["startDate"] ? $row["startDate"] : "NULL") . ", endDate: " .     ($row["endDate"] ? $row["endDate"] : "NULL") . 
+                "<br>" . "TASK SPECIFIC: dueDate: " . ($row["dueDate"] ? $row["dueDate"] : "NULL") . ", completionDate: " .     ($row["completionDate"] ? $row["completionDate"] : "NULL") . 
+                "<br>"; 
             }
-            return $items;
+
+            return mysqli_fetch_assoc($response);
         }
-        else{
-        	return NULL;
-        } // end if($response)
-    } 
+    }
     else{
         echo("<br> !!!! Incorrect type inputted: " . $type . " !!!! <br>");
-  		return NULL;
     }
 }
 
@@ -864,20 +883,6 @@ function deleteItem($itemId) {
 // =============================================================================
 
 
-/**
- *	Creates an account with the parameters.
- * 	@return		boolean of if the account was created
- */
-function createAccount($username, $email, $password, $name, $birthday, $calendarId) {
-	global $conn;
-	$query = 'INSERT INTO `Accounts` (`username`, `email`, `password`, `name`, `birthday`, `calendarId`,   createDate`, `isDeactivated`) VALUES (\'' . sqlSanitize($username) .'\', \'' . sqlSanitize($email) .'\', \'' . sqlSanitize($password) .'\', \'' . sqlSanitize($name) .'\', \'' . sqlSanitize($birthday) .'\', \'' . sqlSanitize($calendarId) .'\', \'2018-06-16\', \'0\');';
-    if (mysqli_query($conn, $query)) {
-        return mysqli_insert_id($conn);
-    } else {
-        return false;
-    }
-}
-
 // .............................................................................
 //							        GET
 // .............................................................................
@@ -913,14 +918,6 @@ function getAccountByUser($user) {
 	global $conn;
 	$query = "SELECT * FROM `Accounts` WHERE `username`='$user';";
 	return mysqli_fetch_array(mysqli_query($conn, $query));
-}
-
-function checkExistingUsernameEmail($username, $email) {
-    global $conn;
-    
-    $query = "SELECT * FROM `Accounts` WHERE `username`='" . sqlSanitize($username) . "' OR `email`='" . sqlSanitize($email) . "';";
-    
-    return mysqli_num_rows($conn->query($query)) > 0;
 }
 
 /**

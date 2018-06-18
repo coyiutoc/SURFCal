@@ -362,6 +362,42 @@ main header.calendar h2 {
     width: 100%;
 }
 
+/* Contacts */
+.removeField {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#backToContacts {
+    margin-bottom: 20px;
+}
+
+#deleteContact {
+    color: red;
+    font-size: 16px;
+    display: block;
+}
+
+.contactInfoSection {
+    background-color: white;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 0px 10px;
+    display: block;
+}
+
+.infoField {
+    display: block;
+}
+
+.infoField label {
+    font-weight: bold;
+    padding-right: 20px;
+}
+
 .landing {
     text-align: center;
 }
@@ -404,17 +440,12 @@ main header.calendar h2 {
     margin-right: 5px;
     width: 10ch;
 }
-.positive_alert {
+.alert {
     background-color: #5b9960;
     color: white;
     padding: 20px;
 }
 
-.negative_alert {
-    background-color: #e86e55;
-    color: white;
-    padding: 20px;
-}
 .closebtn {
     color: white;
     cursor: pointer;
