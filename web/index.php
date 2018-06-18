@@ -49,6 +49,9 @@ switch ($getSection) {
     case 'contact':
         include('sources/contact/main.php');
         break;
+    case 'settings':
+        include('sources/settings/main.php');
+        break;
     case 'acp':
         include('sources/acp/main.php');
         break;
