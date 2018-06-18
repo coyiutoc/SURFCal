@@ -22,8 +22,6 @@ else
     		$username = trim($_POST["username"]);
     		$infoArray = array();
     		$infoArray["name"] = $name;
-    		$infoArray["email"] = $email;
-    		$infoArray["username"] = $username;
     		$infoArray["birthday"] = $birthday;
 
     		if (updateAccount($id, $infoArray)) {
