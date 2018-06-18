@@ -14,7 +14,17 @@ else
 {
 	include('styles/header.php');
 	include('styles/footer.php');
-	echo "settings";
+
+	// get information associated with current user
+	$accountInfo = getAccountByUser($id);
+	printf($accountInfo);
+	// display form filled out with user information
+	// have update button which updates user information (PUT)
+
+	// get calendar information associated with current user
+	// display form with calendar information
+	// have update button which updates calendar information (PUT)
+
 }
 
 ?>
