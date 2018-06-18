@@ -20,8 +20,13 @@ else
     		$birthday = trim($_POST["birthday"]) === "" ? null : trim($_POST["birthday"]);
     		$email = trim($_POST["email"]);
     		$username = trim($_POST["username"]);
+    		$infoArray = array();
+    		$infoArray["name"] = $name;
+    		$infoArray["email"] = $email;
+    		$infoArray["username"] = $username;
+    		$infoArray["birthday"] = $birthday;
 
-    		if (updateAccount($id, $name, $birthday, $email, $username)) {
+    		if (updateAccount($id, $infoArray)) {
     			// refresh page (redirect back to main contact page)
     			header("Location: ?$profile=settings");
     		} else {
