@@ -1,7 +1,7 @@
 /* populating tables */
 
 INSERT INTO Calendars (calendarId, name, description) VALUES
-    (1, 'mclovin calendar', 'justins personal calendar'),
+    (1, 'mclovin calendar', 'mclovins personal calendar'),
     (2, 'Katies Calendar', 'mock calendar for sales demo'),
     (3, 'valentinas Calendar', 'mock calendar for sales demo'),
     (4, 'borts calendar', 'borts personal calendar'),
