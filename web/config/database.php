@@ -1,7 +1,8 @@
 <?php
 
-//ini_set('display_errors', 'On');
+ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 if (basename($_SERVER['PHP_SELF']) === 'database.php') {
     require_once('../403.php');
@@ -149,7 +150,7 @@ function updateCalendar($accountId, $calendarId, array $args = array()){
         echo("RESULTING QUERY: " . $query);
         mysqli_query($conn, $query);
 
-        return checkUpdateSuccess($conn);
+        return checkUpdateSuccess($conn, $query);
     }
     else{
         echo "<br> !!!!!! COULD NOT Update Calendar with CalendarId = " . $calendarId . " !!!!!! <br>";
@@ -215,7 +216,7 @@ function deleteCalendar($accountId, $calendarId){
         echo("RESULTING QUERY: " . $query);
         mysqli_query($conn, $query);
 
-        return checkUpdateSuccess($conn);
+        return checkUpdateSuccess($conn, $query);
     }
     else{
         echo "<br> !!!!!! COULD NOT Delete Calendar with CalendarId = " . $calendarId . " !!!!!! <br>";
@@ -267,22 +268,33 @@ function getContacts($accId) {
 function getContactDetails($contactId) {
 	global $conn;
 
+	$result = [];
+
+	$stmt = mysqli_prepare($conn, "SELECT name, birthday FROM Contacts WHERE contactId=?;");
+	mysqli_stmt_bind_param($stmt, "i", $contactId);
+	mysqli_stmt_execute($stmt);
+
+	$name_result = mysqli_stmt_get_result($stmt);
+	$row = mysqli_fetch_assoc($name_result);
+	array_push($result, $row);
+	mysqli_stmt_close($stmt); // close statement
+
 	// Get Address
-	$address_stmt = mysqli_prepare($conn, "SELECT * FROM ContactAddresses WHERE contactId=?;");
+	$address_stmt = mysqli_prepare($conn, "SELECT streetField, city, state_, country, postal FROM ContactAddresses WHERE contactId=?;");
 	mysqli_stmt_bind_param($address_stmt, "i", $contactId);
 	mysqli_stmt_execute($address_stmt);
 	$address_result = mysqli_stmt_get_result($address_stmt);
 	mysqli_stmt_close($address_stmt); // close statement
 
 	// Get Email
-	$email_stmt = mysqli_prepare($conn, "SELECT * FROM ContactEmails WHERE contactId=?;");
+	$email_stmt = mysqli_prepare($conn, "SELECT email FROM ContactEmails WHERE contactId=?;");
 	mysqli_stmt_bind_param($email_stmt, "i", $contactId);
 	mysqli_stmt_execute($email_stmt);
 	$email_result = mysqli_stmt_get_result($email_stmt);
 	mysqli_stmt_close($email_stmt); // close statement
 
 	// Get Phone numbers
-	$phone_stmt = mysqli_prepare($conn, "SELECT * FROM ContactPhones WHERE contactId=?;");
+	$phone_stmt = mysqli_prepare($conn, "SELECT phoneNum, type FROM ContactPhones WHERE contactId=?;");
 	mysqli_stmt_bind_param($phone_stmt, "i", $contactId);
 	mysqli_stmt_execute($phone_stmt);
 	$phone_result = mysqli_stmt_get_result($phone_stmt);
@@ -290,34 +302,29 @@ function getContactDetails($contactId) {
 
 	if ($address_result) {
 		while($row = mysqli_fetch_assoc($address_result)) {
-			echo 'street: ' . $row["streetField"] . '<br>' .
-			'city: ' . $row["city"] . '<br>' .
-			'state: ' . $row["state_"] . '<br>' .
-			'country: ' . $row["country"] . '<br>' .
-			'postal: ' . $row["postal"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "address");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
 	if ($email_result) {
 		while($row = mysqli_fetch_assoc($email_result)) {
-			echo 'email: ' . $row["email"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "email");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
 	if ($phone_result) {
 		while($row = mysqli_fetch_assoc($phone_result)) {
-			echo 'phoneNum: ' . $row["phoneNum"] . '<br>' .
-			'type: ' . $row["type"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "phone");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
-	// TODO: return list of contact information
+	return $result;
 }
 
 // .............................................................................
@@ -348,6 +355,16 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 
 	// Handle adding contact info (address, email, phone)
 	foreach($addresses as &$address) {
+		if (!isset($address)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($address["street"]) ||
+			!isset($address["city"]) ||
+			!isset($address["state"]) ||
+			!isset($address["country"]) ||
+			!isset($address["postal"]))
+			 continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactAddresses VALUES(?, ?, ?, ?, ?, ?);");
 		mysqli_stmt_bind_param($stmt,
 								"isssss",
@@ -367,6 +384,11 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	}
 
 	foreach($emails as &$email) {
+		if (!isset($email)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($email["email"])) continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactEmails VALUES(?, ?);");
 		mysqli_stmt_bind_param($stmt,
 								"is",
@@ -382,6 +404,11 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 	}
 
 	foreach($phones as &$phone) {
+		if (!isset($phone)) continue;
+
+		// if any fields are missing, do not add to DB
+		if (!isset($phone["phone"]) || !isset($phone["type"])) continue;
+
 		$stmt = mysqli_prepare($conn, "INSERT INTO ContactPhones VALUES(?, ?, ?);");
 		mysqli_stmt_bind_param($stmt,
 								"iss",
@@ -397,8 +424,6 @@ function createContact($accId, $name, $birthday, array $addresses = array(), arr
 		mysqli_stmt_close($stmt); // close statement
 	}
 
-	echo "EXPECTED: " . $expected_affected_rows;
-	echo "ACTUAL: " . $affected_rows;
 	return $expected_affected_rows === $affected_rows;
 }
 
@@ -420,6 +445,7 @@ function deleteContact($contactId) {
 	mysqli_stmt_execute($stmt);
 
 	$affected_rows = mysqli_stmt_affected_rows($stmt);
+
 	return $affected_rows > 0;
 }
 
@@ -464,7 +490,7 @@ function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $co
 	$note = trim($note);
 
 	$item_stmt = mysqli_prepare($conn, "INSERT INTO Items VALUES(0, ?, ?, NOW(), ?, ?, ?, ?, ?, ?);");
-	mysqli_stmt_bind_param($item_stmt, "issssiis", $calendarId, $name, $note, $reminder, $type, $createdBy, $location, $colour);
+	mysqli_stmt_bind_param($item_stmt, "issssiss", $calendarId, $name, $note, $reminder, $type, $createdBy, $location, $colour);
 	mysqli_stmt_execute($item_stmt);
 
 	$item_affected_rows = mysqli_stmt_affected_rows($item_stmt);
@@ -740,6 +766,10 @@ function getMinMaxItemsPerAccount($operation){
 // .............................................................................
 
 /**
+ *  !!!!!! TO DO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ *         Revert it back to binding + have check that type and itemId match. 
+ *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ *
  *	Edit an Item and its associated Event/Task if the item type is "event" or "task"
  *  @param integer $accountId   the account id, REQUIRED
  *  @param integer $calendarId  the calendar id, REQUIRED
@@ -748,79 +778,117 @@ function getMinMaxItemsPerAccount($operation){
  *	@param string $name     	the item's title, NULLABLE
  * 	@param string $note   		the item's description, NULLABLE
  *	@param string $reminder 	the item's reminder datetime string, NULLABLE
- *  @param array $args 		    the item's additional information (start_date and end_date for
+ *  @param array $args 		    the item's additional information (start_date and end_date for 
  *								event, due_date and completion_date for task), NULLABLE.
  *                              if null, set it to array()
  *  @param string $location     the item's location, NULLABLE
  *  @param integer $colour 		the item's colour value (0-7), NULLABLE
  * 	@return boolean				true if item is edited successfully
  */
-function editItem($itemId, $name, $note, $reminder, $type, $options) {
-	// TODO: can refactor createItem and editItem
-	global $conn;
+function editItem($accountId, $calendarId, $itemId, $type, $name, $note, $reminder, $location, $colour, array $args = array()){
 
-	$item_edited = false; // return value
+    if (hasCalendarPermission($accountId, $calendarId, 'update') && 
+			$accountId && $calendarId && $itemId && $type){
 
-	// Fix input
-	$name = trim($name);
-	$note = trim($note);
+        global $conn;
+    	//print_r($args);
+        //echo "<br> ******* Editing item with Id = " . $itemId . " ******* <br>";
 
-	$item_stmt = mysqli_prepare($conn, "UPDATE Items SET name=?, note=?, reminder=? WHERE itemId=?");
-	mysqli_stmt_bind_param($item_stmt, "sssi", $name, $note, $reminder, $itemId);
-	mysqli_stmt_execute($item_stmt);
+    	// Checking for query onto Items -----------------------------------------
 
-	$item_affected_rows = mysqli_stmt_affected_rows($item_stmt);
-	mysqli_stmt_close($item_stmt); // close statement
-	// echo $item_affected_rows;
+        $query = "UPDATE Items SET ";
+        $params = array();
+        
+        if ($name){
+        	array_push($params, "name = '$name'");
+        }
 
-	$item_edited = $item_edited || ($item_affected_rows > 0);
-
-	// Handle edit Item Subclass (Event/Task)
-	echo $type;
-	$affected_rows = 0;
-	switch($type) {
-		case "event":
-			$start_date = $options["start_date"];
-			$end_date = $options["end_date"];
-
-			$stmt = mysqli_prepare($conn, "UPDATE EventItems SET startDate=?, endDate=? WHERE itemId=?");
-			mysqli_stmt_bind_param($stmt, "ssi", $start_date, $end_date, $itemId);
-			mysqli_stmt_execute($stmt);
-
-			$affected_rows = mysqli_stmt_affected_rows($stmt);
-
-			mysqli_stmt_close($stmt); // close statement
-
-			break;
-		case "task":
-			$due_date = $options['due_date'];
-			$completion_date = $options['completion_date'];
-			echo "got here";
-
-			$stmt = mysqli_prepare($conn, "UPDATE TaskItems SET dueDate=?, completionDate=? WHERE itemId=?");
-			mysqli_stmt_bind_param($stmt, "ssi", $due_date, $completion_date, $itemId);
-			// echo var_dump($stmt);
-			mysqli_stmt_execute($stmt);
-
-			$affected_rows = mysqli_stmt_affected_rows($stmt);
-
-			mysqli_stmt_close($stmt); // close statement
+        if ($note){
+        	array_push($params, "note = '$note'");
+        }
 
         if ($reminder){
         	array_push($params, "reminder = '$reminder'");
         }
 
-	// this is for testing only, to be deleted -----------------
-	if ($affected_rows > 0) {
-		echo "Edited Event or Task";
-	} else {
-		echo "Cannot edit Event or Task";
-	}
-	// ---------------------------------------------------------
+        if ($location){
+        	array_push($params, "location = '$location'");
+        }
 
-	$item_edited = $item_edited || ($affected_rows > 0);
+        // Note that colour will ALWAYS be a param,
+        // so even if there is no change, it will trigger
+        // the query. 
+        if ($colour){
+        	array_push($params, "colour = '$colour'");
+        }
 
-	return $item_edited;
+      	if (!empty($params)){
+	        // Adding commas in the right places:
+	        for ($i = 0; $i < count($params)-1; $i++){
+	            $query .= $params[$i] . ", ";
+	        }
+	        $query .= $params[count($params)-1] . " WHERE itemId = $itemId;";
+
+	        //echo("RESULTING QUERY: " . $query); 
+	        mysqli_query($conn, $query);
+			//echo(mysqli_error($conn));
+
+	        $query_success = checkUpdateSuccess($conn, $query);
+
+	        if (!$query_success) {return false;}
+	    } // end if(!empty($params))
+
+	    // Checking for query onto EventItems/TaskItems --------------------------
+
+        if ($type){
+
+        	$type_params = array();
+
+	        if ($type == 'event'){
+	        	$type_query = "UPDATE EventItems SET ";
+		        if (isset($args['startDate'])){
+		            $startDate = $args['startDate'];
+		            array_push($type_params, "startDate = '$startDate'");
+		        }
+
+		        if (isset($args['endDate'])){
+		            $endDate = $args['endDate'];
+		            array_push($type_params, "endDate = '$endDate'");
+		        }
+	    	}
+	    	else if ($type == 'task'){
+	    		$type_query = "UPDATE TaskItems SET ";
+	    		if (isset($args['dueDate'])){
+		            $dueDate = $args['dueDate'];
+		            array_push($type_params, "dueDate = '$dueDate'");
+		        }
+
+		        if (isset($args['completionDate'])){
+		            $completionDate = $args['completionDate'];
+		            array_push($type_params, "completionDate = '$completionDate'");
+		        }
+	    	}
+
+	    	if (!empty($type_params)){
+		    	//Adding commas in the right places:
+		        for ($i = 0; $i < count($type_params)-1; $i++){
+		            $type_query .= $type_params[$i] . ", ";
+		        }
+		        $type_query .= $type_params[count($type_params)-1] . " WHERE itemId = $itemId;";
+
+		        //echo("RESULTING QUERY: " . $type_query); 
+		        mysqli_query($conn, $type_query);
+
+		        return checkUpdateSuccess($conn, $type_query);
+		    }
+	    	else {return true;} // end if($type_query)
+	    }
+	    else {return true;} // end if($type)
+    }
+    else{
+        echo "<br> !!!!!! COULD NOT Update Item with ItemId = " . $itemId . " !!!!!! <br>";
+        return false;
+    }
 }
 
 // .............................................................................
@@ -843,27 +911,13 @@ function deleteItem($itemId) {
 
 	mysqli_stmt_close($stmt); // close statement
 
-	return $affected_rows > 0;
+	return checkUpdateSuccessWithStmt(($affected_rows > 0), 'DELETE FROM Items Where itemId=$itemId');
 }
 
 // =============================================================================
 //							       ACCOUNT
 // =============================================================================
 
-
-/**
- *	Creates an account with the parameters.
- * 	@return		boolean of if the account was created
- */
-function createAccount($username, $email, $password, $name, $birthday, $calendarId) {
-	global $conn;
-	$query = 'INSERT INTO `Accounts` (`username`, `email`, `password`, `name`, `birthday`, `calendarId`,   createDate`, `isDeactivated`) VALUES (\'' . sqlSanitize($username) .'\', \'' . sqlSanitize($email) .'\', \'' . sqlSanitize($password) .'\', \'' . sqlSanitize($name) .'\', \'' . sqlSanitize($birthday) .'\', \'' . sqlSanitize($calendarId) .'\', \'2018-06-16\', \'0\');';
-    if (mysqli_query($conn, $query)) {
-        return mysqli_insert_id($conn);
-    } else {
-        return false;
-    }
-}
 
 // .............................................................................
 //							        GET
@@ -1075,7 +1129,7 @@ function updateAccount($accountId, array $args = array()){
     // echo("RESULTING QUERY: " . $query);
     mysqli_query($conn, $query);
 
-    return checkUpdateSuccess($conn);
+    return checkUpdateSuccess($conn, $query);
 }
 
 // .............................................................................
@@ -1115,7 +1169,8 @@ function hasCalendarPermission($accountId, $calendarId, $operationType){
         $permissionType = mysqli_fetch_assoc($response)["permissionType"];
 
         if (in_array($permissionType, $operationPermission[$operationType])){
-            // echo "<br> [Permission Check: AccountId " . $accountId . " has permission to
+
+            // echo "<br> [Permission Check: AccountId " . $accountId . " has permission to 
             // modify Calendar with id = " . $calendarId . ".]<br>";
 
             return true;
@@ -1133,16 +1188,69 @@ function hasCalendarPermission($accountId, $calendarId, $operationType){
 // Checks whether an update to the DB was successful.
 // ___ RETURNS: true if update was successful,
 //              otherwise false.
-function checkUpdateSuccess($conn){
+function checkUpdateSuccess($conn, $query){
 
-    if (mysqli_affected_rows($conn) > 0) {
-        echo "<br> Record updated successfully. Rows affected: " . mysqli_affected_rows($conn) . "<br>";
+    if (mysqli_affected_rows($conn) >= 0) {
+        //echo "<br> No errors in record update. Rows affected: " . mysqli_affected_rows($conn) . "<br>";
+        $affected_rows = mysqli_affected_rows($conn);
+        // Alert:
+		echo <<<_END
+			<div class="positive_sql_alert">
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+			  	<strong>No errors in record update.</strong> 
+			  	<div style="margin-left: 15px">
+			  	Rows affected: $affected_rows
+			  	<br> Query: $query
+			  	</div>
+			</div>
+_END;
+
         return true;
         }
     else {
-        echo "<br> !!!! Record not updated. No rows affected. Check query. <br>";
+        //echo "<br> !!!! Record not updated. No rows affected. Check query. <br>";
+       	// Alert:
+		echo <<<_END
+			<div class="negative_alert">
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+			  	<strong>Errors in record update.</strong>
+			  	<div style="margin-left: 15px">
+			  	Query: $query
+			  	</div>
+			</div>
+_END;
+
         return false;
     }
+}
+
+function checkUpdateSuccessWithStmt($row_is_affected, $query){
+	if ($row_is_affected){
+		// Alert:
+		echo <<<_END
+			<div class="positive_sql_alert">
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+			  	<strong>No errors in record update.</strong> 
+			  	<div style="margin-left: 15px">
+				Query: $query
+			  	</div>
+			</div>
+_END;
+
+        return true;
+	}
+	else{
+		// Alert:
+		echo <<<_END
+			<div class="negative_alert">
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+			  	<strong>Errors in record update.</strong>
+			  	<div style="margin-left: 15px">
+			  	Query: $query
+			  	</div>
+			</div>
+_END;
+	}
 }
 
 ?>
