@@ -264,22 +264,33 @@ function getContacts($accId) {
 function getContactDetails($contactId) {
 	global $conn;
 
+	$result = [];
+
+	$stmt = mysqli_prepare($conn, "SELECT name, birthday FROM Contacts WHERE contactId=?;");
+	mysqli_stmt_bind_param($stmt, "i", $contactId);
+	mysqli_stmt_execute($stmt);
+
+	$name_result = mysqli_stmt_get_result($stmt);
+	$row = mysqli_fetch_assoc($name_result);
+	array_push($result, $row);
+	mysqli_stmt_close($stmt); // close statement
+
 	// Get Address
-	$address_stmt = mysqli_prepare($conn, "SELECT * FROM ContactAddresses WHERE contactId=?;");
+	$address_stmt = mysqli_prepare($conn, "SELECT streetField, city, state_, country, postal FROM ContactAddresses WHERE contactId=?;");
 	mysqli_stmt_bind_param($address_stmt, "i", $contactId);
 	mysqli_stmt_execute($address_stmt);
 	$address_result = mysqli_stmt_get_result($address_stmt);
 	mysqli_stmt_close($address_stmt); // close statement
 
 	// Get Email
-	$email_stmt = mysqli_prepare($conn, "SELECT * FROM ContactEmails WHERE contactId=?;");
+	$email_stmt = mysqli_prepare($conn, "SELECT email FROM ContactEmails WHERE contactId=?;");
 	mysqli_stmt_bind_param($email_stmt, "i", $contactId);
 	mysqli_stmt_execute($email_stmt);
 	$email_result = mysqli_stmt_get_result($email_stmt);
 	mysqli_stmt_close($email_stmt); // close statement
 
 	// Get Phone numbers
-	$phone_stmt = mysqli_prepare($conn, "SELECT * FROM ContactPhones WHERE contactId=?;");
+	$phone_stmt = mysqli_prepare($conn, "SELECT phoneNum, type FROM ContactPhones WHERE contactId=?;");
 	mysqli_stmt_bind_param($phone_stmt, "i", $contactId);
 	mysqli_stmt_execute($phone_stmt);
 	$phone_result = mysqli_stmt_get_result($phone_stmt);
@@ -287,34 +298,29 @@ function getContactDetails($contactId) {
 
 	if ($address_result) {
 		while($row = mysqli_fetch_assoc($address_result)) {
-			echo 'street: ' . $row["streetField"] . '<br>' .
-			'city: ' . $row["city"] . '<br>' .
-			'state: ' . $row["state_"] . '<br>' .
-			'country: ' . $row["country"] . '<br>' .
-			'postal: ' . $row["postal"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "address");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
 	if ($email_result) {
 		while($row = mysqli_fetch_assoc($email_result)) {
-			echo 'email: ' . $row["email"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "email");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
 	if ($phone_result) {
 		while($row = mysqli_fetch_assoc($phone_result)) {
-			echo 'phoneNum: ' . $row["phoneNum"] . '<br>' .
-			'type: ' . $row["type"] . '<br>';
-
-			// TODO: Add to result
+			// array_push($row, "infoType" => "phone");
+			// echo var_dump($row);
+			array_push($result, $row);
 		}
 	}
 
-	// TODO: return list of contact information
+	return $result;
 }
 
 // .............................................................................
