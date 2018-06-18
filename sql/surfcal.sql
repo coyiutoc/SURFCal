@@ -1,3 +1,4 @@
+DROP SCHEMA `surfcal`;
 CREATE SCHEMA `surfcal`;
 
 CREATE TABLE Calendars (
