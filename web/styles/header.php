@@ -16,6 +16,7 @@ echo <<<_END
         <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous" />
         <link href="styles/styles.css" rel="stylesheet" type="text/css" />
         <script src="http://twemoji.maxcdn.com/2/twemoji.min.js?2.7"></script>
+        <script src="scripts/surfcal.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="wrapper">

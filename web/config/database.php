@@ -1,6 +1,6 @@
 <?php
 
-ini_set('display_errors', 'On');
+//ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
 
 if (basename($_SERVER['PHP_SELF']) === 'database.php') {
@@ -27,6 +27,22 @@ $conn->set_charset('utf-8');
 //                                CALENDAR
 // =============================================================================
 
+/**
+ * Creates a new calendar with name and description.
+ * @return  (boolean)
+ */
+function createCalendar($name, $description) {
+    global $conn;
+    
+    $query = 'INSERT INTO `Calendars` (`name`, `description`) VALUES (\'' . sqlSanitize($name) . '\', \'' . sqlSanitize($description) . '\');';
+    
+    if (mysqli_query($conn, $query)) {
+        return mysqli_insert_id($conn);
+    } else {
+        return false;
+    }
+}
+
 // .............................................................................
 //                                  GET
 // .............................................................................
@@ -37,20 +53,23 @@ function getCalendar($calendarId){
 
     global $conn;
 
-    echo "<br> ******* Getting all info on Calendar with calendarId = " . $calendarId . " ******* <br>";
+    // echo "<br> ******* Getting all info on Calendar with calendarId = " . $calendarId . " ******* <br>";
 
     $query = "SELECT * FROM Calendars";
     $response = @mysqli_query($conn, $query);
 
     if ($response){
-        while($row = mysqli_fetch_assoc($response)){
-            echo "<br> calendarId: " . $row["calendarId"] . 
-            "<br>" . "name: " . $row["name"] . 
-            "<br>" . "description: " . $row["description"] . 
-            "<br>" ;
-        }
+        // while($row = mysqli_fetch_assoc($response)){
+        //     echo "<br> calendarId: " . $row["calendarId"] . 
+        //     "<br>" . "name: " . $row["name"] . 
+        //     "<br>" . "description: " . $row["description"] . 
+        //     "<br>" ;
+        // }
 
         return mysqli_fetch_assoc($response);
+    }
+    else{
+    	return NULL;
     }
 }
 
@@ -535,9 +554,9 @@ function createItem($calendarId, $createdBy, $name, $note, $reminder, $type, $co
 
 	// this is for testing only, to be deleted -----------------
 	if ($affected_rows > 0) {
-		echo "Added Event or Task";
+		// echo "Added Event or Task";
 	} else {
-		echo "Cannot add Event or Task";
+		// echo "Cannot add Event or Task";
 	}
 	// ---------------------------------------------------------
 
@@ -670,27 +689,32 @@ function getItemsByType($type, $calendarId){
     if ($queries[$type]){
 
         $response = @mysqli_query($conn, $queries[$type]);
-        echo "<br> ******* Getting all " . $type . " items with calendarId = " . $calendarId . " ******* <br>";
+        // echo "<br> ******* Getting all " . $type . " items with calendarId = " . $calendarId . " ******* <br>";
 
         if ($response){
+        	$items = [];
+            while($item = mysqli_fetch_assoc($response)){
+                // echo "<br> itemId: " . $row["itemId"] . 
+                // "<br>" . "name: " . $row["name"] . 
+                // "<br>" . "createDate: " . $row["createDate"] . 
+                // "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") . 
+                // "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . 
+                // "<br>" . "type: " . $row["type"] . 
+                // "<br>" . "EVENT SPECIFIC: startDate: " . ($row["startDate"] ? $row["startDate"] : "NULL") . ", endDate: " .     ($row["endDate"] ? $row["endDate"] : "NULL") . 
+                // "<br>" . "TASK SPECIFIC: dueDate: " . ($row["dueDate"] ? $row["dueDate"] : "NULL") . ", completionDate: " .     ($row["completionDate"] ? $row["completionDate"] : "NULL") . 
+                // "<br>"; 
 
-            while($row = mysqli_fetch_assoc($response)){
-                echo "<br> itemId: " . $row["itemId"] . 
-                "<br>" . "name: " . $row["name"] . 
-                "<br>" . "createDate: " . $row["createDate"] . 
-                "<br>" . "note: " . ($row["note"] ? $row["note"] : "NULL") . 
-                "<br>" . "reminder: " . ($row["reminder"] ? $row["reminder"] : "NULL") . 
-                "<br>" . "type: " . $row["type"] . 
-                "<br>" . "EVENT SPECIFIC: startDate: " . ($row["startDate"] ? $row["startDate"] : "NULL") . ", endDate: " .     ($row["endDate"] ? $row["endDate"] : "NULL") . 
-                "<br>" . "TASK SPECIFIC: dueDate: " . ($row["dueDate"] ? $row["dueDate"] : "NULL") . ", completionDate: " .     ($row["completionDate"] ? $row["completionDate"] : "NULL") . 
-                "<br>"; 
+                array_push($items, $item);
             }
-
-            return mysqli_fetch_assoc($response);
+            return $items;
         }
-    }
+        else{
+        	return NULL;
+        } // end if($response)
+    } 
     else{
         echo("<br> !!!! Incorrect type inputted: " . $type . " !!!! <br>");
+  		return NULL;
     }
 }
 
@@ -864,6 +888,20 @@ function deleteItem($itemId) {
 // =============================================================================
 
 
+/**
+ *	Creates an account with the parameters.
+ * 	@return		boolean of if the account was created
+ */
+function createAccount($username, $email, $password, $name, $birthday, $calendarId) {
+	global $conn;
+	$query = 'INSERT INTO `Accounts` (`username`, `email`, `password`, `name`, `birthday`, `calendarId`,   createDate`, `isDeactivated`) VALUES (\'' . sqlSanitize($username) .'\', \'' . sqlSanitize($email) .'\', \'' . sqlSanitize($password) .'\', \'' . sqlSanitize($name) .'\', \'' . sqlSanitize($birthday) .'\', \'' . sqlSanitize($calendarId) .'\', \'2018-06-16\', \'0\');';
+    if (mysqli_query($conn, $query)) {
+        return mysqli_insert_id($conn);
+    } else {
+        return false;
+    }
+}
+
 // .............................................................................
 //							        GET
 // .............................................................................
@@ -899,6 +937,14 @@ function getAccountByUser($user) {
 	global $conn;
 	$query = "SELECT * FROM `Accounts` WHERE `username`='$user';";
 	return mysqli_fetch_array(mysqli_query($conn, $query));
+}
+
+function checkExistingUsernameEmail($username, $email) {
+    global $conn;
+    
+    $query = "SELECT * FROM `Accounts` WHERE `username`='" . sqlSanitize($username) . "' OR `email`='" . sqlSanitize($email) . "';";
+    
+    return mysqli_num_rows($conn->query($query)) > 0;
 }
 
 /**
