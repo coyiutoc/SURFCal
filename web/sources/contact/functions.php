@@ -140,6 +140,7 @@ function infoKeyToLabel($key) {
 
 function handleAddContact($POST_RESULT) {
 	global $profile;
+	global $id;
 
 	$name = trim($POST_RESULT["name"]);
 	$birthday = trim($POST_RESULT["birthday"]) === "" ? null : trim($POST_RESULT["birthday"]); 
