@@ -936,26 +936,8 @@ function deleteItem($itemId) {
  */
 function getAllAccounts() {
 	global $conn;
-<<<<<<< HEAD
-
-	$query = "SELECT id, username, email, name FROM Accounts ORDER BY id ASC;";
-
-	$result = mysqli_query($conn, $query);
-
-	if ($result) {
-		while($row = mysqli_fetch_assoc($result)) {
-			echo 'id: ' . $row["id"] . '<br>' .
-			'username: ' . $row["username"] . '<br>' .
-			'email: ' . $row["email"] . '<br>' .
-			'name: ' . $row["name"] . '<br>';
-		}
-	}
-
-	// TODO: return list of accounts
-=======
 	$query = "SELECT `id`, `username`, `email`, `name` FROM `Accounts` ORDER BY `id`;";
     return mysqli_query($conn, $query);
->>>>>>> Partial implementation for pages for Admin Panel.
 }
 
 /**
@@ -974,12 +956,7 @@ function getAccountByUser($user) {
  */
 function getExperiencedAccounts() {
 	global $conn;
-<<<<<<< HEAD
-
-	$query = "	SELECT id, username, email, name
-=======
 	$query = "	SELECT `id`
->>>>>>> Partial implementation for pages for Admin Panel.
 				FROM Accounts A
 				WHERE NOT EXISTS
 						(SELECT T.type
@@ -987,25 +964,7 @@ function getExperiencedAccounts() {
 						 WHERE NOT EXISTS (SELECT I.type
 						   				FROM Items I
 										WHERE I.createdBy=A.id AND T.type=I.type));";
-<<<<<<< HEAD
-
-	$result = mysqli_query($conn, $query);
-
-	if ($result) {
-		while($row = mysqli_fetch_assoc($result)) {
-			echo 'id: ' . $row["id"] . '<br>' .
-			'username: ' . $row["username"] . '<br>' .
-			'email: ' . $row["email"] . '<br>' .
-			'name: ' . $row["name"] . '<br>';
-
-			// TODO: Add to result
-		}
-	}
-
-	// TODO: return result
-=======
 	return mysqli_query($conn, $query);
->>>>>>> Partial implementation for pages for Admin Panel.
 }
 
 
