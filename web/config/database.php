@@ -806,8 +806,8 @@ function editItem($itemId, $name, $note, $reminder, $type, $options) {
 
 			mysqli_stmt_close($stmt); // close statement
 
-		if ($reminder){
-            array_push($params, "reminder = '$reminder'");
+        if ($reminder){
+        	array_push($params, "reminder = '$reminder'");
         }
 
 	// this is for testing only, to be deleted -----------------
