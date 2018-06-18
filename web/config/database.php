@@ -741,12 +741,11 @@ function getMinMaxItemsPerAccount($operation){
     if ($queries[$operation]){
 
         $response = @mysqli_query($conn, $queries[$operation]);
-        echo "<br> ******* Get " . $operation . " of number of items created per Account. ******* <br>";
 
         if ($response){
 
             $result = mysqli_fetch_assoc($response)["Result"];
-            echo ("{$operation} : {$result}");
+            // echo ("{$operation} : {$result}");
 
             return $result;
         }
@@ -758,14 +757,41 @@ function getMinMaxItemsPerAccount($operation){
 
 function getTotalItems() {
     global $conn;
-    $query = "SELECT COUNT FROM `Items`;";
-    return mysqli_fetch_array(mysqli_query($conn, $query));
+
+    $query = "SELECT COUNT(*) as Count FROM `Items`;";
+
+    $response = mysqli_query($conn, $query);
+
+    if ($response) {
+    	return mysqli_fetch_assoc($response)["Count"];
+    }
+
+    // if no response, return 0
+    return 0;
 }
 
 function getTotalItemsByType() {
     global $conn;
-    $query = "SELECT `type`, COUNT FROM `Items` GROUP BY `type`;";
-    return mysqli_query($conn, $query);
+
+    $query = "SELECT `type`, COUNT(*) as Count FROM `Items` GROUP BY `type`;";
+
+    $response = mysqli_query($conn, $query);
+
+    $result = [];
+
+    if ($response) {
+    	while ($row = mysqli_fetch_assoc($response)) {
+    		$type = $row["type"];
+    		$count = $row["Count"];
+    		
+    		$result[$row["type"]] = $row["Count"];
+    	}
+
+    	return $result;
+    }
+
+    // if no response, return 0
+    return 0;
 }
 
 // .............................................................................
@@ -1055,14 +1081,14 @@ function getMinMaxContactsPerAccount($operation) {
 										GROUP BY accId) C");
 
 	if ($queries[$operation]) {
-		$result = mysqli_query($conn, $query);
+		$result = mysqli_query($conn, $queries[$operation]);
 
 		if ($result) {
 			$row = mysqli_fetch_assoc($result);
 
-			if ($operation === "MIN") {
+			if ($operation === "min") {
 				return $row["MIN(C.count)"];
-			} else if ($operation === "MAX") {
+			} else if ($operation === "max") {
 				return $row["MAX(C.count)"];
 			}
 		}

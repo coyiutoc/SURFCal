@@ -11,16 +11,16 @@ $totalItemsByType = getTotalItemsByType();
 
 $stats = array(
     array('Items created', getTotalItems(), ''),
-    array('&nbsp;&nbsp;&nbsp;&nbsp; - Events', mysqli_fetch_array($totalItemsByType), ''),
-    array('&nbsp;&nbsp;&nbsp;&nbsp; - Reminders', mysqli_fetch_array($totalItemsByType), ''),
-    array('&nbsp;&nbsp;&nbsp;&nbsp; - Tasks', mysqli_fetch_array($totalItemsByType), ''),
-    array('&nbsp;&nbsp;&nbsp;&nbsp; - Notes', mysqli_fetch_array($totalItemsByType), ''),
+    array('&nbsp;&nbsp;&nbsp;&nbsp; - Events', $totalItemsByType["event"], ''),
+    array('&nbsp;&nbsp;&nbsp;&nbsp; - Reminders', $totalItemsByType["reminder"], ''),
+    array('&nbsp;&nbsp;&nbsp;&nbsp; - Tasks', $totalItemsByType["task"], ''),
+    array('&nbsp;&nbsp;&nbsp;&nbsp; - Notes', $totalItemsByType["note"], ''),
     array('Average Items Per Account', getAverageItemsPerAccount(), ''),
     array('Average Contacts Per Account', getAverageContactsPerAccount(), ''),
-    array('', getMinMaxContactsPerAccount(), ''),
-    array('', getMinMaxContactsPerAccount(), ''),
-    array('', getMinMaxItemsPerAccount('min'), ''),
-    array('', getMinMaxItemsPerAccount('max'), '')
+    array('Minimum number of contacts created for an account', getMinMaxContactsPerAccount("min"), 'Minimum contacts created, calculated across all accounts that have contacts'),
+    array('Maximum number of contacts created for an account', getMinMaxContactsPerAccount("max"), 'Maximum contacts created, calculated across all accounts that have contacts'),
+    array('Minimum number of items created for an account', getMinMaxItemsPerAccount('min'), 'Minimum items created, calculated across all accounts that have contacts'),
+    array('Maximum number of items created for an account', getMinMaxItemsPerAccount('max'), 'Maximum items created, calculated across all accounts that have contacts')
 );
 
 include('styles/header.php');
@@ -57,8 +57,8 @@ echo "
                     </main>
 ";
 
-echo var_dump(getTotalItems());
-echo var_dump(getTotalItemsByType());
+// echo var_dump(getTotalItems());
+// echo var_dump(getTotalItemsByType());
 
 include('styles/footer.php');
 
