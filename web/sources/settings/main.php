@@ -39,21 +39,17 @@ else
 	echo <<< _END
     <aside class="updateUserInfo">
    		<form id="updateUserInfo" action="?$profile=settings&settings=updateUserInfo" method="post">
-   			<div class="field">
-   				<label for="username">Username</label>
-    			<input type="text" name="username" value="$accountInfo[username]" required="required" maxlength="64">
-    		</div>
-    		<div class="field">
-    			<label for="birthday">Birthday</label>
-    			<input type="date" name="birthday" value="$accountInfo[birthday]" maxlength="64">
-   			</div>
     		<div class="field">
                 <label for="name">Name</label>
                 <input type="text" name="name" value="$accountInfo[name]" required="required" maxlength="64">
             </div>
     		<div class="field">
-    			<label for="email0">Email</label>
-    			<input type="email" name="email" value="$accountInfo[email]" required="required" maxlength="64">
+    			<label for="birthday">Birthday</label>
+    			<input type="date" name="birthday" value="$accountInfo[birthday]" maxlength="64">
+   			</div>
+    		<div class="field">
+    			<label for="password">password</label>
+    			<input type="password" name="password" required="required" maxlength="64">
     		</div>
     		<div>
     		   <input type="submit" name="updateUserInfo" value="Update User Info" />
