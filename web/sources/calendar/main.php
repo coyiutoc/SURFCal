@@ -17,7 +17,7 @@ if ($loggedin) {
         echo <<< _END
             <aside class="updateCalendar">
                 <h2>Update Calendar</h2>
-       		    <form id="updateCalendarInfo" action="?$profile=calendar&mode=updateCalendar" method="post">
+       		    <form id="updateCalendarInfo" action="?$profile=calendar&calendar=$calendarId&mode=updateCalendar" method="post">
         		    <div class="field">
                         <label for="name">Name</label>
                         <input type="text" name="name" value="$calendarInfo[name]" required="required" maxlength="64">
@@ -39,7 +39,7 @@ _END;
             $description = trim($_POST["description"]);
             $updatedCalendar["name"] = $name;
             $updatedCalendar["description"] = $description;
-            updateCalendar($Id, $calendarId, $updatedCalendar);
+            updateCalendar($id, $calendarId, $updatedCalendar);
             header("location: ?$profile=calendar&calendar=$calendarId");
     } else {
         if(isset($_GET['calendar'])){
