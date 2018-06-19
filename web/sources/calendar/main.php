@@ -33,15 +33,13 @@ if ($loggedin) {
         	    </form>
             </aside>
 _END;
-    } else if {
-        if(isset($+GET['calendar']) && isset($_GET['mode']) && $_GET['mode'] === 'updateCalendar') {
+    } else if (isset($_GET['calendar']) && isset($_GET['mode']) && $_GET['mode'] === 'updateCalendar') {
             $updatedCalendar = array();
             $name = $calendarInfo[name];
             $description = $calendarInfo[description];
             $updatedCalendar["name"] = $name;
             $updatedCalendar["description"] = $description;
             updateCalendar($Id, $updatedCalendar);
-        }
     } else {
         if(isset($_GET['calendar'])){
            		$isHomeCalendar = false;

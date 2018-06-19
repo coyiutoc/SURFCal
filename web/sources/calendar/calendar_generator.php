@@ -74,8 +74,8 @@
             <header class="calendar">
                 <h2><i class="far fa-calendar-alt"></i> {$calendar_name} </h2>
                 <span class="actions">
-                    <a class="edit" href="#"><i class="fas fa-edit"></i></a>
-                    <a class="addMember" href="?$profile=calendar&mode=editCalendar&calendar=$calendarId"><i class="fas fa-users"></i></a>
+                    <a class="edit" href="?$profile=calendar&mode=editCalendar&calendar=$calendarId"><i class="fas fa-edit"></i></a>
+                    <a class="addMember" href="#"><i class="fas fa-users"></i></a>
                 </span>
             </header>
 _END;
