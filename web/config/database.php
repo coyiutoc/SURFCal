@@ -11,8 +11,8 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'root';
-$pass = '';
+$user = 'coyiutoc';
+$pass = '1234';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
@@ -111,10 +111,15 @@ function getAccountsInCalendar($calendarId) {
 	mysqli_stmt_close($stmt); // close statement
 
 	if ($result) {
-		while($row = mysqli_fetch_assoc($result)) {
-			echo 'username: ' . $row["username"] . '<br>' .
-			'email: ' . $row["email"] . '<br>';
+		// while($row = mysqli_fetch_assoc($result)) {
+		// 	echo 'username: ' . $row["username"] . '<br>' .
+		// 	'email: ' . $row["email"] . '<br>';
+		// }
+		$accounts = [];
+		while ($account = mysqli_fetch_assoc($result)) {
+			array_push($accounts, $account);
 		}
+		return $accounts;
 	}
 
 	// TODO: return list of accounts

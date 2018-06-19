@@ -62,6 +62,14 @@
 
     if ($calendar_data){
         $calendar_name = $calendar_data["name"];
+
+        $calendar_accounts = getAccountsInCalendar($calendarId);
+        $account_string = '';
+        for ($i = 0; $i < count($calendar_accounts)-1; $i++){
+            $account_string .= $calendar_accounts[$i]['username'] . ', ';
+        }
+
+        $account_string .= $calendar_accounts[count($calendar_accounts)-1]['username'];
     }
     else{
         $calendar_name = "Calendar";
@@ -76,13 +84,16 @@
                 <span class="actions">
                     <a class="edit" href="#"><i class="fas fa-edit"></i></a>
                     <a class="addMember" href="#"><i class="fas fa-users"></i></a>
-                </span>
+                </span>                
             </header>
 _END;
 
 // ------------ HTML FOR CALENDAR BODY -------------------------------------------- // 
 
             echo "<section class='items' id='items'>";
+            echo "<h6> Users: $account_string </h6>";
+            
+            echo "<div class='item_type_border'></div>";
 
             // Populate Events:
             echo "<h3>Events</h3>";
