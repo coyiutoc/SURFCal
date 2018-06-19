@@ -1,7 +1,7 @@
 <?php
 
     $calendarId;
-    
+
     global $isHomeCalendar;
     include('functions.php');
 
@@ -12,7 +12,7 @@
         $calendarId = $_GET['calendar'];
     }
 
-    // ------------ ENDPOINT HANDLING -------------------------------------------------- // 
+    // ------------ ENDPOINT HANDLING -------------------------------------------------- //
 
     // echo("<br> GET: <br>");
     // print_r ($_GET);
@@ -27,10 +27,10 @@
         // Must reassign to avoid global variable reassignment issues:
         $POST_RESULT = $_POST;
 
-        // Add item to DB: 
+        // Add item to DB:
         handleAddItem($calendarId, $POST_RESULT);
 
-    }   
+    }
 
     // editItem:
     if(isset($_GET['calendar']) && isset($_GET['mode']) && ($_GET['mode'] === 'editItem')){
@@ -52,10 +52,10 @@
         handleDeleteItem($_GET['id']);
     }
 
-    // ------------ HTML FOR CALENDAR HEADER ------------------------------------------- // 
+    // ------------ HTML FOR CALENDAR HEADER ------------------------------------------- //
 
     loadModalHTML($calendarId);
-    loadJS(); 
+    loadJS();
 
     // Retrieve Calendar data for header class = "calendar"
     $calendar_data = getCalendar($calendarId);
@@ -82,13 +82,13 @@
             <header class="calendar">
                 <h2><i class="far fa-calendar-alt"></i> {$calendar_name} </h2>
                 <span class="actions">
-                    <a class="edit" href="#"><i class="fas fa-edit"></i></a>
+                    <a class="edit" href="?$profile=calendar&mode=editCalendar&calendar=$calendarId"><i class="fas fa-edit"></i></a>
                     <a class="addMember" href="#"><i class="fas fa-users"></i></a>
                 </span>                
             </header>
 _END;
 
-// ------------ HTML FOR CALENDAR BODY -------------------------------------------- // 
+// ------------ HTML FOR CALENDAR BODY -------------------------------------------- //
 
             echo "<section class='items' id='items'>";
             echo "<h6> Users: $account_string </h6>";
@@ -142,8 +142,8 @@ _END;
             echo "</section>";
     echo "</main>";
 
-// ------------ HTML FOR FORM ----------------------------------------------------- // 
-    
+// ------------ HTML FOR FORM ----------------------------------------------------- //
+
     echo <<<_END
     <aside class="addItem">
         <h4>Add Item</h4>
@@ -252,7 +252,7 @@ _END;
     </aside>
 _END;
 
-// ------------ END HTML FOR FORM -------------------------------------------------- // 
+// ------------ END HTML FOR FORM -------------------------------------------------- //
 
 
 
