@@ -137,7 +137,7 @@ function updateCalendar($accountId, $calendarId, array $args = array()){
 
         global $conn;
 
-        echo "<br> ******* Updating Calendar with CalendarId = " . $calendarId . " ******* <br>";
+        // echo "<br> ******* Updating Calendar with CalendarId = " . $calendarId . " ******* <br>";
 
         $query = "UPDATE Calendars SET ";
         $params = array();
@@ -158,7 +158,7 @@ function updateCalendar($accountId, $calendarId, array $args = array()){
         }
         $query .= $params[count($params)-1] . " WHERE calendarId = $calendarId";
 
-        echo("RESULTING QUERY: " . $query);
+        // echo("RESULTING QUERY: " . $query);
         mysqli_query($conn, $query);
 
         return checkUpdateSuccess($conn, $query);
@@ -487,7 +487,7 @@ function deleteContact($contactId) {
  *									6 = purple
  *									7 = black
  *  @param string $location     the item's location
- *  @param array $options 		the item's additional information (start_date and end_date for 
+ *  @param array $options 		the item's additional information (start_date and end_date for
  *								event, due_date and completion_date for task)
  * 	@return boolean				true if item is inserted successfully
  */
@@ -677,16 +677,16 @@ function getItemsByType($type, $calendarId){
 
 	global $conn;
 
-    $queries = array("event"    => "SELECT * FROM Items I, EventItems E 
+    $queries = array("event"    => "SELECT * FROM Items I, EventItems E
     								WHERE I.type = 'event' && I.itemId = E.itemId && I.calendarId = $calendarId
                                     ORDER BY E.startDate ASC;",
-                     "task"     => "SELECT * FROM Items I, TaskItems E 
+                     "task"     => "SELECT * FROM Items I, TaskItems E
                      				WHERE I.type = 'task' && I.itemId = E.itemId && I.calendarId = $calendarId
                      				ORDER BY E.dueDate ASC;",
-                     "reminder" => "SELECT * FROM Items 
+                     "reminder" => "SELECT * FROM Items
                      				WHERE type = 'reminder' && calendarId = $calendarId
                      				ORDER BY createDate ASC;",
-                     "note"     => "SELECT * FROM Items 
+                     "note"     => "SELECT * FROM Items
                      				WHERE type = 'note' && calendarId = $calendarId
                      				ORDER BY createDate DESC;");
 
@@ -806,7 +806,7 @@ function getTotalItemsByType() {
     	while ($row = mysqli_fetch_assoc($response)) {
     		$type = $row["type"];
     		$count = $row["Count"];
-    		
+
     		$result[$row["type"]] = $row["Count"];
     	}
 
@@ -823,7 +823,7 @@ function getTotalItemsByType() {
 
 /**
  *  !!!!!! TO DO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *         Revert it back to binding + have check that type and itemId match. 
+ *         Revert it back to binding + have check that type and itemId match.
  *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  *
  *	Edit an Item and its associated Event/Task if the item type is "event" or "task"
@@ -834,7 +834,7 @@ function getTotalItemsByType() {
  *	@param string $name     	the item's title, NULLABLE
  * 	@param string $note   		the item's description, NULLABLE
  *	@param string $reminder 	the item's reminder datetime string, NULLABLE
- *  @param array $args 		    the item's additional information (start_date and end_date for 
+ *  @param array $args 		    the item's additional information (start_date and end_date for
  *								event, due_date and completion_date for task), NULLABLE.
  *                              if null, set it to array()
  *  @param string $location     the item's location, NULLABLE
@@ -843,7 +843,7 @@ function getTotalItemsByType() {
  */
 function editItem($accountId, $calendarId, $itemId, $type, $name, $note, $reminder, $location, $colour, array $args = array()){
 
-    if (hasCalendarPermission($accountId, $calendarId, 'update') && 
+    if (hasCalendarPermission($accountId, $calendarId, 'update') &&
 			$accountId && $calendarId && $itemId && $type){
 
         global $conn;
@@ -854,7 +854,7 @@ function editItem($accountId, $calendarId, $itemId, $type, $name, $note, $remind
 
         $query = "UPDATE Items SET ";
         $params = array();
-        
+
         if ($name){
         	array_push($params, "name = '$name'");
         }
@@ -873,7 +873,7 @@ function editItem($accountId, $calendarId, $itemId, $type, $name, $note, $remind
 
         // Note that colour will ALWAYS be a param,
         // so even if there is no change, it will trigger
-        // the query. 
+        // the query.
         if ($colour){
         	array_push($params, "colour = '$colour'");
         }
@@ -885,7 +885,7 @@ function editItem($accountId, $calendarId, $itemId, $type, $name, $note, $remind
 	        }
 	        $query .= $params[count($params)-1] . " WHERE itemId = $itemId;";
 
-	        //echo("RESULTING QUERY: " . $query); 
+	        //echo("RESULTING QUERY: " . $query);
 	        mysqli_query($conn, $query);
 			//echo(mysqli_error($conn));
 
@@ -932,7 +932,7 @@ function editItem($accountId, $calendarId, $itemId, $type, $name, $note, $remind
 		        }
 		        $type_query .= $type_params[count($type_params)-1] . " WHERE itemId = $itemId;";
 
-		        //echo("RESULTING QUERY: " . $type_query); 
+		        //echo("RESULTING QUERY: " . $type_query);
 		        mysqli_query($conn, $type_query);
 
 		        return checkUpdateSuccess($conn, $type_query);
@@ -1227,7 +1227,7 @@ function hasCalendarPermission($accountId, $calendarId, $operationType){
 
         if (in_array($permissionType, $operationPermission[$operationType])){
 
-            // echo "<br> [Permission Check: AccountId " . $accountId . " has permission to 
+            // echo "<br> [Permission Check: AccountId " . $accountId . " has permission to
             // modify Calendar with id = " . $calendarId . ".]<br>";
 
             return true;
@@ -1253,8 +1253,8 @@ function checkUpdateSuccess($conn, $query){
         // Alert:
 		echo <<<_END
 			<div class="positive_sql_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>No errors in record update.</strong> 
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+			  	<strong>No errors in record update.</strong>
 			  	<div style="margin-left: 15px">
 			  	Rows affected: $affected_rows
 			  	<br> Query: $query
@@ -1269,7 +1269,7 @@ _END;
        	// Alert:
 		echo <<<_END
 			<div class="negative_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
 			  	<strong>Errors in record update.</strong>
 			  	<div style="margin-left: 15px">
 			  	Query: $query
@@ -1286,8 +1286,8 @@ function checkUpdateSuccessWithStmt($row_is_affected, $query){
 		// Alert:
 		echo <<<_END
 			<div class="positive_sql_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>No errors in record update.</strong> 
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+			  	<strong>No errors in record update.</strong>
 			  	<div style="margin-left: 15px">
 				Query: $query
 			  	</div>
@@ -1300,7 +1300,7 @@ _END;
 		// Alert:
 		echo <<<_END
 			<div class="negative_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
 			  	<strong>Errors in record update.</strong>
 			  	<div style="margin-left: 15px">
 			  	Query: $query

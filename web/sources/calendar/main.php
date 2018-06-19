@@ -40,6 +40,7 @@ _END;
             $updatedCalendar["name"] = $name;
             $updatedCalendar["description"] = $description;
             updateCalendar($Id, $calendarId, $updatedCalendar);
+            header("location: ?$profile=calendar&calendar=$calendarId");
     } else {
         if(isset($_GET['calendar'])){
            		$isHomeCalendar = false;
