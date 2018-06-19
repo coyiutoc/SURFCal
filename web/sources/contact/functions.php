@@ -230,13 +230,14 @@ function displayAddContactSection() {
 					<label for="birthday">Birthday</label>
 					<input type="date" name="birthday" placeholder="birthday" maxlength="64">
 				</div>
-
-				<button class="addFieldBtn" id="addAddress" type="button" onclick="addFieldSection('address')">Add Address</button>
-				<button class="addFieldBtn" id="addEmail" type="button" onclick="addFieldSection('email')">Add Email</button>
-				<button class="addFieldBtn" id="addPhone" type="button" onclick="addFieldSection('phone')">Add Phone</button>
-				
-				<br>
-		      	<input id="addContactBtn" type="submit" name="addContact" value="Add Contact" />
+                <div class="field">
+				    <button class="addFieldBtn button" id="addAddress" type="button" onclick="addFieldSection('address')">Add Address</button>
+				    <button class="addFieldBtn button" id="addEmail" type="button" onclick="addFieldSection('email')">Add Email</button>
+				    <button class="addFieldBtn button" id="addPhone" type="button" onclick="addFieldSection('phone')">Add Phone</button>
+				</div>
+				<div class="field">
+		      	   <input id="addContactBtn" type="submit" name="addContact" value="Add Contact" class="button" />
+                </div>
 		    </form>
 		</aside>
 _END;

@@ -56,6 +56,7 @@ form .field label {
     min-width: 10ch;
 }
 
+form .field button,
 form .field input,
 form .field select {
     border: 1px solid #8b8b8b;
@@ -163,6 +164,7 @@ header.global h1 {
     justify-content: center;
     position: absolute;
     right: 9px;
+    text-transform: capitalize;
     width: 32px;
 }
 
@@ -432,22 +434,6 @@ main header.calendar h2 {
 .infoField label {
     font-weight: bold;
     padding-right: 20px;
-}
-
-.addFieldBtn {
-    width: 30%;
-    background-color: lightgrey;
-    text-align: center;
-}
-
-#addContactBtn {
-    display: block;
-    width: 100%;
-    background-color: #cccccc;
-    font-size: 12px;
-    padding: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .landing {
