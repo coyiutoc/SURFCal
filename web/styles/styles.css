@@ -402,6 +402,13 @@ main header.calendar h2 {
     margin-bottom: 20px;
 }
 
+#addContactBtn {
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .contactInfoSection {
     background-color: white;
     padding: 10px;
