@@ -19,6 +19,27 @@ function generateAlert($string, $is_positive){
 			</div>
 ";
 }
+
+function dateCheck($start, $stop){
+
+	if ($start && $stop){
+		$start_substr = substr($start,0,10);
+		$end_substr = substr($stop,0,10);
+
+		$startTime = new DateTime($start_substr);
+		$endTime = new DateTime($end_substr);
+
+		if ($startTime > $endTime){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	else{
+		return true;
+	} 
+}
 /**
  *	Adds the new item to the DB.
  *	@param array $POST_RESULT				
@@ -26,26 +47,33 @@ function generateAlert($string, $is_positive){
 function handleAddItem($calendarId, $POST_RESULT){
 
 	if ($POST_RESULT['type'] === 'event'){
+
+		$date_check_ok = dateCheck($_POST["start_date"], $_POST["end_date"]);
+
 		$options = array("start_date" 		 => $_POST["start_date"] ? $_POST["start_date"] : NULL,
 						 "end_date"   		 => $_POST["end_date"] ? $_POST["end_date"] : NULL);
 	}
 	else if ($POST_RESULT['type'] === 'task'){
+
+		$date_check_ok = dateCheck($_POST["due_date"], $_POST["completion_date"]);
+
 		$options = array("due_date" 		 => $_POST["due_date"] ? $_POST["due_date"] : NULL,
 						 "completion_date"   => $_POST["completion_date"] ? $_POST["completion_date"] : NULL);
 	}
 	else{
 		$options = NULL;
+		$date_check_ok = true;
 	}
 
 	// If item successfully created: 
-	if (createItem($calendarId, $_SESSION['id'], 
-			   	   $POST_RESULT['name'] ? $POST_RESULT['name'] : NULL, 
-			   	   $POST_RESULT['note'] ? $POST_RESULT['note'] : NULL, 
-			   	   $POST_RESULT['reminder'] ? $POST_RESULT['reminder'] : NULL, 
-			   	   $POST_RESULT['type'] ? $POST_RESULT['type'] : NULL, 
-			   	   $POST_RESULT['colour'] ? $POST_RESULT['colour'] : NULL, 
-			   	   $POST_RESULT['location'] ? $POST_RESULT['location'] : NULL, 
-			   	   $options)){
+	if ($date_check_ok && createItem($calendarId, $_SESSION['id'], 
+								   	   $POST_RESULT['name'] ? $POST_RESULT['name'] : NULL, 
+								   	   $POST_RESULT['note'] ? $POST_RESULT['note'] : NULL, 
+								   	   $POST_RESULT['reminder'] ? $POST_RESULT['reminder'] : NULL, 
+								   	   $POST_RESULT['type'] ? $POST_RESULT['type'] : NULL, 
+								   	   $POST_RESULT['colour'] ? $POST_RESULT['colour'] : NULL, 
+								   	   $POST_RESULT['location'] ? $POST_RESULT['location'] : NULL, 
+								   	   $options)){
 	
 		generateAlert("Item was successfully added!", true);
 	}
