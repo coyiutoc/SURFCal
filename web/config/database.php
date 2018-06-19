@@ -38,10 +38,11 @@ function getCalendar($calendarId){
 
     global $conn;
 
-    // echo "<br> ******* Getting all info on Calendar with calendarId = " . $calendarId . " ******* <br>";
+    //echo "<br> ******* Getting all info on Calendar with calendarId = " . $calendarId . " ******* <br>";
 
-    $query = "SELECT * FROM Calendars";
+    $query = "SELECT * FROM Calendars WHERE calendarId = $calendarId";
     $response = @mysqli_query($conn, $query);
+    $calendar = [];
 
     if ($response){
         // while($row = mysqli_fetch_assoc($response)){
@@ -51,7 +52,11 @@ function getCalendar($calendarId){
         //     "<br>" ;
         // }
 
-        return mysqli_fetch_assoc($response);
+        while($row = mysqli_fetch_assoc($response)) {
+            array_push($calendar, $row);
+        }
+
+        return $calendar[0];
     }
     else{
     	return NULL;
@@ -72,9 +77,20 @@ function getAllCalendars($accountId){
     $calendars = [];
 
     if ($response){
+
+        // while($row = mysqli_fetch_assoc($response)){
+        //     echo "<br> accountId: " . $row["accId"] .
+        //     "<br> calendarId: " . $row["calendarId"] .
+        //     "<br>" . "name: " . $row["name"] .
+        //     "<br>" . "description: " . $row["description"] .
+        //     "<br>" . "permissionType: " . $row["permissionType"] .
+        //     "<br>" ;
+        // }
+
         while($row = mysqli_fetch_assoc($response)) {
             array_push($calendars, $row);
         }
+
         return $calendars;
     }
 }
@@ -661,11 +677,18 @@ function getItemsByType($type, $calendarId){
 
 	global $conn;
 
-    $queries = array("event"    => "SELECT * FROM Items I, EventItems E WHERE I.type = 'event' && I.itemId = E.itemId
+    $queries = array("event"    => "SELECT * FROM Items I, EventItems E 
+    								WHERE I.type = 'event' && I.itemId = E.itemId && I.calendarId = $calendarId
                                     ORDER BY E.startDate ASC;",
-                     "task"     => "SELECT * FROM Items I, TaskItems E WHERE I.type = 'task' && I.itemId = E.itemId           ORDER BY E.dueDate ASC;",
-                     "reminder" => "SELECT * FROM Items WHERE type = 'reminder' ORDER BY createDate ASC;",
-                     "note"     => "SELECT * FROM Items WHERE type = 'note' ORDER BY createDate DESC;");
+                     "task"     => "SELECT * FROM Items I, TaskItems E 
+                     				WHERE I.type = 'task' && I.itemId = E.itemId && I.calendarId = $calendarId
+                     				ORDER BY E.dueDate ASC;",
+                     "reminder" => "SELECT * FROM Items 
+                     				WHERE type = 'reminder' && calendarId = $calendarId
+                     				ORDER BY createDate ASC;",
+                     "note"     => "SELECT * FROM Items 
+                     				WHERE type = 'note' && calendarId = $calendarId
+                     				ORDER BY createDate DESC;");
 
     if ($queries[$type]){
 
@@ -944,7 +967,7 @@ function deleteItem($itemId) {
 
 	mysqli_stmt_close($stmt); // close statement
 
-	return checkUpdateSuccessWithStmt(($affected_rows > 0), 'DELETE FROM Items Where itemId=$itemId');
+	return checkUpdateSuccessWithStmt(($affected_rows > 0), 'DELETE FROM Items Where itemId={$itemId}');
 }
 
 // =============================================================================

@@ -11,11 +11,32 @@ $COLOURS = array(0 => "grey",
 
 $profile = 'SURFCal'; //Need better way to get from config/properties.php
 
+function generateAlert($string, $is_positive){
+
+	if ($is_positive){
+		echo <<<_END
+			<div class="positive_alert">
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+			  	<strong>Success!</strong> $string
+			</div>
+_END;
+	}
+
+	else{
+		echo <<<_END
+			<div class="negative_alert">
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+			  	<strong>Error!</strong> $string
+			</div>
+_END;
+	}
+}
 /**
  *	Adds the new item to the DB.
  *	@param array $POST_RESULT				
  */
-function handleAddItem($POST_RESULT){
+function handleAddItem($calendarId, $POST_RESULT){
+
 	if ($POST_RESULT['type'] === 'event'){
 		$options = array("start_date" 		 => $_POST["start_date"] ? $_POST["start_date"] : NULL,
 						 "end_date"   		 => $_POST["end_date"] ? $_POST["end_date"] : NULL);
@@ -29,33 +50,19 @@ function handleAddItem($POST_RESULT){
 	}
 
 	// If item successfully created: 
-	if (createItem($_SESSION['calId'], $_SESSION['id'], 
+	if (createItem($calendarId, $_SESSION['id'], 
 			   	   $POST_RESULT['name'] ? $POST_RESULT['name'] : NULL, 
 			   	   $POST_RESULT['note'] ? $POST_RESULT['note'] : NULL, 
 			   	   $POST_RESULT['reminder'] ? $POST_RESULT['reminder'] : NULL, 
 			   	   $POST_RESULT['type'] ? $POST_RESULT['type'] : NULL, 
 			   	   $POST_RESULT['colour'] ? $POST_RESULT['colour'] : NULL, 
 			   	   $POST_RESULT['location'] ? $POST_RESULT['location'] : NULL, 
-			   	   $options))
-	{
-		
-		// Alert:
-		echo <<<_END
-			<div class="positive_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>Success!</strong> Item was successfully added!
-			</div>
-_END;
+			   	   $options)){
+	
+		generateAlert("Item was successfully added!", true);
 	}
-	else{
-
-		// Alert:
-		echo <<<_END
-			<div class="negative_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>Item could not be added.</strong>
-			</div>
-_END;
+	else { 
+		generateAlert("Item could not be added!", false); 
 	}
 }
 
@@ -63,7 +70,7 @@ _END;
  *	Updates the item in the DB.
  *	@param array $POST_RESULT				
  */
-function handleEditItem($POST_RESULT){
+function handleEditItem($calendarId, $POST_RESULT){
 
 	if ($POST_RESULT['type'] === 'event'){
 		$options = array("startDate" 		=> $_POST["start_date"] ? $_POST["start_date"] : NULL,
@@ -77,28 +84,14 @@ function handleEditItem($POST_RESULT){
 		$options = array();
 	}
 
-    if (editItem($_SESSION['id'], $_SESSION['calId'], $POST_RESULT['editedItemId'], $POST_RESULT['type'], 
+    if (editItem($_SESSION['id'], $calendarId, $POST_RESULT['editedItemId'], $POST_RESULT['type'], 
     	$POST_RESULT['name'], $POST_RESULT['note'], $POST_RESULT['reminder'], $POST_RESULT['location'], 
-    	$POST_RESULT['colour'], $options))
-    {
+    	$POST_RESULT['colour'], $options)){
 
-    	// Alert:
-		echo <<<_END
-			<div class="positive_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>Success!</strong> Item was successfully edited!
-			</div>
-_END;
+    	generateAlert("Item was successfully edited!", true);
 	}
-	else{
-
-		// Alert:
-		echo <<<_END
-			<div class="negative_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>Item could not be edited or your input does not introduce new changes.</strong>
-			</div>
-_END;
+	else { 
+		generateAlert("Item could not be edited!", false); 
 	}
 }
 
@@ -109,23 +102,10 @@ _END;
 function handleDeleteItem($itemId){
 
 	if (deleteItem($itemId)){
-		// Alert:
-		echo <<<_END
-			<div class="positive_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>Success!</strong> Item was successfully deleted!
-			</div>
-_END;
+    	generateAlert("Item was successfully deleted!", true);
 	}
-
-	else{
-		// Alert:
-		echo <<<_END
-			<div class="negative_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>Item could not be deleted.</strong>
-			</div>
-_END;
+	else { 
+		generateAlert("Item could not be deleted!", false); 
 	}
 }
 
@@ -135,7 +115,7 @@ _END;
  *  @param array $items 
  * 	@return HTML				
  */
-function itemsToHTML($type, $items){
+function itemsToHTML($type, $items, $calendarId){
 	if ($type !== 'event' && $type !== 'task' && $type !== 'note'
 		&& $type !== 'reminder'){
 			echo "!!!!! Incorrect type input. !!!!!!";
@@ -190,7 +170,7 @@ function itemsToHTML($type, $items){
 	            // Icon for editing:
                 echo "<a class='edit'><i id='editButton' class='far fa-edit' align='right' onclick='javascript:openModal($itemEncoded);'></i></a>";
 	            // Icon for removing:
-                echo "<a class='remove' href='?$profile=calendar&calendar=removeItem&id=$itemId'><i class='far fa-minus-square' align='right' style='padding-left: 5px''></i></a>";
+                echo "<a class='remove' href='?$profile=calendar&calendar=$calendarId&mode=removeItem&id=$itemId'><i class='far fa-minus-square' align='right' style='padding-left: 5px''></i></a>";
              
 	        echo "</article>";
 
@@ -201,7 +181,7 @@ function itemsToHTML($type, $items){
 /**
  *	Generates the HTML for the edit modal.	
  */
-function loadModalHTML(){
+function loadModalHTML($calendarId){
 
 	global $profile;
 
@@ -226,7 +206,7 @@ function loadModalHTML(){
 
             <h4 style="padding-bottom: 10px;"><div id="editItemTitle"></div></h4>
                 <div id="modalEventBlock" style="display:none">
-                    <form id="event" action="?$profile=calendar&calendar=editItem" method="post">
+                    <form id="event" action="?$profile=calendar&calendar=$calendarId&mode=editItem" method="post">
                         <input type="hidden" name="type" value="event"/>
                         <input id="eventItemId" type="hidden" name="editedItemId"/>
                         <div class="field"><label for="name">Name</label><input id="eventNameInput" type="text" name="name" placeholder="Name" maxlength="64"></div>
@@ -252,7 +232,7 @@ function loadModalHTML(){
                     </form>
                 </div>
                 <div id="modalTaskBlock" style="display:none">
-                    <form id="task" action="?$profile=calendar&calendar=editItem" method="post">
+                    <form id="task" action="?$profile=calendar&calendar=$calendarId&mode=editItem" method="post">
                         <input type="hidden" name="type" value="task"/>
                         <input id="taskItemId" type="hidden" name="editedItemId"/>
                         <div class="field"><label for="name">Name</label><input id="taskNameInput" type="text" name="name" maxlength="64"></div>
@@ -278,7 +258,7 @@ function loadModalHTML(){
                     </form>
                 </div>
                 <div id="modalReminderBlock" style="display:none">
-                    <form id="reminder" action="?$profile=calendar&calendar=editItem" method="post">
+                    <form id="reminder" action="?$profile=calendar&calendar=$calendarId&mode=editItem" method="post">
                         <input type="hidden" name="type" value="reminder"/>
                         <input id="reminderItemId" type="hidden" name="editedItemId"/>
                         <div class="field"><label for="name">Name</label><input id="reminderNameInput" type="text" name="name" maxlength="64"></div>
@@ -302,7 +282,7 @@ function loadModalHTML(){
                     </form>
                 </div>
                 <div id="modalNoteBlock" style="display:none">
-                    <form id="note" action="?$profile=calendar&calendar=editItem" method="post">
+                    <form id="note" action="?$profile=calendar&calendar=$calendarId&mode=editItem" method="post">
                         <input type="hidden" name="type" value="note"/>
                         <input id="noteItemId" type="hidden" name="editedItemId"/>
                         <div class="field"><label for="name">Name</label><input id="noteNameInput" type="text" name="name" maxlength="64"></div>

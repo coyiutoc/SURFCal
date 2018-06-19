@@ -10,7 +10,10 @@ $pageMode = ($loggedin ? '' : 'macro');
 include('styles/header.php');
 
 if ($loggedin) {
-    // Load default caldendar.
+
+    $isHomeCalendar = true;
+    include('sources/calendar/calendar_generator.php');
+
 } else {
     echo <<<_END
                     <main>
