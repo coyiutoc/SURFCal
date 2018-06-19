@@ -7,13 +7,10 @@ if (basename($_SERVER['PHP_SELF']) === 'main.php') {
 $pageTitle .= ' - Accounts';
 $pageMode = '';
 
+// Array of account information for all accounts
 $accQ = getAllAccounts();
+// Array of ids (of experienced accounts)
 $expQ = getExperiencedAccounts();
-
-$exp = array();
-while ($r = mysqli_fetch_array($expQ)) {
-    $exp[] = $r['id'];
-}
 
 include('styles/header.php');
 
@@ -35,13 +32,13 @@ echo "
                                     </tr>
                                 </thead>
                                 <tbody>";
-while ($r = mysqli_fetch_array($accQ)) {
+foreach($accQ as &$acc) {
     echo "\n                                    <tr>"
-    . "\n                                        <td>" . $r['id'] . "</td>"
-    . "\n                                        <td>" . $r['username'] . "</td>"
-    . "\n                                        <td>" . $r['email'] . "</td>"
-    . "\n                                        <td>" . $r['name'] . "</td>"
-    . "\n                                        <td><i class=\"fas fa-" . (in_array($r['id'], $exp) ? "check" : "times") . "\"></i></td>"
+    . "\n                                        <td>" . $acc['id'] . "</td>"
+    . "\n                                        <td>" . $acc['username'] . "</td>"
+    . "\n                                        <td>" . $acc['email'] . "</td>"
+    . "\n                                        <td>" . $acc['name'] . "</td>"
+    . "\n                                        <td><i class=\"fas fa-" . (in_array($acc['id'], $expQ) ? "check" : "times") . "\"></i></td>"
     . "\n                                    </tr>";
 }
 echo "

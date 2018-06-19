@@ -986,7 +986,18 @@ function deleteItem($itemId) {
 function getAllAccounts() {
 	global $conn;
 	$query = "SELECT `id`, `username`, `email`, `name` FROM `Accounts` ORDER BY `id`;";
-    return mysqli_query($conn, $query);
+
+	$response = mysqli_query($conn, $query);
+
+	$result = [];
+
+	if ($response) {
+		while($row = mysqli_fetch_assoc($response)) {
+			array_push($result, $row);
+		}
+	}
+
+	return $result;
 }
 
 /**
@@ -1005,7 +1016,7 @@ function getAccountByUser($user) {
  */
 function getExperiencedAccounts() {
 	global $conn;
-	$query = "	SELECT `id`
+	$query = "	SELECT id
 				FROM Accounts A
 				WHERE NOT EXISTS
 						(SELECT T.type
@@ -1013,7 +1024,18 @@ function getExperiencedAccounts() {
 						 WHERE NOT EXISTS (SELECT I.type
 						   				FROM Items I
 										WHERE I.createdBy=A.id AND T.type=I.type));";
-	return mysqli_query($conn, $query);
+
+	$response = mysqli_query($conn, $query);
+
+	$result = [];
+
+	if ($response) {
+		while($row = mysqli_fetch_assoc($response)) {
+			array_push($result, $row["id"]);
+		}
+	}
+
+	return $result;
 }
 
 
