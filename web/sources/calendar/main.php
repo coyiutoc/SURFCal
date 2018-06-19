@@ -35,8 +35,8 @@ _END;
     } else if (isset($_GET['calendar']) && isset($_GET['mode']) && $_GET['mode'] === 'updateCalendar') {
             $updatedCalendar = array();
             $calendarId = $_GET['calendar'];
-            $name = $calendarInfo[name];
-            $description = $calendarInfo[description];
+            $name = trim($_POST["name"]);
+            $description = trim($_POST["description"]);
             $updatedCalendar["name"] = $name;
             $updatedCalendar["description"] = $description;
             updateCalendar($Id, $calendarId, $updatedCalendar);
