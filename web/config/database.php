@@ -111,10 +111,15 @@ function getAccountsInCalendar($calendarId) {
 	mysqli_stmt_close($stmt); // close statement
 
 	if ($result) {
-		while($row = mysqli_fetch_assoc($result)) {
-			echo 'username: ' . $row["username"] . '<br>' .
-			'email: ' . $row["email"] . '<br>';
+		// while($row = mysqli_fetch_assoc($result)) {
+		// 	echo 'username: ' . $row["username"] . '<br>' .
+		// 	'email: ' . $row["email"] . '<br>';
+		// }
+		$accounts = [];
+		while ($account = mysqli_fetch_assoc($result)) {
+			array_push($accounts, $account);
 		}
+		return $accounts;
 	}
 
 	// TODO: return list of accounts
