@@ -34,11 +34,12 @@ if ($loggedin) {
 _END;
     } else if (isset($_GET['calendar']) && isset($_GET['mode']) && $_GET['mode'] === 'updateCalendar') {
             $updatedCalendar = array();
+            $calendarId = $_GET['calendar'];
             $name = $calendarInfo[name];
             $description = $calendarInfo[description];
             $updatedCalendar["name"] = $name;
             $updatedCalendar["description"] = $description;
-            updateCalendar($Id, $updatedCalendar);
+            updateCalendar($Id, $calendarId, $updatedCalendar);
     } else {
         if(isset($_GET['calendar'])){
            		$isHomeCalendar = false;
