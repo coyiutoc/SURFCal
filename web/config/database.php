@@ -11,8 +11,8 @@ if (basename($_SERVER['PHP_SELF']) === 'database.php') {
 ini_set('display_errors', 'On');
 
 $host = 'localhost';
-$user = 'root';
-$pass = '';
+$user = 'hyngan';
+$pass = 'hyngan';
 $schema = 'surfcal';
 
 $conn = new mysqli($host, $user, $pass, $schema);
@@ -122,7 +122,7 @@ function getAccountsInCalendar($calendarId) {
 		return $accounts;
 	}
 
-	// TODO: return list of accounts
+	return [];
 }
 
 // .............................................................................
@@ -587,6 +587,8 @@ function getItem($itemId) {
 
 	mysqli_stmt_close($item_stmt); // close statement
 
+	$result = [];
+
 	if ($item_result) {
 		$item = mysqli_fetch_assoc($item_result);
 		echo 'itemId: ' . $item["itemId"] . '<br>' .
@@ -597,14 +599,16 @@ function getItem($itemId) {
 			'reminder: ' . $item["reminder"] . '<br>' .
 			'type: ' . $item["type"] . '<br>';
 
+		array_push($result, $item);
+
 		if ($item["type"] == "event") {
 			$stmt = mysqli_prepare($conn, "SELECT * FROM EventItems WHERE itemId=?;");
 			mysqli_stmt_bind_param($stmt, "i", $itemId);
 			mysqli_stmt_execute($stmt);
 
-			$result = mysqli_stmt_get_result($stmt);
+			$event_result = mysqli_stmt_get_result($stmt);
 
-			$event = mysqli_fetch_assoc($result);
+			$event = mysqli_fetch_assoc($event_result);
 
 			mysqli_stmt_close($stmt); // close statement
 
@@ -613,16 +617,16 @@ function getItem($itemId) {
 				'startDate: ' . $event["startDate"] . '<br>' .
 				'endDate: ' . $event["endDate"] . '<br>';
 
-			// TODO: Add event information to result
+			array_push($result, $event);
 
 		} else if ($item["type"] == "task") {
 			$stmt = mysqli_prepare($conn, "SELECT * FROM TaskItems WHERE itemId=?;");
 			mysqli_stmt_bind_param($stmt, "i", $itemId);
 			mysqli_stmt_execute($stmt);
 
-			$result = mysqli_stmt_get_result($stmt);
+			$task_result = mysqli_stmt_get_result($stmt);
 
-			$task = mysqli_fetch_assoc($result);
+			$task = mysqli_fetch_assoc($task_result);
 
 			mysqli_stmt_close($stmt); // close statement
 
@@ -631,11 +635,11 @@ function getItem($itemId) {
 				'dueDate: ' . $task["dueDate"] . '<br>' .
 				'completionDate: ' . $task["completionDate"] . '<br>';
 
-			// TODO: Add task information to result
+			array_push($result, $task);
 		}
 	}
 
-	// TODO: return item
+	return $result;
 }
 
 // Returns all Items and their attributes (Task and Event only) for display in
