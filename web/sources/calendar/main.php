@@ -9,12 +9,11 @@ $pageMode = ($loggedin ? '' : 'macro');
 
 include('styles/header.php');
 
-// get calendarId
-$calendarId = $_GET['calendar'];
-$calendarInfo = getCalendar($calendarId);
-
 if ($loggedin) {
     if(isset($_GET['calendar']) && isset($_GET['mode']) && $_GET['mode'] === 'editCalendar') {
+        // get calendarId
+        $calendarId = $_GET['calendar'];
+        $calendarInfo = getCalendar($calendarId);
         echo <<< _END
             <aside class="updateCalendar">
                 <h2>Update Calendar</h2>
