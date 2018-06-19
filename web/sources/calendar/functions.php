@@ -12,24 +12,12 @@ $COLOURS = array(0 => "grey",
 $profile = 'SURFCal'; //Need better way to get from config/properties.php
 
 function generateAlert($string, $is_positive){
-
-	if ($is_positive){
-		echo <<<_END
-			<div class="positive_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>Success!</strong> $string
+	echo "
+			<div class=\"" . ($is_positive ? "positive_alert" : "negative_alert") . "\">
+			  	<span class=\"closebtn\" onclick=\"this.parentElement.style.display='none';\"><i class=\"fas fa-times\"></i></span> 
+			  	<strong>" . ($is_positive ? "Success!" : "Error!") . "</strong> $string
 			</div>
-_END;
-	}
-
-	else{
-		echo <<<_END
-			<div class="negative_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  	<strong>Error!</strong> $string
-			</div>
-_END;
-	}
+";
 }
 /**
  *	Adds the new item to the DB.

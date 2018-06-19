@@ -486,33 +486,22 @@ main header.calendar h2 {
     margin-bottom: 20px;
 }
 
-.positive_alert {
+.positive_alert, .positive_sql_alert, .negative_alert, .negative_sql_alert {
+    color: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.positive_alert, .positive_sql_alert {
     background-color: #5b9960;
-    color: white;
-    padding: 20px;
-    margin-bottom: 20px;
 }
 
-.positive_sql_alert {
-    background-color: #5b9960;
-    color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    opacity: 0.6;
-}
-
-.negative_alert {
+.negative_alert, .negative_sql_alert {
     background-color: #e86e55;
-    color: white;
-    padding: 20px;
-    margin-bottom: 20px;
 }
 
-.negative_sql_alert {
-    background-color: #e86e55;
-    color: white;
-    padding: 20px;
-    margin-bottom: 20px;
+.positive_sql_alert, .negative_sql_alert {
     opacity: 0.6;
 }
 
@@ -597,6 +586,7 @@ footer.global {
     .main .container {
         align-items: flex-start;
         display: flex;
+        flex-wrap: wrap;
     }
     
     main {
