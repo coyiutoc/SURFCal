@@ -1262,11 +1262,10 @@ function checkUpdateSuccess($conn, $query){
         // Alert:
 		echo <<<_END
 			<div class="positive_sql_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-			  	<strong>No errors in record update.</strong>
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';"><i class='fas fa-times'></i></span> 
+			  	<strong>No errors in record update.</strong> 
 			  	<div style="margin-left: 15px">
-			  	Rows affected: $affected_rows
-			  	<br> Query: $query
+				Query: $query
 			  	</div>
 			</div>
 _END;
@@ -1278,7 +1277,7 @@ _END;
        	// Alert:
 		echo <<<_END
 			<div class="negative_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';"><i class='fas fa-times'></i></span> 
 			  	<strong>Errors in record update.</strong>
 			  	<div style="margin-left: 15px">
 			  	Query: $query
@@ -1295,7 +1294,7 @@ function checkUpdateSuccessWithStmt($row_is_affected, $query){
 		// Alert:
 		echo <<<_END
 			<div class="positive_sql_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';"><i class=\"fas fa-times\"></i></span> 
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';"><i class='fas fa-times'></i></span> 
 			  	<strong>No errors in record update.</strong> 
 			  	<div style="margin-left: 15px">
 				Query: $query
@@ -1309,7 +1308,7 @@ _END;
 		// Alert:
 		echo <<<_END
 			<div class="negative_alert">
-			  	<span class="closebtn" onclick="this.parentElement.style.display='none';"><i class=\"fas fa-times\"></i></span> 
+			  	<span class="closebtn" onclick="this.parentElement.style.display='none';"><i class='fas fa-times'></i></span> 
 			  	<strong>Errors in record update.</strong>
 			  	<div style="margin-left: 15px">
 			  	Query: $query
