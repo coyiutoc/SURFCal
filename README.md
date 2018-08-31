@@ -8,6 +8,7 @@ The application also allows users to login/logout of their account, and to updat
 ### Stack
 - PHP
 - MySQL
+- Javascript
 - HTML
 - CSS
 - Oracle VirtualBox
